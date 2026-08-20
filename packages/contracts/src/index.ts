@@ -19,4 +19,8 @@ export {
   healthResponseSchema,
   type HealthResponse,
 } from "./health/health.contract.js";
+export {
+  beachForecastSchema,
+  type BeachForecast,
+} from "./forecast/beach-forecast.contract.js";
 
