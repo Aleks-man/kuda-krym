@@ -1,4 +1,8 @@
 export {
+  beachDetailSchema,
+  type BeachDetail,
+} from "./beaches/beach-detail.contract.js";
+export {
   apiErrorSchema,
   type ApiError,
 } from "./common/api-error.contract.js";

@@ -1,4 +1,5 @@
 import type { BeachListItem } from "@kuda-krym/contracts";
+import Link from "next/link";
 
 import { getBeachLabels } from "../../model/beach-labels";
 import styles from "./beach-card.module.css";
@@ -23,7 +24,9 @@ export function BeachCard({ beach }: BeachCardProps) {
           <li>{labels.surface}</li>
           <li>{labels.childSuitability}</li>
         </ul>
-        <span className={styles.pending}>Подробнее скоро</span>
+        <Link className={styles.link} href={`/beaches/${beach.slug}`}>
+          Подробнее <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </article>
   );
