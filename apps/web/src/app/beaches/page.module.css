@@ -1,0 +1,44 @@
+.main {
+  position: relative;
+  width: min(100% - 40px, 1180px);
+  min-height: calc(100vh - 76px);
+  margin: 0 auto;
+  padding: clamp(52px, 8vw, 96px) 0 96px;
+}
+
+.intro {
+  max-width: 760px;
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.intro h1 {
+  margin: 0;
+  font-size: clamp(50px, 8vw, 82px);
+  font-weight: 780;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.description {
+  max-width: 650px;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: clamp(18px, 3vw, 22px);
+  line-height: 1.55;
+}
+
+.count {
+  margin: 18px 0 0;
+  color: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 750;
+}

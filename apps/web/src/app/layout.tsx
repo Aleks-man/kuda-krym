@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { SiteHeader } from "@/shared/ui/site-header/site-header";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +19,10 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }
