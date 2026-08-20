@@ -3,6 +3,7 @@ import "dotenv/config";
 import {
   BeachField,
   DataSourceType,
+  PublicationStatus,
   VerificationStatus,
 } from "../src/generated/prisma/client.js";
 import { createPrismaClient } from "../src/client.js";
@@ -57,6 +58,7 @@ async function seed() {
           longitude: item.longitude,
           osmType: item.osmType,
           osmId: item.osmId,
+          publicationStatus: PublicationStatus.PUBLISHED,
         },
         create: {
           slug: item.slug,
@@ -68,11 +70,25 @@ async function seed() {
           longitude: item.longitude,
           osmType: item.osmType,
           osmId: item.osmId,
+          publicationStatus: PublicationStatus.PUBLISHED,
           profile: { create: {} },
         },
       });
 
       for (const field of [BeachField.NAME, BeachField.COORDINATES]) {
+        await transaction.beachFieldEvidence.updateMany({
+          where: {
+            beachId: beach.id,
+            field,
+            sourceId: { not: source.id },
+          },
+          data: {
+            status: VerificationStatus.REJECTED,
+            isPrimary: false,
+            note: "Источник заменён после повторной проверки OSM-объекта.",
+          },
+        });
+
         await transaction.beachFieldEvidence.upsert({
           where: {
             beachId_field_sourceId: {
@@ -82,14 +98,16 @@ async function seed() {
             },
           },
           update: {
-            status: VerificationStatus.IMPORTED,
+            status: VerificationStatus.MANUALLY_CHECKED,
+            verifiedAt: retrievedAt,
             isPrimary: true,
           },
           create: {
             beachId: beach.id,
             field,
             sourceId: source.id,
-            status: VerificationStatus.IMPORTED,
+            status: VerificationStatus.MANUALLY_CHECKED,
+            verifiedAt: retrievedAt,
             isPrimary: true,
           },
         });
@@ -97,7 +115,7 @@ async function seed() {
     });
   }
 
-  console.log(`Seeded ${seedBeaches.length} draft beaches.`);
+  console.log(`Seeded ${seedBeaches.length} published beaches.`);
 }
 
 try {
