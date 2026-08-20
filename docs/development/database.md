@@ -32,6 +32,14 @@ Copy-Item packages/database/.env.example packages/database/.env
 npm run migrate:dev --workspace @kuda-krym/database
 ```
 
+Загрузить начальные данные для разработки:
+
+```powershell
+npm run seed --workspace @kuda-krym/database
+```
+
+Seed можно запускать повторно: существующие пляжи обновляются и не дублируются.
+
 Проверить состояние базы:
 
 ```powershell
