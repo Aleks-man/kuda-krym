@@ -7,10 +7,12 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/server.js",
+    "pretest": "npm run build --workspace @kuda-krym/contracts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@kuda-krym/contracts": "^0.1.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
