@@ -1,9 +1,7 @@
 .main {
   position: relative;
-  display: grid;
   min-height: calc(100vh - 76px);
   overflow: hidden;
-  align-items: center;
   padding: clamp(48px, 7vw, 96px) 20px 80px;
 }
 
@@ -42,6 +40,7 @@
   display: grid;
   width: min(100%, 1180px);
   margin: 0 auto;
+  min-height: calc(100vh - 220px);
   align-items: center;
   gap: clamp(48px, 7vw, 96px);
   grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);

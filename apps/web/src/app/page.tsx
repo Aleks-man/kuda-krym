@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { RecommendationPreferences } from "@/features/recommendations/ui/recommendation-preferences/recommendation-preferences";
+
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -69,6 +71,7 @@ export default function HomePage() {
           </p>
         </aside>
       </section>
+      <RecommendationPreferences />
     </main>
   );
 }
