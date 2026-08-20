@@ -19,6 +19,7 @@
     "generate": "prisma generate",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
+    "seed": "prisma db seed",
     "studio": "prisma studio",
     "typecheck": "npm run generate && tsc --noEmit",
     "validate": "prisma validate"
@@ -33,6 +34,7 @@
     "@types/node": "^26.2.0",
     "@types/pg": "^8.23.1",
     "prisma": "^7.9.1",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
 }
