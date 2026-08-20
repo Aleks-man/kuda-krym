@@ -37,6 +37,32 @@ describe("API contracts", () => {
             waveDirectionDegrees: 225,
             wavePeriodSeconds: 3.8,
           },
+          scores: {
+            sea: {
+              score: 96,
+              coveragePercent: 100,
+              factors: [
+                { name: "waveHeight", score: 98, weight: 0.4 },
+                { name: "windSpeed", score: 99, weight: 0.3 },
+                { name: "waterTemperature", score: 96, weight: 0.2 },
+                { name: "windGust", score: 88, weight: 0.1 },
+              ],
+            },
+            weather: {
+              score: 95,
+              coveragePercent: 100,
+              factors: [
+                { name: "airTemperature", score: 96, weight: 0.4 },
+                {
+                  name: "precipitationProbability",
+                  score: 98,
+                  weight: 0.3,
+                },
+                { name: "precipitationAmount", score: 100, weight: 0.2 },
+                { name: "cloudCover", score: 94, weight: 0.1 },
+              ],
+            },
+          },
         },
       ],
     });
