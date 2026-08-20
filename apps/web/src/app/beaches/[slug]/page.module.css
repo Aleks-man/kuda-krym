@@ -1,0 +1,6 @@
+.main {
+  width: min(100% - 40px, 1180px);
+  min-height: calc(100vh - 76px);
+  margin: 0 auto;
+  padding: clamp(34px, 6vw, 68px) 0 100px;
+}

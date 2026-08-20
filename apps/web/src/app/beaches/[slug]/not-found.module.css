@@ -1,0 +1,5 @@
+.main { display: grid; min-height: calc(100vh - 76px); place-content: center; justify-items: start; width: min(100% - 40px, 720px); margin: auto; }
+.main p { margin: 0; color: var(--accent); font-weight: 800; letter-spacing: .1em; }
+.main h1 { margin: 12px 0; font-size: clamp(42px, 7vw, 70px); letter-spacing: -.05em; line-height: 1; }
+.main span { color: var(--muted); font-size: 18px; }
+.main a { margin-top: 28px; padding: 13px 18px; border-radius: 12px; background: var(--foreground); color: white; font-weight: 750; }

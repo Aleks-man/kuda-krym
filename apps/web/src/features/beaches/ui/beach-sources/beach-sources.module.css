@@ -1,0 +1,9 @@
+.section { display: grid; grid-template-columns: .8fr 1.2fr; gap: 60px; margin-top: clamp(64px, 9vw, 110px); padding: clamp(28px, 5vw, 54px); border-radius: 28px; background: #163c3a; color: white; }
+.eyebrow { margin: 0 0 10px; color: #91d7d0; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.section h2 { margin: 0; font-size: 40px; letter-spacing: -.04em; }
+.lead { margin: 16px 0 0; color: #bdd2ce; line-height: 1.6; }
+.list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.list a { display: flex; justify-content: space-between; gap: 20px; padding: 18px 20px; border: 1px solid rgb(255 255 255 / 13%); border-radius: 14px; background: rgb(255 255 255 / 6%); }
+.list span { font-weight: 700; }
+.list small { color: #91d7d0; text-align: right; }
+@media (max-width: 760px) { .section { grid-template-columns: 1fr; gap: 32px; } }

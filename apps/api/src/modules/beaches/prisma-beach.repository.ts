@@ -1,6 +1,7 @@
-import type { BeachListItem } from "@kuda-krym/contracts";
+import type { BeachDetail, BeachListItem } from "@kuda-krym/contracts";
 import {
   PublicationStatus,
+  VerificationStatus,
   type PrismaClient,
 } from "@kuda-krym/database";
 
@@ -58,6 +59,111 @@ export class PrismaBeachRepository implements BeachRepository {
         coverImageUrl: beach.images[0]?.url ?? null,
       };
     });
+  }
+
+  public async findPublishedBySlug(slug: string): Promise<BeachDetail | null> {
+    const beach = await this.prisma.beach.findFirst({
+      where: {
+        slug,
+        publicationStatus: PublicationStatus.PUBLISHED,
+        profile: { isNot: null },
+      },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        officialName: true,
+        description: true,
+        region: true,
+        locality: true,
+        latitude: true,
+        longitude: true,
+        profile: {
+          select: {
+            surface: true,
+            waterEntry: true,
+            childSuitability: true,
+            infrastructure: true,
+            parking: true,
+            accessibility: true,
+            bayProtection: true,
+            hasToilet: true,
+            hasShower: true,
+            hasChangingRoom: true,
+          },
+        },
+        images: {
+          select: {
+            url: true,
+            alt: true,
+            author: true,
+            license: true,
+            sourceUrl: true,
+            isCover: true,
+          },
+          orderBy: [{ isCover: "desc" }, { sortOrder: "asc" }],
+        },
+        evidence: {
+          where: {
+            isPrimary: true,
+            status: {
+              in: [
+                VerificationStatus.MANUALLY_CHECKED,
+                VerificationStatus.CONFLICTING,
+                VerificationStatus.STALE,
+              ],
+            },
+          },
+          select: {
+            field: true,
+            status: true,
+            verifiedAt: true,
+            source: { select: { title: true, url: true } },
+          },
+          orderBy: { field: "asc" },
+        },
+      },
+    });
+
+    if (!beach?.profile) {
+      return null;
+    }
+
+    return {
+      id: beach.id,
+      slug: beach.slug,
+      name: beach.name,
+      officialName: beach.officialName,
+      description: beach.description,
+      region: beach.region,
+      locality: beach.locality,
+      coordinates: {
+        latitude: beach.latitude.toNumber(),
+        longitude: beach.longitude.toNumber(),
+      },
+      surface: beach.profile.surface,
+      childSuitability: beach.profile.childSuitability,
+      coverImageUrl: beach.images.find((image) => image.isCover)?.url ?? null,
+      profile: {
+        waterEntry: beach.profile.waterEntry,
+        childSuitability: beach.profile.childSuitability,
+        infrastructure: beach.profile.infrastructure,
+        parking: beach.profile.parking,
+        accessibility: beach.profile.accessibility,
+        bayProtection: beach.profile.bayProtection,
+        hasToilet: beach.profile.hasToilet,
+        hasShower: beach.profile.hasShower,
+        hasChangingRoom: beach.profile.hasChangingRoom,
+      },
+      images: beach.images.map(({ isCover: _isCover, ...image }) => image),
+      sources: beach.evidence.map((evidence) => ({
+        field: evidence.field,
+        title: evidence.source.title,
+        url: evidence.source.url,
+        status: evidence.status as BeachDetail["sources"][number]["status"],
+        verifiedAt: evidence.verifiedAt?.toISOString() ?? null,
+      })),
+    };
   }
 }
 

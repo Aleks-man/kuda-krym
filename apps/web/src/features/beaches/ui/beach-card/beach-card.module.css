@@ -62,9 +62,10 @@
   content: "•";
 }
 
-.pending {
+.link {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   padding: 7px 10px;
   border-radius: 9px;
   background: var(--accent-soft);
@@ -72,4 +73,7 @@
   font-size: 12px;
   font-weight: 750;
 }
+
+.link:hover span { transform: translateX(3px); }
+.link span { transition: transform 160ms ease; }
 

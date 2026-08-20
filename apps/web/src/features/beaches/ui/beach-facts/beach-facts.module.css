@@ -1,0 +1,9 @@
+.section { margin-top: clamp(64px, 9vw, 110px); }
+.heading { max-width: 620px; margin-bottom: 34px; }
+.heading p { margin: 0 0 10px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.heading h2 { margin: 0; font-size: clamp(34px, 5vw, 52px); letter-spacing: -.045em; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; overflow: hidden; margin: 0; border: 1px solid var(--border); border-radius: 24px; background: var(--border); }
+.fact { padding: 22px 24px; background: rgb(255 255 255 / 90%); }
+.fact dt { color: var(--muted); font-size: 13px; }
+.fact dd { margin: 7px 0 0; font-size: 17px; font-weight: 720; }
+@media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
