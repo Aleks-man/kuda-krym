@@ -1,3 +1,5 @@
+import type { BeachForecast as BeachForecastData } from "@kuda-krym/contracts";
+
 import { getBeachForecast } from "../../api/get-beach-forecast";
 import {
   formatForecastDate,
@@ -5,6 +7,7 @@ import {
   formatMeasurement,
   selectUpcomingHours,
 } from "../../model/forecast-view";
+import { ConditionScores } from "../condition-scores/condition-scores";
 import styles from "./beach-forecast.module.css";
 
 type BeachForecastProps = Readonly<{ beachId: string }>;
@@ -66,6 +69,8 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
           </dl>
         </div>
 
+        <ConditionScores scores={current.scores} />
+
         <div className={styles.timeline}>
           {hours.map((hour) => (
             <article className={styles.hour} key={hour.time}>
@@ -106,4 +111,3 @@ function ForecastUnavailable() {
     </section>
   );
 }
-import type { BeachForecast as BeachForecastData } from "@kuda-krym/contracts";
