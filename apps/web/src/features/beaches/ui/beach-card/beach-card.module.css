@@ -62,16 +62,14 @@
   content: "•";
 }
 
-.link {
+.pending {
   display: inline-flex;
-  gap: 8px;
   align-items: center;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: var(--accent-soft);
   color: var(--accent-strong);
+  font-size: 12px;
   font-weight: 750;
-}
-
-.link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 
