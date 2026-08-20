@@ -6,9 +6,23 @@ import {
   beachForecastSchema,
   beachListResponseSchema,
   healthResponseSchema,
+  recommendationRequestSchema,
 } from "../src/index.js";
 
 describe("API contracts", () => {
+  it("accepts recommendation preferences", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: "simferopol",
+      date: "2026-08-20",
+      time: "day",
+      company: "children",
+      surface: "sand",
+      priority: "calm_sea",
+    });
+
+    expect(result.priority).toBe("calm_sea");
+  });
+
   it("accepts a combined beach forecast", () => {
     const result = beachForecastSchema.parse({
       beach: {
