@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Region {
+  WEST_CRIMEA
+  SOUTH_COAST
+  EAST_CRIMEA
+  SEVASTOPOL
+  KERCH_PENINSULA
+}
+
+enum PublicationStatus {
+  DRAFT
+  PUBLISHED
+  DISABLED
+}
+
+enum OsmType {
+  NODE
+  WAY
+  RELATION
+}
+
+enum Surface {
+  UNKNOWN
+  SAND
+  PEBBLE
+  MIXED
+  ROCK
+}
+
+enum WaterEntry {
+  UNKNOWN
+  GENTLE
+  MODERATE
+  STEEP
+}
+
+enum ChildSuitability {
+  UNKNOWN
+  SUITABLE
+  LIMITED
+  UNSUITABLE
+}
+
+enum InfrastructureLevel {
+  UNKNOWN
+  NONE
+  BASIC
+  DEVELOPED
+}
+
+enum ParkingType {
+  UNKNOWN
+  NONE
+  REMOTE
+  NEARBY
+  ON_SITE
+}
+
+enum AccessibilityLevel {
+  UNKNOWN
+  LIMITED
+  ACCESSIBLE
+}
+
+enum BayProtection {
+  UNKNOWN
+  OPEN
+  PARTIAL
+  PROTECTED
+}
+
+enum ExposureLevel {
+  UNKNOWN
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Availability {
+  UNKNOWN
+  YES
+  NO
+}
+
+enum DataSourceType {
+  OFFICIAL_REGISTRY
+  OPENSTREETMAP
+  WIKIMEDIA_COMMONS
+  OWNER_PROVIDED
+  FIELD_CHECK
+  EDITORIAL_RESEARCH
+}
+
+enum BeachField {
+  NAME
+  OFFICIAL_NAME
+  REGION
+  LOCALITY
+  COORDINATES
+  SURFACE
+  WATER_ENTRY
+  CHILD_SUITABILITY
+  INFRASTRUCTURE
+  PARKING
+  ACCESSIBILITY
+  BAY_PROTECTION
+  COASTLINE_BEARING
+  WIND_EXPOSURE
+  WAVE_EXPOSURE
+  HAS_TOILET
+  HAS_SHOWER
+  HAS_CHANGING_ROOM
+}
+
+enum VerificationStatus {
+  IMPORTED
+  MANUALLY_CHECKED
+  CONFLICTING
+  STALE
+  REJECTED
+}
+
+model Beach {
+  id                 String               @id @default(uuid()) @db.Uuid
+  slug               String               @unique
+  name               String
+  officialName       String?
+  region             Region
+  locality           String?
+  latitude           Decimal              @db.Decimal(9, 6)
+  longitude          Decimal              @db.Decimal(9, 6)
+  osmType            OsmType?
+  osmId              BigInt?
+  officialRegistryId String?
+  description        String?
+  publicationStatus  PublicationStatus    @default(DRAFT)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  profile            BeachProfile?
+  evidence           BeachFieldEvidence[]
+  images             BeachImage[]
+
+  @@unique([osmType, osmId])
+  @@index([publicationStatus])
+  @@index([region])
+  @@map("beaches")
+}
+
+model BeachProfile {
+  beachId          String              @id @db.Uuid
+  surface          Surface             @default(UNKNOWN)
+  waterEntry       WaterEntry          @default(UNKNOWN)
+  childSuitability ChildSuitability    @default(UNKNOWN)
+  infrastructure   InfrastructureLevel @default(UNKNOWN)
+  parking          ParkingType         @default(UNKNOWN)
+  accessibility    AccessibilityLevel  @default(UNKNOWN)
+  bayProtection    BayProtection       @default(UNKNOWN)
+  coastlineBearing Int?
+  windExposure     ExposureLevel       @default(UNKNOWN)
+  waveExposure     ExposureLevel       @default(UNKNOWN)
+  hasToilet        Availability        @default(UNKNOWN)
+  hasShower        Availability        @default(UNKNOWN)
+  hasChangingRoom  Availability        @default(UNKNOWN)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  beach            Beach               @relation(fields: [beachId], references: [id], onDelete: Cascade)
+
+  @@index([surface])
+  @@index([childSuitability])
+  @@map("beach_profiles")
+}
+
+model DataSource {
+  id          String               @id @default(uuid()) @db.Uuid
+  type        DataSourceType
+  title       String
+  url         String
+  license     String?
+  retrievedAt DateTime
+  createdAt   DateTime             @default(now())
+  evidence    BeachFieldEvidence[]
+
+  @@index([type])
+  @@map("data_sources")
+}
+
+model BeachFieldEvidence {
+  id         String             @id @default(uuid()) @db.Uuid
+  beachId    String             @db.Uuid
+  field      BeachField
+  sourceId   String             @db.Uuid
+  status     VerificationStatus @default(IMPORTED)
+  verifiedAt DateTime?
+  note       String?
+  isPrimary  Boolean            @default(false)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  beach      Beach              @relation(fields: [beachId], references: [id], onDelete: Cascade)
+  source     DataSource         @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@unique([beachId, field, sourceId])
+  @@index([beachId, field])
+  @@index([sourceId])
+  @@map("beach_field_evidence")
+}
+
+model BeachImage {
+  id         String   @id @default(uuid()) @db.Uuid
+  beachId    String   @db.Uuid
+  url        String
+  sourceUrl  String
+  title      String?
+  author     String
+  license    String
+  licenseUrl String?
+  alt        String
+  sortOrder  Int      @default(0)
+  isCover    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  beach      Beach    @relation(fields: [beachId], references: [id], onDelete: Cascade)
+
+  @@index([beachId, sortOrder])
+  @@map("beach_images")
+}
