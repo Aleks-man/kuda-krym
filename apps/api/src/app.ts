@@ -5,10 +5,13 @@ import helmet from "helmet";
 import type { AppEnv } from "./config/env.js";
 import { createBeachRouter } from "./modules/beaches/beach.router.js";
 import type { BeachService } from "./modules/beaches/beach.service.js";
+import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
+import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { healthRouter } from "./modules/health/health.router.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
+  beachForecastService: BeachForecastService;
 }>;
 
 export type CreateAppOptions = Readonly<{
@@ -26,6 +29,10 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
 
   app.use("/api/health", healthRouter);
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
+  app.use(
+    "/api/forecast",
+    createBeachForecastRouter(dependencies.beachForecastService),
+  );
 
   return app;
 }
