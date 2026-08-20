@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { getBeach } from "@/features/beaches/api/get-beach";
 import { BeachDetailHero } from "@/features/beaches/ui/beach-detail-hero/beach-detail-hero";
 import { BeachFacts } from "@/features/beaches/ui/beach-facts/beach-facts";
 import { BeachSources } from "@/features/beaches/ui/beach-sources/beach-sources";
+import { BeachForecast } from "@/features/forecast/ui/beach-forecast/beach-forecast";
+import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
 
 import styles from "./page.module.css";
 
@@ -28,6 +31,9 @@ export default async function BeachPage({ params }: BeachPageProps) {
   return (
     <main className={styles.main}>
       <BeachDetailHero beach={beach} />
+      <Suspense fallback={<BeachForecastSkeleton />}>
+        <BeachForecast beachId={beach.id} />
+      </Suspense>
       <BeachFacts beach={beach} />
       <BeachSources beach={beach} />
     </main>

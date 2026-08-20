@@ -1,0 +1,7 @@
+.section { margin-top: clamp(64px, 9vw, 110px); }
+.title, .panel, .row { border-radius: 18px; background: linear-gradient(90deg, #e7efed 25%, #f4f8f7 50%, #e7efed 75%); background-size: 200% 100%; animation: pulse 1.4s infinite; }
+.title { width: min(70%, 470px); height: 52px; margin-bottom: 30px; }
+.panel { height: 250px; }
+.row { height: 130px; margin-top: 14px; }
+@keyframes pulse { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .title, .panel, .row { animation: none; } }
