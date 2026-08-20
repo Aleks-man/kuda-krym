@@ -6,11 +6,20 @@ const envSchema = z.object({
     .default("development"),
   PORT: z.coerce.number().int().min(1).max(65_535).default(4000),
   WEB_ORIGIN: z.url().default("http://localhost:3000"),
+  DATABASE_URL: z.url().optional(),
 });
 
 export type AppEnv = z.infer<typeof envSchema>;
 
 export function parseEnv(environment: NodeJS.ProcessEnv): AppEnv {
   return envSchema.parse(environment);
+}
+
+export function requireDatabaseUrl(env: AppEnv): string {
+  if (!env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is required to start the API");
+  }
+
+  return env.DATABASE_URL;
 }
 

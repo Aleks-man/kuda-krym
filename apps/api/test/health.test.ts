@@ -2,12 +2,11 @@ import { healthResponseSchema } from "@kuda-krym/contracts";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 
-import { createApp } from "../src/app.js";
-import { parseEnv } from "../src/config/env.js";
+import { createTestApp } from "./support/create-test-app.js";
 
 describe("GET /api/health", () => {
   it("reports that the API is available", async () => {
-    const app = createApp(parseEnv({ NODE_ENV: "test" }));
+    const app = createTestApp();
 
     const response = await request(app).get("/api/health");
 
