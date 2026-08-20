@@ -2,6 +2,7 @@ import type { BeachForecast } from "@kuda-krym/contracts";
 
 import type { MarineForecastProvider } from "../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../weather/weather-forecast.js";
+import { mapForecastHours } from "./forecast-hour.mapper.js";
 import type { ForecastBeachRepository } from "./forecast-beach.repository.js";
 
 type BeachForecastServiceDependencies = Readonly<{
@@ -37,9 +38,6 @@ export class BeachForecastService {
       this.dependencies.weatherProvider.getForecast(request),
       this.dependencies.marineProvider.getForecast(request),
     ]);
-    const marineByTime = new Map(
-      marine.hourly.map((conditions) => [conditions.time, conditions]),
-    );
 
     return {
       beach: {
@@ -50,30 +48,7 @@ export class BeachForecastService {
       },
       timezone: "UTC",
       generatedAt: this.now().toISOString(),
-      hourly: weather.hourly.map((conditions) => {
-        const marineConditions = marineByTime.get(conditions.time);
-        return {
-          time: conditions.time,
-          weather: {
-            temperatureCelsius: conditions.temperatureCelsius,
-            precipitationProbabilityPercent:
-              conditions.precipitationProbabilityPercent,
-            precipitationMillimeters: conditions.precipitationMillimeters,
-            windSpeedMetersPerSecond: conditions.windSpeedMetersPerSecond,
-            windDirectionDegrees: conditions.windDirectionDegrees,
-            windGustMetersPerSecond: conditions.windGustMetersPerSecond,
-            cloudCoverPercent: conditions.cloudCoverPercent,
-          },
-          marine: {
-            seaSurfaceTemperatureCelsius:
-              marineConditions?.seaSurfaceTemperatureCelsius ?? null,
-            waveHeightMeters: marineConditions?.waveHeightMeters ?? null,
-            waveDirectionDegrees:
-              marineConditions?.waveDirectionDegrees ?? null,
-            wavePeriodSeconds: marineConditions?.wavePeriodSeconds ?? null,
-          },
-        };
-      }),
+      hourly: mapForecastHours(weather, marine),
     };
   }
 }

@@ -65,7 +65,17 @@ describe("GET /api/forecast/:beachId", () => {
     expect(response.status).toBe(200);
     expect(body.beach.slug).toBe("uchkuevka");
     expect(body.hourly[0]?.marine.waveHeightMeters).toBe(0.32);
+    expect(body.hourly[0]?.scores.sea.score).toBeGreaterThan(90);
+    expect(body.hourly[0]?.scores.sea.coveragePercent).toBe(100);
+    expect(body.hourly[0]?.scores.weather.score).toBeGreaterThan(90);
     expect(body.hourly[1]?.marine.waveHeightMeters).toBeNull();
+    expect(body.hourly[1]?.scores.sea.coveragePercent).toBe(40);
+    expect(body.hourly[1]?.scores.sea.factors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "waveHeight", score: null }),
+        expect.objectContaining({ name: "windSpeed", score: expect.any(Number) }),
+      ]),
+    );
   });
 
   it("returns 404 when a published beach does not exist", async () => {

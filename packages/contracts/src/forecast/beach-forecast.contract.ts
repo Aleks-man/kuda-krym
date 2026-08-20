@@ -5,6 +5,27 @@ const coordinatesSchema = z.object({
   longitude: z.number().min(-180).max(180),
 });
 
+const scoreFactorSchema = z.object({
+  name: z.enum([
+    "waveHeight",
+    "windSpeed",
+    "waterTemperature",
+    "windGust",
+    "airTemperature",
+    "precipitationProbability",
+    "precipitationAmount",
+    "cloudCover",
+  ]),
+  score: z.number().int().min(0).max(100).nullable(),
+  weight: z.number().positive().max(1),
+});
+
+const conditionsScoreSchema = z.object({
+  score: z.number().int().min(0).max(100).nullable(),
+  coveragePercent: z.number().int().min(0).max(100),
+  factors: z.array(scoreFactorSchema),
+});
+
 export const beachForecastSchema = z.object({
   beach: z.object({
     id: z.uuid(),
@@ -31,6 +52,10 @@ export const beachForecastSchema = z.object({
         waveHeightMeters: z.number().nonnegative().nullable(),
         waveDirectionDegrees: z.number().min(0).max(360).nullable(),
         wavePeriodSeconds: z.number().nonnegative().nullable(),
+      }),
+      scores: z.object({
+        sea: conditionsScoreSchema,
+        weather: conditionsScoreSchema,
       }),
     }),
   ),
