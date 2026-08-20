@@ -8,6 +8,7 @@ import type { BeachService } from "./modules/beaches/beach.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { healthRouter } from "./modules/health/health.router.js";
+import { recommendationRouter } from "./modules/recommendations/recommendation.router.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
@@ -33,6 +34,7 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
   );
+  app.use("/api/recommendations", recommendationRouter);
 
   return app;
 }

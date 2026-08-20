@@ -23,4 +23,14 @@ export {
   beachForecastSchema,
   type BeachForecast,
 } from "./forecast/beach-forecast.contract.js";
+export {
+  recommendationCompanySchema,
+  recommendationDateSchema,
+  recommendationOriginSchema,
+  recommendationPrioritySchema,
+  recommendationRequestSchema,
+  recommendationSurfaceSchema,
+  recommendationTimeSchema,
+  type RecommendationRequest,
+} from "./recommendations/recommendation-request.contract.js";
 
