@@ -1,0 +1,77 @@
+.card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: 0 16px 44px rgb(22 48 43 / 7%);
+}
+
+.image {
+  display: flex;
+  min-height: 180px;
+  align-items: flex-end;
+  padding: 20px;
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(13 91 102 / 12%)),
+    linear-gradient(160deg, #bde8e5 0%, #68bac1 52%, #217b91 53%, #15546b 100%);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.content {
+  padding: 24px;
+}
+
+.region {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.locality {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.facts {
+  display: grid;
+  gap: 8px;
+  margin: 22px 0;
+  padding: 0;
+  color: #334e49;
+  font-size: 14px;
+  list-style: none;
+}
+
+.facts li::before {
+  margin-right: 8px;
+  color: var(--accent);
+  content: "•";
+}
+
+.link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--accent-strong);
+  font-weight: 750;
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+

@@ -1,0 +1,47 @@
+.main {
+  display: grid;
+  min-height: calc(100vh - 69px);
+  place-items: center;
+  padding: 40px 20px;
+}
+
+.panel {
+  width: min(100%, 640px);
+  padding: clamp(32px, 7vw, 64px);
+  border: 1px solid #efd2cb;
+  border-radius: 24px;
+  background: var(--surface);
+}
+
+.eyebrow {
+  margin: 0;
+  color: #a04430;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel h1 {
+  margin: 14px 0;
+  font-size: clamp(30px, 6vw, 48px);
+  letter-spacing: -0.04em;
+}
+
+.panel p:not(.eyebrow) {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.button {
+  margin-top: 16px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent-strong);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 750;
+}
+

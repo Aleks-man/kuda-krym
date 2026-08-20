@@ -1,0 +1,46 @@
+.main {
+  width: min(100% - 40px, 1180px);
+  margin: 0 auto;
+  padding: 72px 0;
+}
+
+.heading,
+.card {
+  background: linear-gradient(90deg, #e8efed, #f6f9f8, #e8efed);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.heading {
+  width: min(80%, 520px);
+  height: 72px;
+  margin-bottom: 48px;
+  border-radius: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+}
+
+.card {
+  min-height: 430px;
+  border-radius: 22px;
+}
+
+.srOnly {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
