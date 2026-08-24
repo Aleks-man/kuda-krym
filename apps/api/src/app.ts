@@ -8,11 +8,13 @@ import type { BeachService } from "./modules/beaches/beach.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { healthRouter } from "./modules/health/health.router.js";
-import { recommendationRouter } from "./modules/recommendations/recommendation.router.js";
+import { createRecommendationRouter } from "./modules/recommendations/recommendation.router.js";
+import type { RecommendationService } from "./modules/recommendations/recommendation.service.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
   beachForecastService: BeachForecastService;
+  recommendationService: Pick<RecommendationService, "calculate">;
 }>;
 
 export type CreateAppOptions = Readonly<{
@@ -34,7 +36,10 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
   );
-  app.use("/api/recommendations", recommendationRouter);
+  app.use(
+    "/api/recommendations",
+    createRecommendationRouter(dependencies.recommendationService),
+  );
 
   return app;
 }
