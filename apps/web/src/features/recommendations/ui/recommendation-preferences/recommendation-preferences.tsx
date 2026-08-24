@@ -1,3 +1,9 @@
+"use client";
+
+import type { RecommendationResponse } from "@kuda-krym/contracts";
+import { useState, type FormEvent } from "react";
+import { submitRecommendations } from "../../api/submit-recommendations";
+import { createRecommendationRequest } from "../../model/recommendation-form";
 import {
   companyOptions,
   dateOptions,
@@ -7,9 +13,30 @@ import {
   timeOptions,
 } from "../../model/preference-options";
 import { PreferenceChoice } from "../preference-choice/preference-choice";
+import { RecommendationResults } from "../recommendation-results/recommendation-results";
 import styles from "./recommendation-preferences.module.css";
 
 export function RecommendationPreferences() {
+  const [result, setResult] = useState<RecommendationResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const request = createRecommendationRequest(new FormData(event.currentTarget));
+      setResult(await submitRecommendations(request));
+    } catch (cause) {
+      setResult(null);
+      setError(cause instanceof Error ? cause.message : "Не удалось подобрать пляжи");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <section className={styles.section} id="preferences">
       <div className={styles.intro}>
@@ -21,7 +48,7 @@ export function RecommendationPreferences() {
         </span>
       </div>
 
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label className={styles.selectField}>
             <span>Откуда выезжаем</span>
@@ -115,15 +142,17 @@ export function RecommendationPreferences() {
         </fieldset>
 
         <div className={styles.footer}>
-          <button disabled type="button">
-            Подобрать пляж
+          <button disabled={isLoading} type="submit">
+            {isLoading ? "Сравниваем условия…" : "Подобрать пляж"}
           </button>
           <p>
-            Подключим расчёт рекомендаций на следующем этапе. Сейчас можно
-            проверить состав и удобство формы.
+            Учтём прогноз моря и погоды, ваши приоритеты и покажем до трёх
+            лучших вариантов.
           </p>
         </div>
+        {error ? <div className={styles.error} role="alert">{error}</div> : null}
       </form>
+      {result ? <RecommendationResults result={result} /> : null}
     </section>
   );
 }
