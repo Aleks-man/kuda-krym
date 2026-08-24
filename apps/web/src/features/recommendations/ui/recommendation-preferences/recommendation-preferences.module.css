@@ -12,7 +12,10 @@
 .twoColumns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .threeColumns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .footer { display: flex; align-items: center; gap: 18px; padding-top: 4px; }
-.footer button { flex: 0 0 auto; padding: 15px 20px; border: 0; border-radius: 14px; background: var(--foreground); color: white; font: inherit; font-weight: 760; opacity: .48; cursor: not-allowed; }
+.footer button { flex: 0 0 auto; padding: 15px 20px; border: 0; border-radius: 14px; background: var(--foreground); color: white; font: inherit; font-weight: 760; cursor: pointer; transition: transform .2s ease, opacity .2s ease; }
+.footer button:hover:not(:disabled) { transform: translateY(-2px); }
+.footer button:disabled { opacity: .55; cursor: wait; }
 .footer p { max-width: 440px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.error { padding: 14px 16px; border: 1px solid rgb(177 64 56 / 18%); border-radius: 14px; background: rgb(177 64 56 / 8%); color: #873d37; font-size: 13px; font-weight: 650; }
 @media (max-width: 940px) { .section { grid-template-columns: 1fr; } .intro { position: static; max-width: 680px; } }
 @media (max-width: 680px) { .section { padding: 24px 18px; border-radius: 24px; } .row { grid-template-columns: 1fr; } .threeColumns { grid-template-columns: 1fr; } .footer { align-items: start; flex-direction: column; } }
