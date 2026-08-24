@@ -8,9 +8,50 @@ import {
   healthResponseSchema,
   recommendationRequestSchema,
   recommendationResponseSchema,
+  routeRequestSchema,
+  routeResponseSchema,
 } from "../src/index.js";
 
 describe("API contracts", () => {
+  it("accepts a driving route calculation", () => {
+    const request = routeRequestSchema.parse({
+      origin: { latitude: 44.9521, longitude: 34.1024 },
+      beachId: "47f72fb6-dd75-4ca2-9f78-ad1e594dbcb4",
+    });
+    const response = routeResponseSchema.parse({
+      data: {
+        origin: request.origin,
+        destination: { latitude: 44.644844, longitude: 33.536119 },
+        distanceMeters: 78240,
+        durationSeconds: 4380,
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            [34.1024, 44.9521],
+            [33.536119, 44.644844],
+          ],
+        },
+      },
+      meta: {
+        source: "OSRM",
+        calculatedAt: "2026-08-24T09:30:00.000Z",
+        cached: false,
+      },
+    });
+
+    expect(request.profile).toBe("DRIVING");
+    expect(response.data.durationSeconds).toBe(4380);
+  });
+
+  it("rejects an invalid route origin", () => {
+    const result = routeRequestSchema.safeParse({
+      origin: { latitude: 144.9521, longitude: 34.1024 },
+      beachId: "47f72fb6-dd75-4ca2-9f78-ad1e594dbcb4",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
   it("accepts an empty recommendation response", () => {
     const result = recommendationResponseSchema.parse({
       data: [],

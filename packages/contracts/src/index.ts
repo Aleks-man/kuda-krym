@@ -37,4 +37,12 @@ export {
   recommendationResponseSchema,
   type RecommendationResponse,
 } from "./recommendations/recommendation-response.contract.js";
+export {
+  routePointSchema,
+  routeRequestSchema,
+  routeResponseSchema,
+  type RoutePoint,
+  type RouteRequest,
+  type RouteResponse,
+} from "./routing/route.contract.js";
 
