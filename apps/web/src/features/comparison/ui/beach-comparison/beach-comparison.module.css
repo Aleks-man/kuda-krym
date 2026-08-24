@@ -1,0 +1,14 @@
+.scroller { overflow-x: auto; padding: 2px 2px 24px; }
+.table { width: 100%; min-width: 760px; border-spacing: 0; border-collapse: separate; table-layout: fixed; }
+.table th, .table td { padding: 18px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgb(255 255 255 / 65%); text-align: left; }
+.table tr > :first-child { width: 190px; border-left: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 750; }
+.table thead th { padding-block: 22px; border-top: 1px solid var(--border); vertical-align: top; }
+.table thead th:first-child { border-top-left-radius: 20px; }
+.table thead th:last-child { border-top-right-radius: 20px; }
+.table tbody tr:last-child > :first-child { border-bottom-left-radius: 20px; }
+.table tbody tr:last-child > :last-child { border-bottom-right-radius: 20px; }
+.table thead span { display: block; margin-bottom: 6px; color: var(--accent); font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.table thead strong { display: block; min-height: 50px; color: var(--foreground); font-size: 20px; letter-spacing: -.025em; }
+.table thead a { display: inline-block; margin-top: 14px; color: var(--foreground); font-size: 12px; font-weight: 800; text-decoration: none; }
+.table td { color: var(--foreground); font-size: 14px; font-weight: 700; }
+@media (max-width: 680px) { .scroller { margin-right: -18px; } .table { min-width: 680px; } .table th, .table td { padding: 14px; } .table tr > :first-child { width: 150px; } }

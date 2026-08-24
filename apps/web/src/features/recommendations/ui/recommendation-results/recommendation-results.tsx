@@ -19,6 +19,10 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
     );
   }
 
+  const comparisonUrl = `/compare?beaches=${result.data
+    .map(({ beach }) => beach.slug)
+    .join(",")}`;
+
   return (
     <section className={styles.results} aria-live="polite">
       <header>
@@ -45,6 +49,11 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
           </article>
         ))}
       </div>
+      {result.data.length >= 2 ? (
+        <Link className={styles.compare} href={comparisonUrl}>
+          Сравнить эти пляжи <span>→</span>
+        </Link>
+      ) : null}
     </section>
   );
 }

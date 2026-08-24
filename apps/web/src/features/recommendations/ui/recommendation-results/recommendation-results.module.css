@@ -15,4 +15,5 @@
 .card dd { margin: 0; font-size: 13px; font-weight: 750; }
 .card a { display: flex; align-items: center; justify-content: space-between; margin-top: auto; color: var(--foreground); font-size: 13px; font-weight: 800; text-decoration: none; }
 .empty { grid-column: 1 / -1; margin-top: 16px; padding: 22px; border-radius: 18px; background: rgb(255 255 255 / 65%); color: var(--muted); }
+.compare { display: flex; align-items: center; justify-content: space-between; width: fit-content; min-width: 230px; padding: 14px 18px; border-radius: 14px; background: var(--foreground); color: white; font-size: 13px; font-weight: 800; text-decoration: none; }
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
