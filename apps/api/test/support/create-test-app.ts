@@ -8,6 +8,7 @@ import { BeachForecastService } from "../../src/modules/forecast/beach-forecast.
 import type { ForecastBeach } from "../../src/modules/forecast/forecast-beach.repository.js";
 import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js";
 import type { WeatherForecast } from "../../src/modules/weather/weather-forecast.js";
+import type { RecommendationCalculation } from "../../src/modules/recommendations/recommendation-calculation.js";
 
 type TestAppData = Readonly<{
   beaches?: BeachListItem[];
@@ -15,6 +16,8 @@ type TestAppData = Readonly<{
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
+  recommendationCalculation?: RecommendationCalculation;
+  recommendationError?: Error | null;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -31,12 +34,37 @@ const emptyMarineForecast: MarineForecast = {
   hourly: [],
 };
 
+const emptyRecommendationCalculation: RecommendationCalculation = {
+  context: {
+    origin: {
+      code: "simferopol",
+      name: "Симферополь",
+      latitude: 44.952117,
+      longitude: 34.102417,
+    },
+    date: "2026-08-20",
+    forecastDays: 1,
+    visitWindow: {
+      startsAt: "2026-08-20T09:00:00.000Z",
+      endsAt: "2026-08-20T14:00:00.000Z",
+    },
+    company: "ALONE",
+    preferredSurface: "ANY",
+    priority: "CALM_SEA",
+  },
+  recommendations: [],
+  failures: [],
+  meta: { candidateCount: 0, recommendationCount: 0, failureCount: 0 },
+};
+
 export function createTestApp({
   beaches = [],
   details = [],
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
+  recommendationCalculation = emptyRecommendationCalculation,
+  recommendationError = null,
 }: TestAppData = {}) {
   const beachRepository: BeachRepository = {
     findPublished: async () => beaches,
@@ -58,6 +86,12 @@ export function createTestApp({
     dependencies: {
       beachService: new BeachService(beachRepository),
       beachForecastService,
+      recommendationService: {
+        calculate: async () => {
+          if (recommendationError) throw recommendationError;
+          return recommendationCalculation;
+        },
+      },
     },
   });
 }

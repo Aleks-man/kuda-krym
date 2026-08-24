@@ -7,9 +7,86 @@ import {
   beachListResponseSchema,
   healthResponseSchema,
   recommendationRequestSchema,
+  recommendationResponseSchema,
 } from "../src/index.js";
 
 describe("API contracts", () => {
+  it("accepts an empty recommendation response", () => {
+    const result = recommendationResponseSchema.parse({
+      data: [],
+      context: {
+        origin: { code: "simferopol", name: "Симферополь" },
+        date: "2026-08-20",
+        visitWindow: {
+          startsAt: "2026-08-20T09:00:00.000Z",
+          endsAt: "2026-08-20T14:00:00.000Z",
+        },
+        priority: "CALM_SEA",
+      },
+      meta: {
+        candidateCount: 0,
+        recommendationCount: 0,
+        unavailableCount: 0,
+      },
+    });
+
+    expect(result.data).toEqual([]);
+  });
+
+  it("accepts an averaged fractional ranking component", () => {
+    const result = recommendationResponseSchema.parse({
+      data: [
+        {
+          position: 1,
+          beach: {
+            id: "47f72fb6-dd75-4ca2-9f78-ad1e594dbcb4",
+            slug: "uchkuevka",
+            name: "Пляж Учкуевка",
+            coordinates: { latitude: 44.644844, longitude: 33.536119 },
+            surface: "SAND",
+            childSuitability: "SUITABLE",
+          },
+          score: 92,
+          rawScore: 94,
+          confidencePercent: 95,
+          hourCount: 6,
+          components: [
+            {
+              name: "SEA",
+              score: 94.5,
+              coveragePercent: 90,
+              weight: 0.65,
+            },
+          ],
+          conditions: {
+            airTemperatureCelsius: 26.2,
+            seaSurfaceTemperatureCelsius: 25.4,
+            waveHeightMeters: 0.3,
+            windSpeedMetersPerSecond: 2.8,
+            precipitationProbabilityPercent: 5,
+          },
+        },
+      ],
+      context: {
+        origin: { code: "simferopol", name: "Симферополь" },
+        date: "2026-08-24",
+        visitWindow: {
+          startsAt: "2026-08-24T09:00:00.000Z",
+          endsAt: "2026-08-24T14:00:00.000Z",
+        },
+        priority: "CALM_SEA",
+      },
+      meta: {
+        candidateCount: 1,
+        recommendationCount: 1,
+        unavailableCount: 0,
+      },
+    });
+
+    expect(result.data[0]?.components[0]?.score).toBe(94.5);
+  });
+
+
   it("accepts recommendation preferences", () => {
     const result = recommendationRequestSchema.parse({
       origin: "simferopol",

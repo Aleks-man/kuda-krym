@@ -33,4 +33,8 @@ export {
   recommendationTimeSchema,
   type RecommendationRequest,
 } from "./recommendations/recommendation-request.contract.js";
+export {
+  recommendationResponseSchema,
+  type RecommendationResponse,
+} from "./recommendations/recommendation-response.contract.js";
 
