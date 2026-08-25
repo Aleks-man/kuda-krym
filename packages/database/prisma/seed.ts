@@ -61,6 +61,7 @@ async function seed() {
           longitude: item.longitude,
           osmType: item.osmType,
           osmId: item.osmId,
+          coastalLocation: { connect: { slug: item.coastalLocationSlug } },
           publicationStatus: PublicationStatus.PUBLISHED,
         },
         create: {
@@ -73,6 +74,7 @@ async function seed() {
           longitude: item.longitude,
           osmType: item.osmType,
           osmId: item.osmId,
+          coastalLocation: { connect: { slug: item.coastalLocationSlug } },
           publicationStatus: PublicationStatus.PUBLISHED,
           profile: { create: {} },
         },

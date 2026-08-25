@@ -21,6 +21,7 @@ export const seedCoastalLocations: readonly SeedCoastalLocation[] = [
   location("steregushchee", "Стерегущее", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 45.747, 33.229, 45.79, 33.20),
   location("evpatoria", "Евпатория", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 45.19, 33.367, 45.16, 33.31),
   location("zaozernoe", "Заозёрное", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 45.158, 33.278, 45.13, 33.22),
+  location("popovka", "Поповка", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 45.2963, 33.0306, 45.26, 33.01),
   location("novofedorovka", "Новофёдоровка", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 45.091, 33.574, 45.05, 33.54),
   location("nikolaevka", "Николаевка", Region.WEST_CRIMEA, WaterBody.BLACK_SEA, 44.966, 33.614, 44.93, 33.58),
   location("kacha", "Кача", Region.SEVASTOPOL, WaterBody.BLACK_SEA, 44.776, 33.543, 44.78, 33.49),
