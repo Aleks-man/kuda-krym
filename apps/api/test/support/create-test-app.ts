@@ -57,6 +57,7 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
     maxTravelMinutes: 120,
   },
   recommendations: [],
+  candidateRoutes: [],
   failures: [],
   meta: { candidateCount: 0, recommendationCount: 0, failureCount: 0 },
 };

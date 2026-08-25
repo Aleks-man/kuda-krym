@@ -5,11 +5,14 @@ import { normalizeRecommendationRequest } from "./context/normalize-recommendati
 import type { CandidateForecastLoader } from "./forecasts/candidate-forecast.loader.js";
 import { rankRecommendationCandidates } from "./ranking/rank-recommendation-candidates.js";
 import type { RecommendationCalculation } from "./recommendation-calculation.js";
+import type { CandidateRouteLoader } from "./routes/candidate-route.loader.js";
+import { filterCandidateRoutes } from "./routes/filter-candidate-routes.js";
 import { summarizeCandidateWindows } from "./summaries/candidate-window-summarizer.js";
 
 type RecommendationServiceDependencies = Readonly<{
   candidateService: Pick<RecommendationCandidateService, "listEligible">;
   forecastLoader: Pick<CandidateForecastLoader, "load">;
+  routeLoader: Pick<CandidateRouteLoader, "load">;
   now?: () => Date;
 }>;
 
@@ -29,8 +32,19 @@ export class RecommendationService {
     const candidates = await this.dependencies.candidateService.listEligible(
       context,
     );
+    const routes = await this.dependencies.routeLoader.load(candidates, {
+      latitude: context.origin.latitude,
+      longitude: context.origin.longitude,
+    });
+    const routeSelection = filterCandidateRoutes(
+      routes.available,
+      context.maxTravelMinutes,
+    );
+    const routeEligibleCandidates = routeSelection.eligible.map(
+      ({ candidate }) => candidate,
+    );
     const forecasts = await this.dependencies.forecastLoader.load(
-      candidates,
+      routeEligibleCandidates,
       context.forecastDays,
     );
     const summaries = summarizeCandidateWindows(forecasts, context);
@@ -42,11 +56,19 @@ export class RecommendationService {
     return {
       context,
       recommendations: ranking.recommendations,
-      failures: ranking.failures,
+      candidateRoutes: routeSelection.eligible,
+      failures: [
+        ...routes.failures,
+        ...routeSelection.excluded,
+        ...ranking.failures,
+      ],
       meta: {
         candidateCount: candidates.length,
         recommendationCount: ranking.recommendations.length,
-        failureCount: ranking.failures.length,
+        failureCount:
+          routes.failures.length +
+          routeSelection.excluded.length +
+          ranking.failures.length,
       },
     };
   }

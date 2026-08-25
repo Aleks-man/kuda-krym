@@ -4,6 +4,11 @@ import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js
 import type { RecommendationCandidate } from "../../src/modules/recommendations/candidates/recommendation-candidate.js";
 import { CandidateForecastLoader } from "../../src/modules/recommendations/forecasts/candidate-forecast.loader.js";
 import { RecommendationService } from "../../src/modules/recommendations/recommendation.service.js";
+import { CandidateRouteLoader } from "../../src/modules/recommendations/routes/candidate-route.loader.js";
+import type {
+  RoutePoint,
+  RoutingProvider,
+} from "../../src/modules/routing/route.js";
 import type { WeatherForecast } from "../../src/modules/weather/weather-forecast.js";
 
 const now = new Date("2026-08-24T06:00:00.000Z");
@@ -40,6 +45,7 @@ describe("RecommendationService", () => {
     const service = new RecommendationService({
       candidateService: { listEligible },
       forecastLoader: loader,
+      routeLoader: createRouteLoader(),
       now: () => now,
     });
 
@@ -56,6 +62,7 @@ describe("RecommendationService", () => {
       }),
     );
     expect(result.recommendations[0]?.candidate.slug).toBe("calm");
+    expect(result.candidateRoutes).toHaveLength(2);
     expect(result.meta).toEqual({
       candidateCount: 2,
       recommendationCount: 2,
@@ -72,6 +79,7 @@ describe("RecommendationService", () => {
         weatherProvider,
         marineProvider,
       }),
+      routeLoader: createRouteLoader(),
       now: () => now,
     });
 
@@ -82,7 +90,71 @@ describe("RecommendationService", () => {
     expect(weatherProvider.getForecast).not.toHaveBeenCalled();
     expect(marineProvider.getForecast).not.toHaveBeenCalled();
   });
+
+  it("does not load forecasts for candidates beyond the travel limit", async () => {
+    const near = createCandidate("near", 44.5);
+    const far = createCandidate("far", 44.6);
+    const getForecast = vi.fn(async ({ location }) =>
+      createWeatherForecast(location),
+    );
+    const service = new RecommendationService({
+      candidateService: {
+        listEligible: vi.fn().mockResolvedValue([near, far]),
+      },
+      routeLoader: createRouteLoader((destination) =>
+        destination.latitude === far.latitude ? 121 : 60,
+      ),
+      forecastLoader: new CandidateForecastLoader({
+        weatherProvider: { getForecast },
+        marineProvider: {
+          getForecast: vi.fn(async ({ location }) =>
+            createMarineForecast(location, 0.2),
+          ),
+        },
+      }),
+      now: () => now,
+    });
+
+    const result = await service.calculate(request);
+
+    expect(getForecast).toHaveBeenCalledTimes(1);
+    expect(result.candidateRoutes[0]?.candidate.slug).toBe("near");
+    expect(result.failures).toContainEqual(
+      expect.objectContaining({
+        slug: "far",
+        code: "TRAVEL_TIME_EXCEEDED",
+        durationMinutes: 121,
+      }),
+    );
+    expect(result.meta.failureCount).toBe(1);
+  });
 });
+
+function createRouteLoader(
+  durationMinutes: (destination: RoutePoint) => number = () => 60,
+) {
+  const routingProvider: RoutingProvider = {
+    getDrivingRoute: vi.fn<RoutingProvider["getDrivingRoute"]>(async ({ origin, destination }) => ({
+      origin,
+      destination,
+      distanceMeters: 50_000,
+      durationSeconds: durationMinutes(destination) * 60,
+      geometry: {
+        type: "LineString" as const,
+        coordinates: [
+          [origin.longitude, origin.latitude] as [number, number],
+          [destination.longitude, destination.latitude] as [number, number],
+        ],
+      },
+      source: "OSRM",
+      calculatedAt: "2026-08-24T06:00:00.000Z",
+    })),
+  };
+
+  return new CandidateRouteLoader({
+    routingProvider,
+  });
+}
 
 function createCandidate(
   slug: string,

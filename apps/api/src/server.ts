@@ -14,6 +14,7 @@ import { RecommendationCandidateService } from "./modules/recommendations/candid
 import { PrismaRecommendationCandidateRepository } from "./modules/recommendations/candidates/prisma-recommendation-candidate.repository.js";
 import { CandidateForecastLoader } from "./modules/recommendations/forecasts/candidate-forecast.loader.js";
 import { RecommendationService } from "./modules/recommendations/recommendation.service.js";
+import { CandidateRouteLoader } from "./modules/recommendations/routes/candidate-route.loader.js";
 import { OsrmClient } from "./modules/routing/osrm/osrm.client.js";
 import { PrismaRoutingBeachRepository } from "./modules/routing/prisma-routing-beach.repository.js";
 import { RoutingService } from "./modules/routing/routing.service.js";
@@ -24,6 +25,7 @@ const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const weatherProvider = new OpenMeteoWeatherClient();
 const marineProvider = new OpenMeteoMarineClient();
+const routingProvider = new OsrmClient({ baseUrl: env.OSRM_BASE_URL });
 const beachForecastService = new BeachForecastService({
   beachRepository: new PrismaForecastBeachRepository(prisma),
   weatherProvider,
@@ -38,10 +40,14 @@ const recommendationService = new RecommendationService({
     marineProvider,
     concurrency: 3,
   }),
+  routeLoader: new CandidateRouteLoader({
+    routingProvider,
+    concurrency: 2,
+  }),
 });
 const routingService = new RoutingService({
   beachRepository: new PrismaRoutingBeachRepository(prisma),
-  routingProvider: new OsrmClient({ baseUrl: env.OSRM_BASE_URL }),
+  routingProvider,
 });
 const app = createApp({
   env,
