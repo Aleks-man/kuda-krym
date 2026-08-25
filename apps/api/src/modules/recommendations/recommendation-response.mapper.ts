@@ -1,6 +1,7 @@
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 
 import type { RecommendationCalculation } from "./recommendation-calculation.js";
+import { mapRecommendationTravel } from "./recommendation-travel.mapper.js";
 
 export function mapRecommendationResponse(
   calculation: RecommendationCalculation,
@@ -23,6 +24,10 @@ export function mapRecommendationResponse(
       rawScore: recommendation.rawScore,
       confidencePercent: recommendation.confidencePercent,
       hourCount: recommendation.hourCount,
+      travel: mapRecommendationTravel(
+        recommendation.candidate.id,
+        calculation.candidateRoutes,
+      ),
       components: recommendation.components,
       conditions: recommendation.averages,
     })),
@@ -34,6 +39,7 @@ export function mapRecommendationResponse(
       date: calculation.context.date,
       visitWindow: calculation.context.visitWindow,
       priority: calculation.context.priority,
+      maxTravelMinutes: calculation.context.maxTravelMinutes,
     },
     meta: {
       candidateCount: calculation.meta.candidateCount,
