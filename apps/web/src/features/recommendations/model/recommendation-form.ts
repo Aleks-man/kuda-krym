@@ -18,5 +18,6 @@ export function createRecommendationRequest(
     company: formData.get("company"),
     surface: formData.get("surface"),
     priority: formData.get("priority"),
+    maxTravelMinutes: Number(formData.get("maxTravelMinutes")),
   });
 }

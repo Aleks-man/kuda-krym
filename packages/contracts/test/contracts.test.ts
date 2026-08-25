@@ -136,9 +136,11 @@ describe("API contracts", () => {
       company: "children",
       surface: "sand",
       priority: "calm_sea",
+      maxTravelMinutes: 120,
     });
 
     expect(result.priority).toBe("calm_sea");
+    expect(result.maxTravelMinutes).toBe(120);
   });
 
   it("accepts a combined beach forecast", () => {

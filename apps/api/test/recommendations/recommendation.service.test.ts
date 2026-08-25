@@ -14,6 +14,7 @@ const request = {
   company: "alone",
   surface: "any",
   priority: "calm_sea",
+  maxTravelMinutes: 120,
 } as const;
 
 describe("RecommendationService", () => {

@@ -15,6 +15,7 @@ describe("normalizeRecommendationRequest", () => {
         company: "children",
         surface: "sand",
         priority: "calm_sea",
+        maxTravelMinutes: 120,
       },
       now,
     );
@@ -35,6 +36,7 @@ describe("normalizeRecommendationRequest", () => {
       company: "WITH_CHILDREN",
       preferredSurface: "SAND",
       priority: "CALM_SEA",
+      maxTravelMinutes: 120,
     });
   });
 
@@ -47,6 +49,7 @@ describe("normalizeRecommendationRequest", () => {
         company: "alone",
         surface: "any",
         priority: "comfort",
+        maxTravelMinutes: 90,
       },
       now,
     );
@@ -68,6 +71,7 @@ describe("normalizeRecommendationRequest", () => {
         company: "friends",
         surface: "pebble",
         priority: "warm_water",
+        maxTravelMinutes: 180,
       },
       new Date("2026-08-20T22:30:00.000Z"),
     );
@@ -86,6 +90,7 @@ describe("normalizeRecommendationRequest", () => {
           company: "alone",
           surface: "any",
           priority: "calm_sea",
+          maxTravelMinutes: 60,
         },
         now,
       ),

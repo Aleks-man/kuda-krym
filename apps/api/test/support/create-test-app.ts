@@ -54,6 +54,7 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
     company: "ALONE",
     preferredSurface: "ANY",
     priority: "CALM_SEA",
+    maxTravelMinutes: 120,
   },
   recommendations: [],
   failures: [],

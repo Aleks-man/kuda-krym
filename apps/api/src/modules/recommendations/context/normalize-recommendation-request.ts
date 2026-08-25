@@ -50,6 +50,7 @@ export function normalizeRecommendationRequest(
     company: companyMap[request.company],
     preferredSurface: surfaceMap[request.surface],
     priority: priorityMap[request.priority],
+    maxTravelMinutes: request.maxTravelMinutes,
   };
 }
 

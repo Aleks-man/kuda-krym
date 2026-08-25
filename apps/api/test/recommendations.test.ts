@@ -12,6 +12,7 @@ const validRequest = {
   company: "children",
   surface: "sand",
   priority: "calm_sea",
+  maxTravelMinutes: 120,
 };
 
 describe("POST /api/recommendations", () => {

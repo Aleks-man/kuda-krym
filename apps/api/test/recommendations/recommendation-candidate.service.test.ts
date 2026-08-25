@@ -18,6 +18,7 @@ const context: RecommendationContext = {
   },
   company: "WITH_CHILDREN",
   preferredSurface: "SAND",
+  maxTravelMinutes: 120,
   priority: "CALM_SEA",
 };
 

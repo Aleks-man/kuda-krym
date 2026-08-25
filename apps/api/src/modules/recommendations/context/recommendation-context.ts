@@ -16,4 +16,5 @@ export type RecommendationContext = Readonly<{
   company: "ALONE" | "WITH_CHILDREN" | "FRIENDS";
   preferredSurface: "ANY" | "SAND" | "PEBBLE";
   priority: "CALM_SEA" | "WARM_WATER" | "COMFORT";
+  maxTravelMinutes: number;
 }>;
