@@ -1,0 +1,4 @@
+.frame, .loading { width: 100%; min-height: 420px; overflow: hidden; border: 1px solid rgb(255 255 255 / 80%); border-radius: 24px; background: #e8f1ef; box-shadow: 0 22px 60px rgb(19 77 80 / 10%); }
+.map { width: 100%; min-height: 420px; font-family: inherit; }
+.loading { display: grid; place-items: center; color: var(--muted); font-size: 13px; font-weight: 750; }
+@media (max-width: 680px) { .frame, .loading, .map { min-height: 360px; border-radius: 19px; } }

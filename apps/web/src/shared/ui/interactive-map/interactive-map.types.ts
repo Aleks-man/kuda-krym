@@ -1,0 +1,15 @@
+export type MapPosition = [latitude: number, longitude: number];
+
+export type MapPoint = Readonly<{
+  id: string;
+  label: string;
+  position: MapPosition;
+}>;
+
+export type InteractiveMapProps = Readonly<{
+  center: MapPosition;
+  points?: readonly MapPoint[];
+  route?: readonly MapPosition[];
+  zoom?: number;
+  ariaLabel?: string;
+}>;
