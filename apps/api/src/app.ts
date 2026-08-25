@@ -10,11 +10,14 @@ import type { BeachForecastService } from "./modules/forecast/beach-forecast.ser
 import { healthRouter } from "./modules/health/health.router.js";
 import { createRecommendationRouter } from "./modules/recommendations/recommendation.router.js";
 import type { RecommendationService } from "./modules/recommendations/recommendation.service.js";
+import { createRoutingRouter } from "./modules/routing/routing.router.js";
+import type { RoutingService } from "./modules/routing/routing.service.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
   beachForecastService: BeachForecastService;
   recommendationService: Pick<RecommendationService, "calculate">;
+  routingService: Pick<RoutingService, "calculateDrivingRoute">;
 }>;
 
 export type CreateAppOptions = Readonly<{
@@ -36,6 +39,7 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
   );
+  app.use("/api/routes", createRoutingRouter(dependencies.routingService));
   app.use(
     "/api/recommendations",
     createRecommendationRouter(dependencies.recommendationService),

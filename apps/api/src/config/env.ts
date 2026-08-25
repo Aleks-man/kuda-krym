@@ -7,6 +7,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65_535).default(4000),
   WEB_ORIGIN: z.url().default("http://localhost:3000"),
   DATABASE_URL: z.url().optional(),
+  OSRM_BASE_URL: z.url().default("https://router.project-osrm.org/"),
 });
 
 export type AppEnv = z.infer<typeof envSchema>;
