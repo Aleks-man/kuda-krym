@@ -24,6 +24,10 @@ const recommendationItemSchema = z.object({
   rawScore: z.number().int().min(0).max(100),
   confidencePercent: z.number().int().min(0).max(100),
   hourCount: z.number().int().positive(),
+  travel: z.object({
+    distanceMeters: z.number().int().nonnegative(),
+    durationMinutes: z.number().int().nonnegative(),
+  }),
   components: z.array(
     z.object({
       name: z.enum(["SEA", "WEATHER", "WARM_WATER"]),
@@ -51,6 +55,7 @@ export const recommendationResponseSchema = z.object({
       endsAt: z.iso.datetime(),
     }),
     priority: z.enum(["CALM_SEA", "WARM_WATER", "COMFORT"]),
+    maxTravelMinutes: z.number().int().min(30).max(240),
   }),
   meta: z.object({
     candidateCount: z.number().int().nonnegative(),

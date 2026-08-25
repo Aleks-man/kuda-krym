@@ -63,6 +63,7 @@ describe("API contracts", () => {
           endsAt: "2026-08-20T14:00:00.000Z",
         },
         priority: "CALM_SEA",
+        maxTravelMinutes: 120,
       },
       meta: {
         candidateCount: 0,
@@ -91,6 +92,7 @@ describe("API contracts", () => {
           rawScore: 94,
           confidencePercent: 95,
           hourCount: 6,
+          travel: { distanceMeters: 78_240, durationMinutes: 73 },
           components: [
             {
               name: "SEA",
@@ -116,6 +118,7 @@ describe("API contracts", () => {
           endsAt: "2026-08-24T14:00:00.000Z",
         },
         priority: "CALM_SEA",
+        maxTravelMinutes: 120,
       },
       meta: {
         candidateCount: 1,
