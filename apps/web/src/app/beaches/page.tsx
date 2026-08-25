@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getBeaches } from "@/features/beaches/api/get-beaches";
 import { BeachEmptyState } from "@/features/beaches/ui/beach-empty-state/beach-empty-state";
 import { BeachGrid } from "@/features/beaches/ui/beach-grid/beach-grid";
+import { BeachMap } from "@/features/beaches/ui/beach-map/beach-map";
 
 import styles from "./page.module.css";
 
@@ -31,7 +32,10 @@ export default async function BeachesPage() {
       </header>
 
       {beaches.length > 0 ? (
-        <BeachGrid beaches={beaches} />
+        <>
+          <BeachMap beaches={beaches} />
+          <BeachGrid beaches={beaches} />
+        </>
       ) : (
         <BeachEmptyState />
       )}
