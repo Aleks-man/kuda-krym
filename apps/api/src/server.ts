@@ -6,6 +6,7 @@ import { createApp } from "./app.js";
 import { parseEnv, requireDatabaseUrl } from "./config/env.js";
 import { PrismaBeachRepository } from "./modules/beaches/prisma-beach.repository.js";
 import { BeachService } from "./modules/beaches/beach.service.js";
+import { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/prisma-coastal-location.repository.js";
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
@@ -25,11 +26,15 @@ const env = parseEnv(process.env);
 const prisma = createPrismaClient(requireDatabaseUrl(env));
 const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
-const coastalLocationService = new CoastalLocationService(
-  new PrismaCoastalLocationRepository(prisma),
-);
+const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
+const coastalLocationService = new CoastalLocationService(coastalLocationRepository);
 const weatherProvider = new OpenMeteoWeatherClient();
 const marineProvider = new OpenMeteoMarineClient();
+const coastalForecastService = new CoastalForecastService({
+  locationRepository: coastalLocationRepository,
+  weatherProvider,
+  marineProvider,
+});
 const routingProvider = new OsrmClient({ baseUrl: env.OSRM_BASE_URL });
 const beachForecastService = new BeachForecastService({
   beachRepository: new PrismaForecastBeachRepository(prisma),
@@ -59,6 +64,7 @@ const app = createApp({
   dependencies: {
     beachService,
     coastalLocationService,
+    coastalForecastService,
     beachForecastService,
     recommendationService,
     routingService,
