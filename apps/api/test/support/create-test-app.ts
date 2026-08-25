@@ -1,9 +1,14 @@
-import type { BeachDetail, BeachListItem } from "@kuda-krym/contracts";
+import type {
+  BeachDetail,
+  BeachListItem,
+  CoastalLocation,
+} from "@kuda-krym/contracts";
 
 import { createApp } from "../../src/app.js";
 import { parseEnv } from "../../src/config/env.js";
 import type { BeachRepository } from "../../src/modules/beaches/beach.repository.js";
 import { BeachService } from "../../src/modules/beaches/beach.service.js";
+import { CoastalLocationService } from "../../src/modules/coastal-locations/coastal-location.service.js";
 import { BeachForecastService } from "../../src/modules/forecast/beach-forecast.service.js";
 import type { ForecastBeach } from "../../src/modules/forecast/forecast-beach.repository.js";
 import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js";
@@ -14,6 +19,7 @@ import type { DrivingRoute } from "../../src/modules/routing/route.js";
 type TestAppData = Readonly<{
   beaches?: BeachListItem[];
   details?: BeachDetail[];
+  coastalLocations?: CoastalLocation[];
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
@@ -65,6 +71,7 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
 export function createTestApp({
   beaches = [],
   details = [],
+  coastalLocations = [],
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
@@ -92,6 +99,11 @@ export function createTestApp({
     env: parseEnv({ NODE_ENV: "test" }),
     dependencies: {
       beachService: new BeachService(beachRepository),
+      coastalLocationService: new CoastalLocationService({
+        findPublished: async () => coastalLocations,
+        findPublishedBySlug: async (slug) =>
+          coastalLocations.find((location) => location.slug === slug) ?? null,
+      }),
       beachForecastService,
       recommendationService: {
         calculate: async () => {

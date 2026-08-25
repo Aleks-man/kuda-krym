@@ -5,6 +5,8 @@ import helmet from "helmet";
 import type { AppEnv } from "./config/env.js";
 import { createBeachRouter } from "./modules/beaches/beach.router.js";
 import type { BeachService } from "./modules/beaches/beach.service.js";
+import { createCoastalLocationRouter } from "./modules/coastal-locations/coastal-location.router.js";
+import type { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { healthRouter } from "./modules/health/health.router.js";
@@ -15,6 +17,10 @@ import type { RoutingService } from "./modules/routing/routing.service.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
+  coastalLocationService: Pick<
+    CoastalLocationService,
+    "listPublished" | "getPublishedBySlug"
+  >;
   beachForecastService: BeachForecastService;
   recommendationService: Pick<RecommendationService, "calculate">;
   routingService: Pick<RoutingService, "calculateDrivingRoute">;
@@ -35,6 +41,10 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
 
   app.use("/api/health", healthRouter);
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
+  app.use(
+    "/api/coastal-locations",
+    createCoastalLocationRouter(dependencies.coastalLocationService),
+  );
   app.use(
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
