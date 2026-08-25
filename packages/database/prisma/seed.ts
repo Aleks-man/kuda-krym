@@ -8,6 +8,7 @@ import {
 } from "../src/generated/prisma/client.js";
 import { createPrismaClient } from "../src/client.js";
 import { seedBeaches } from "./seed-data/beaches.js";
+import { seedPublishedCoastalLocations } from "./seed-coastal-locations.js";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -23,6 +24,8 @@ function getOsmUrl(osmType: string, osmId: bigint): string {
 }
 
 async function seed() {
+  await seedPublishedCoastalLocations(prisma);
+
   for (const item of seedBeaches) {
     await prisma.$transaction(async (transaction) => {
       const sourceUrl = getOsmUrl(item.osmType, item.osmId);
