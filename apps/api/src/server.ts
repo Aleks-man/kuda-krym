@@ -14,6 +14,9 @@ import { RecommendationCandidateService } from "./modules/recommendations/candid
 import { PrismaRecommendationCandidateRepository } from "./modules/recommendations/candidates/prisma-recommendation-candidate.repository.js";
 import { CandidateForecastLoader } from "./modules/recommendations/forecasts/candidate-forecast.loader.js";
 import { RecommendationService } from "./modules/recommendations/recommendation.service.js";
+import { OsrmClient } from "./modules/routing/osrm/osrm.client.js";
+import { PrismaRoutingBeachRepository } from "./modules/routing/prisma-routing-beach.repository.js";
+import { RoutingService } from "./modules/routing/routing.service.js";
 
 const env = parseEnv(process.env);
 const prisma = createPrismaClient(requireDatabaseUrl(env));
@@ -36,12 +39,17 @@ const recommendationService = new RecommendationService({
     concurrency: 3,
   }),
 });
+const routingService = new RoutingService({
+  beachRepository: new PrismaRoutingBeachRepository(prisma),
+  routingProvider: new OsrmClient({ baseUrl: env.OSRM_BASE_URL }),
+});
 const app = createApp({
   env,
   dependencies: {
     beachService,
     beachForecastService,
     recommendationService,
+    routingService,
   },
 });
 

@@ -9,6 +9,7 @@ import type { ForecastBeach } from "../../src/modules/forecast/forecast-beach.re
 import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js";
 import type { WeatherForecast } from "../../src/modules/weather/weather-forecast.js";
 import type { RecommendationCalculation } from "../../src/modules/recommendations/recommendation-calculation.js";
+import type { DrivingRoute } from "../../src/modules/routing/route.js";
 
 type TestAppData = Readonly<{
   beaches?: BeachListItem[];
@@ -18,6 +19,8 @@ type TestAppData = Readonly<{
   marineForecast?: MarineForecast;
   recommendationCalculation?: RecommendationCalculation;
   recommendationError?: Error | null;
+  drivingRoute?: DrivingRoute | null;
+  routingError?: Error | null;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -65,6 +68,8 @@ export function createTestApp({
   marineForecast = emptyMarineForecast,
   recommendationCalculation = emptyRecommendationCalculation,
   recommendationError = null,
+  drivingRoute = null,
+  routingError = null,
 }: TestAppData = {}) {
   const beachRepository: BeachRepository = {
     findPublished: async () => beaches,
@@ -90,6 +95,12 @@ export function createTestApp({
         calculate: async () => {
           if (recommendationError) throw recommendationError;
           return recommendationCalculation;
+        },
+      },
+      routingService: {
+        calculateDrivingRoute: async () => {
+          if (routingError) throw routingError;
+          return drivingRoute;
         },
       },
     },
