@@ -12,7 +12,10 @@ export function SiteHeader() {
           </span>
           <span>Куда.Крым</span>
         </Link>
-        <nav aria-label="Основная навигация">
+        <nav className={styles.navigation} aria-label="Основная навигация">
+          <Link className={styles.navLink} href="/coast">
+            Побережье
+          </Link>
           <Link className={styles.navLink} href="/beaches">
             Пляжи
           </Link>

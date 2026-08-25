@@ -1,0 +1,103 @@
+.section,
+.groups {
+  display: grid;
+  gap: 30px;
+}
+
+.heading {
+  display: grid;
+  gap: 8px;
+}
+
+.heading p {
+  margin: 0;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.heading h2 {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 46px);
+  letter-spacing: -0.045em;
+}
+
+.group {
+  display: grid;
+  gap: 16px;
+}
+
+.groupHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(17 73 75 / 12%);
+  padding-bottom: 12px;
+}
+
+.groupHeading h3 {
+  margin: 0;
+  font-size: clamp(21px, 3vw, 28px);
+  letter-spacing: -0.035em;
+}
+
+.groupHeading span {
+  display: grid;
+  min-width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  margin: 0;
+  padding: 0;
+  gap: 12px;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  min-height: 86px;
+  padding: 18px;
+  align-items: flex-start;
+  gap: 13px;
+  border: 1px solid rgb(255 255 255 / 82%);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 58%);
+  box-shadow: 0 12px 34px rgb(19 77 80 / 7%);
+}
+
+.marker {
+  width: 9px;
+  height: 9px;
+  margin-top: 6px;
+  flex: 0 0 auto;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.card div {
+  display: grid;
+  gap: 5px;
+}
+
+.card strong {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.card div span {
+  color: var(--muted);
+  font-size: 13px;
+}

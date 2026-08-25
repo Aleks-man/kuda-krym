@@ -43,6 +43,12 @@
   letter-spacing: 0;
 }
 
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
 .navLink {
   display: inline-flex;
   padding: 10px 14px;
@@ -58,4 +64,19 @@
 .navLink:hover {
   background: var(--accent-soft);
   color: var(--accent-strong);
+}
+
+@media (max-width: 520px) {
+  .inner {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .brand > span:last-child {
+    display: none;
+  }
+
+  .navLink {
+    padding-inline: 10px;
+    font-size: 14px;
+  }
 }
