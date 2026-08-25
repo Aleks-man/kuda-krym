@@ -1,11 +1,6 @@
-import {
-  apiErrorSchema,
-  recommendationRequestSchema,
-} from "@kuda-krym/contracts";
+import { apiErrorSchema, routeRequestSchema } from "@kuda-krym/contracts";
 import { NextResponse } from "next/server";
-import {
-  requestRecommendations,
-} from "@/features/recommendations/api/request-recommendations";
+import { requestRoute } from "@/features/routing/api/request-route";
 import { ApiGatewayError } from "@/shared/api/api-gateway-error";
 
 function errorResponse(code: string, message: string, status: number) {
@@ -17,13 +12,13 @@ function errorResponse(code: string, message: string, status: number) {
 export async function POST(request: Request) {
   try {
     const body: unknown = await request.json();
-    const parsed = recommendationRequestSchema.safeParse(body);
+    const parsed = routeRequestSchema.safeParse(body);
 
     if (!parsed.success) {
-      return errorResponse("VALIDATION_ERROR", "Проверьте параметры подбора", 400);
+      return errorResponse("VALIDATION_ERROR", "Проверьте параметры маршрута", 400);
     }
 
-    return NextResponse.json(await requestRecommendations(parsed.data));
+    return NextResponse.json(await requestRoute(parsed.data));
   } catch (error) {
     if (error instanceof ApiGatewayError) {
       const status = error.status >= 400 && error.status < 500 ? error.status : 502;
@@ -31,8 +26,8 @@ export async function POST(request: Request) {
     }
 
     return errorResponse(
-      "RECOMMENDATIONS_UNAVAILABLE",
-      "Сервис рекомендаций временно недоступен",
+      "ROUTING_UNAVAILABLE",
+      "Сервис маршрутов временно недоступен",
       503,
     );
   }
