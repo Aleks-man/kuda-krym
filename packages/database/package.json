@@ -22,7 +22,8 @@
     "seed": "prisma db seed",
     "studio": "prisma studio",
     "typecheck": "npm run generate && tsc --noEmit",
-    "validate": "prisma validate"
+    "validate": "prisma validate",
+    "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
