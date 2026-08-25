@@ -24,6 +24,12 @@ enum PublicationStatus {
   DISABLED
 }
 
+enum WaterBody {
+  BLACK_SEA
+  AZOV_SEA
+  KERCH_STRAIT
+}
+
 enum OsmType {
   NODE
   WAY
@@ -147,6 +153,8 @@ model Beach {
   publicationStatus  PublicationStatus    @default(DRAFT)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
+  coastalLocationId  String?              @db.Uuid
+  coastalLocation    CoastalLocation?     @relation(fields: [coastalLocationId], references: [id], onDelete: SetNull)
   profile            BeachProfile?
   evidence           BeachFieldEvidence[]
   images             BeachImage[]
@@ -154,7 +162,31 @@ model Beach {
   @@unique([osmType, osmId])
   @@index([publicationStatus])
   @@index([region])
+  @@index([coastalLocationId])
   @@map("beaches")
+}
+
+model CoastalLocation {
+  id                String            @id @default(uuid()) @db.Uuid
+  slug              String            @unique
+  name              String
+  region            Region
+  waterBody         WaterBody
+  weatherLatitude   Decimal           @db.Decimal(9, 6)
+  weatherLongitude  Decimal           @db.Decimal(9, 6)
+  marineLatitude    Decimal           @db.Decimal(9, 6)
+  marineLongitude   Decimal           @db.Decimal(9, 6)
+  coastlineBearing  Int?
+  timezone          String            @default("Europe/Moscow")
+  publicationStatus PublicationStatus @default(DRAFT)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  beaches           Beach[]
+
+  @@index([publicationStatus])
+  @@index([region])
+  @@index([waterBody])
+  @@map("coastal_locations")
 }
 
 model BeachProfile {
