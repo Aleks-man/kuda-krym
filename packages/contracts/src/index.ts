@@ -28,6 +28,7 @@ export {
   recommendationDateSchema,
   recommendationOriginSchema,
   recommendationPrioritySchema,
+  recommendationMaxTravelMinutesSchema,
   recommendationRequestSchema,
   recommendationSurfaceSchema,
   recommendationTimeSchema,

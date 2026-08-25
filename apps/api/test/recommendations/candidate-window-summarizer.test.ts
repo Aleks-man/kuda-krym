@@ -20,6 +20,7 @@ const context: RecommendationContext = {
   },
   company: "ALONE",
   preferredSurface: "ANY",
+  maxTravelMinutes: 120,
   priority: "CALM_SEA",
 };
 

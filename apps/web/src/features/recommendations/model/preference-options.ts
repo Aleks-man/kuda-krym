@@ -12,6 +12,13 @@ export const dateOptions = [
   { value: "tomorrow", label: "Завтра" },
 ] as const;
 
+export const travelTimeOptions = [
+  { value: "60", label: "До 1 часа" },
+  { value: "90", label: "До 1,5 часов" },
+  { value: "120", label: "До 2 часов" },
+  { value: "180", label: "До 3 часов" },
+] as const;
+
 export const timeOptions = [
   { value: "morning", label: "Утро", detail: "09:00–13:00" },
   { value: "day", label: "День", detail: "12:00–17:00" },

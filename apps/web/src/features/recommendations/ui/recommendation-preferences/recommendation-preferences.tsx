@@ -11,6 +11,7 @@ import {
   priorityOptions,
   surfaceOptions,
   timeOptions,
+  travelTimeOptions,
 } from "../../model/preference-options";
 import { PreferenceChoice } from "../preference-choice/preference-choice";
 import { RecommendationResults } from "../recommendation-results/recommendation-results";
@@ -61,7 +62,19 @@ export function RecommendationPreferences() {
             </select>
           </label>
 
-          <fieldset className={styles.fieldset}>
+          <label className={styles.selectField}>
+            <span>Максимум в дороге</span>
+            <select defaultValue="120" name="maxTravelMinutes">
+              {travelTimeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <fieldset className={styles.fieldset}>
             <legend>Когда</legend>
             <div className={styles.twoColumns}>
               {dateOptions.map((option, index) => (
@@ -75,7 +88,6 @@ export function RecommendationPreferences() {
               ))}
             </div>
           </fieldset>
-        </div>
 
         <fieldset className={styles.fieldset}>
           <legend>В какое время</legend>

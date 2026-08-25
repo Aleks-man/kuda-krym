@@ -22,6 +22,11 @@ export const recommendationPrioritySchema = z.enum([
   "warm_water",
   "comfort",
 ]);
+export const recommendationMaxTravelMinutesSchema = z
+  .number()
+  .int()
+  .min(30)
+  .max(240);
 
 export const recommendationRequestSchema = z
   .object({
@@ -31,6 +36,7 @@ export const recommendationRequestSchema = z
     company: recommendationCompanySchema,
     surface: recommendationSurfaceSchema,
     priority: recommendationPrioritySchema,
+    maxTravelMinutes: recommendationMaxTravelMinutesSchema,
   })
   .strict();
 
