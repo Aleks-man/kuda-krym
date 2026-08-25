@@ -6,6 +6,7 @@ export type SeedBeach = Readonly<{
   officialName: string;
   region: Region;
   locality: string;
+  coastalLocationSlug: string;
   latitude: string;
   longitude: string;
   osmType: OsmType;
@@ -19,6 +20,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Учкуевка",
     region: Region.SEVASTOPOL,
     locality: "Севастополь",
+    coastalLocationSlug: "sevastopol-north",
     latitude: "44.644844",
     longitude: "33.536119",
     osmType: OsmType.WAY,
@@ -30,6 +32,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Любимовка",
     region: Region.SEVASTOPOL,
     locality: "Севастополь",
+    coastalLocationSlug: "sevastopol-north",
     latitude: "44.659856",
     longitude: "33.543911",
     osmType: OsmType.WAY,
@@ -41,6 +44,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Пляж Омега",
     region: Region.SEVASTOPOL,
     locality: "Севастополь",
+    coastalLocationSlug: "sevastopol-west",
     latitude: "44.597638",
     longitude: "33.444116",
     osmType: OsmType.WAY,
@@ -52,6 +56,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Яшмовый пляж",
     region: Region.SEVASTOPOL,
     locality: "Севастополь",
+    coastalLocationSlug: "fiolent",
     latitude: "44.503340",
     longitude: "33.507753",
     osmType: OsmType.WAY,
@@ -63,6 +68,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Городской пляж",
     region: Region.SOUTH_COAST,
     locality: "Алушта",
+    coastalLocationSlug: "alushta",
     latitude: "44.673934",
     longitude: "34.416429",
     osmType: OsmType.WAY,
@@ -74,6 +80,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Центральный городской пляж",
     region: Region.EAST_CRIMEA,
     locality: "Судак",
+    coastalLocationSlug: "sudak",
     latitude: "44.839935",
     longitude: "34.973753",
     osmType: OsmType.WAY,
@@ -85,6 +92,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Золотой пляж",
     region: Region.EAST_CRIMEA,
     locality: "Береговое",
+    coastalLocationSlug: "beregovoe",
     latitude: "45.084927",
     longitude: "35.425032",
     osmType: OsmType.RELATION,
@@ -96,6 +104,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Пляж Майами",
     region: Region.WEST_CRIMEA,
     locality: "Оленевка",
+    coastalLocationSlug: "olenevka",
     latitude: "45.370471",
     longitude: "32.515378",
     osmType: OsmType.RELATION,
@@ -107,6 +116,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Пляж Поповка",
     region: Region.WEST_CRIMEA,
     locality: "Поповка",
+    coastalLocationSlug: "popovka",
     latitude: "45.296314",
     longitude: "33.030565",
     osmType: OsmType.RELATION,
@@ -118,6 +128,7 @@ export const seedBeaches: readonly SeedBeach[] = [
     officialName: "Пляж Скиф",
     region: Region.WEST_CRIMEA,
     locality: "Николаевка",
+    coastalLocationSlug: "nikolaevka",
     latitude: "44.959945",
     longitude: "33.604369",
     osmType: OsmType.WAY,
