@@ -1,0 +1,4 @@
+.travel { display: grid; margin-top: 18px; padding: 13px 14px; border: 1px solid rgb(33 116 109 / 12%); border-radius: 15px; background: rgb(33 116 109 / 6%); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.travel div { display: grid; gap: 3px; }
+.travel span { color: var(--muted); font-size: 10px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+.travel strong { color: var(--foreground); font-size: 14px; }

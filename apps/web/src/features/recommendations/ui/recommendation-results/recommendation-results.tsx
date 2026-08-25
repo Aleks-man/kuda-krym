@@ -4,6 +4,7 @@ import {
   formatMeasurement,
   surfaceLabels,
 } from "../../model/recommendation-labels";
+import { RecommendationTravel } from "../recommendation-travel/recommendation-travel";
 import styles from "./recommendation-results.module.css";
 
 type RecommendationResultsProps = {
@@ -39,6 +40,7 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
             </div>
             <h4>{item.beach.name}</h4>
             <p>{surfaceLabels[item.beach.surface]} · уверенность {item.confidencePercent}%</p>
+            <RecommendationTravel travel={item.travel} />
             <dl>
               <div><dt>Море</dt><dd>{formatMeasurement(item.conditions.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
               <div><dt>Волна</dt><dd>{formatMeasurement(item.conditions.waveHeightMeters, "м", 1)}</dd></div>
