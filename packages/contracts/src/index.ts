@@ -24,6 +24,22 @@ export {
   type BeachForecast,
 } from "./forecast/beach-forecast.contract.js";
 export {
+  forecastCoordinatesSchema,
+  forecastHourSchema,
+  type ForecastHour,
+} from "./forecast/forecast-hour.contract.js";
+export {
+  coastalLocationListResponseSchema,
+  coastalLocationSchema,
+  waterBodySchema,
+  type CoastalLocation,
+  type CoastalLocationListResponse,
+} from "./coastal-locations/coastal-location.contract.js";
+export {
+  coastalForecastSchema,
+  type CoastalForecast,
+} from "./coastal-locations/coastal-forecast.contract.js";
+export {
   recommendationCompanySchema,
   recommendationDateSchema,
   recommendationOriginSchema,
