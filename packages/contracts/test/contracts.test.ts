@@ -5,6 +5,8 @@ import {
   beachDetailSchema,
   beachForecastSchema,
   beachListResponseSchema,
+  coastalForecastSchema,
+  coastalLocationListResponseSchema,
   healthResponseSchema,
   recommendationRequestSchema,
   recommendationResponseSchema,
@@ -13,6 +15,31 @@ import {
 } from "../src/index.js";
 
 describe("API contracts", () => {
+  it("accepts coastal locations and their forecast", () => {
+    const location = {
+      id: "47f72fb6-dd75-4ca2-9f78-ad1e594dbcb4",
+      slug: "yalta",
+      name: "Ялта",
+      region: "SOUTH_COAST",
+      waterBody: "BLACK_SEA",
+      weatherCoordinates: { latitude: 44.495, longitude: 34.166 },
+      marineCoordinates: { latitude: 44.46, longitude: 34.17 },
+    } as const;
+    const list = coastalLocationListResponseSchema.parse({
+      data: [location],
+      meta: { total: 1 },
+    });
+    const forecast = coastalForecastSchema.parse({
+      location,
+      timezone: "UTC",
+      generatedAt: "2026-08-25T08:00:00.000Z",
+      hourly: [],
+    });
+
+    expect(list.data[0]?.slug).toBe("yalta");
+    expect(forecast.location.marineCoordinates.latitude).toBe(44.46);
+  });
+
   it("accepts a driving route calculation", () => {
     const request = routeRequestSchema.parse({
       origin: { latitude: 44.9521, longitude: 34.1024 },
