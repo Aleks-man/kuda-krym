@@ -35,6 +35,10 @@ export function mapRecommendationResponse(
       origin: {
         code: calculation.context.origin.code,
         name: calculation.context.origin.name,
+        coordinates: {
+          latitude: calculation.context.origin.latitude,
+          longitude: calculation.context.origin.longitude,
+        },
       },
       date: calculation.context.date,
       visitWindow: calculation.context.visitWindow,
