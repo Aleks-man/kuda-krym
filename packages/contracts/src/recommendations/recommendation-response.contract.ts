@@ -48,7 +48,14 @@ const recommendationItemSchema = z.object({
 export const recommendationResponseSchema = z.object({
   data: z.array(recommendationItemSchema).max(3),
   context: z.object({
-    origin: z.object({ code: z.string().min(1), name: z.string().min(1) }),
+    origin: z.object({
+      code: z.string().min(1),
+      name: z.string().min(1),
+      coordinates: z.object({
+        latitude: z.number().min(-90).max(90),
+        longitude: z.number().min(-180).max(180),
+      }),
+    }),
     date: z.iso.date(),
     visitWindow: z.object({
       startsAt: z.iso.datetime(),

@@ -56,7 +56,11 @@ describe("API contracts", () => {
     const result = recommendationResponseSchema.parse({
       data: [],
       context: {
-        origin: { code: "simferopol", name: "Симферополь" },
+        origin: {
+          code: "simferopol",
+          name: "Симферополь",
+          coordinates: { latitude: 44.952117, longitude: 34.102417 },
+        },
         date: "2026-08-20",
         visitWindow: {
           startsAt: "2026-08-20T09:00:00.000Z",
@@ -111,7 +115,11 @@ describe("API contracts", () => {
         },
       ],
       context: {
-        origin: { code: "simferopol", name: "Симферополь" },
+        origin: {
+          code: "simferopol",
+          name: "Симферополь",
+          coordinates: { latitude: 44.952117, longitude: 34.102417 },
+        },
         date: "2026-08-24",
         visitWindow: {
           startsAt: "2026-08-24T09:00:00.000Z",
