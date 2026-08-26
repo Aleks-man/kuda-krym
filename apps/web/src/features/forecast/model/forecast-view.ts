@@ -1,6 +1,4 @@
-import type { BeachForecast } from "@kuda-krym/contracts";
-
-type ForecastHour = BeachForecast["hourly"][number];
+import type { ForecastHour } from "@kuda-krym/contracts";
 
 const crimeaTimeZone = "Europe/Moscow";
 
