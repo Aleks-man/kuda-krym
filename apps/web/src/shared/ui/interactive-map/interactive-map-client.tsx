@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  AttributionControl,
   CircleMarker,
   MapContainer,
   Polyline,
@@ -28,11 +29,13 @@ export function InteractiveMapClient({
   return (
     <div className={styles.frame} aria-label={ariaLabel} role="region">
       <MapContainer
+        attributionControl={false}
         center={center}
         className={styles.map}
         scrollWheelZoom={false}
         zoom={zoom}
       >
+        <AttributionControl position="bottomright" prefix={false} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url={openStreetMapTiles}
