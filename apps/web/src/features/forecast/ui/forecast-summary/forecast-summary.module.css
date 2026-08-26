@@ -17,4 +17,5 @@
 .hour time, .hour small { color: var(--muted); font-size: 12px; }
 .hour strong { font-size: 28px; }
 .hour span { font-size: 13px; font-weight: 700; }
+.confidence { color: var(--accent-strong); font-size: 11px; font-style: normal; font-weight: 750; }
 @media (max-width: 720px) { .heading { align-items: start; flex-direction: column; gap: 10px; } .now { grid-template-columns: 1fr; } .now > div:first-child { min-height: 190px; } .summary { padding: 10px; } }

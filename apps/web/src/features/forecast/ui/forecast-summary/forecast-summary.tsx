@@ -7,6 +7,7 @@ import {
   selectUpcomingHours,
 } from "../../model/forecast-view";
 import { ConditionScores } from "../condition-scores/condition-scores";
+import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
 import styles from "./forecast-summary.module.css";
 
@@ -52,6 +53,7 @@ export function ForecastSummary({
       </div>
 
       <ConditionScores scores={current.scores} />
+      <ForecastConfidence confidence={current.confidence} />
 
       <div className={styles.timeline}>
         {hours.map((hour) => (
@@ -60,6 +62,9 @@ export function ForecastSummary({
             <strong>{Math.round(hour.weather.temperatureCelsius)}°</strong>
             <span>Волна {formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</span>
             <small>Ветер {hour.weather.windSpeedMetersPerSecond.toFixed(1)} м/с</small>
+            <em className={styles.confidence}>
+              Уверенность {hour.confidence.score}%
+            </em>
           </article>
         ))}
       </div>
