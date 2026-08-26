@@ -40,11 +40,13 @@ export class CoastalForecastService {
       }),
     ]);
 
+    const generatedAt = this.now();
+
     return {
       location,
       timezone: "UTC",
-      generatedAt: this.now().toISOString(),
-      hourly: mapForecastHours(weather, marine),
+      generatedAt: generatedAt.toISOString(),
+      hourly: mapForecastHours(weather, marine, generatedAt),
     };
   }
 }

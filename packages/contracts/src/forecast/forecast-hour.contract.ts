@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { forecastConfidenceSchema } from "./forecast-confidence.contract.js";
 
 export const forecastCoordinatesSchema = z.object({
   latitude: z.number().min(-90).max(90),
@@ -47,6 +48,7 @@ export const forecastHourSchema = z.object({
     sea: conditionsScoreSchema,
     weather: conditionsScoreSchema,
   }),
+  confidence: forecastConfidenceSchema,
 });
 
 export type ForecastHour = z.infer<typeof forecastHourSchema>;

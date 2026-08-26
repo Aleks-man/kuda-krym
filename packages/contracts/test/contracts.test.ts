@@ -235,6 +235,15 @@ describe("API contracts", () => {
               ],
             },
           },
+          confidence: {
+            score: 96,
+            level: "HIGH",
+            factors: [
+              { name: "FRESHNESS", score: 100, weight: 0.4 },
+              { name: "HORIZON", score: 100, weight: 0.25 },
+              { name: "COMPLETENESS", score: 90, weight: 0.35 },
+            ],
+          },
         },
       ],
     });
