@@ -2,6 +2,7 @@ import type {
   BeachDetail,
   BeachListItem,
   CoastalLocation,
+  WeatherModelComparisonResponse,
 } from "@kuda-krym/contracts";
 
 import { createApp } from "../../src/app.js";
@@ -28,6 +29,7 @@ type TestAppData = Readonly<{
   recommendationError?: Error | null;
   drivingRoute?: DrivingRoute | null;
   routingError?: Error | null;
+  weatherModelComparison?: WeatherModelComparisonResponse;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -69,6 +71,13 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
   meta: { candidateCount: 0, recommendationCount: 0, failureCount: 0 },
 };
 
+const emptyWeatherModelComparison: WeatherModelComparisonResponse = {
+  location: { latitude: 0, longitude: 0 },
+  generatedAt: "2026-08-20T08:00:00.000Z",
+  models: { available: [], failures: [] },
+  hourly: [],
+};
+
 export function createTestApp({
   beaches = [],
   details = [],
@@ -80,6 +89,7 @@ export function createTestApp({
   recommendationError = null,
   drivingRoute = null,
   routingError = null,
+  weatherModelComparison = emptyWeatherModelComparison,
 }: TestAppData = {}) {
   const beachRepository: BeachRepository = {
     findPublished: async () => beaches,
@@ -127,6 +137,12 @@ export function createTestApp({
           if (routingError) throw routingError;
           return drivingRoute;
         },
+      },
+      weatherModelComparisonService: {
+        compare: async (location) => ({
+          ...weatherModelComparison,
+          location,
+        }),
       },
     },
   });

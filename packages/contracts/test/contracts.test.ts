@@ -12,9 +12,36 @@ import {
   recommendationResponseSchema,
   routeRequestSchema,
   routeResponseSchema,
+  weatherModelComparisonResponseSchema,
 } from "../src/index.js";
 
 describe("API contracts", () => {
+  it("accepts a partial weather model comparison", () => {
+    const result = weatherModelComparisonResponseSchema.parse({
+      location: { latitude: 44.495, longitude: 34.166 },
+      generatedAt: "2026-08-26T08:05:00.000Z",
+      models: {
+        available: ["ECMWF_IFS", "NOAA_GFS"],
+        failures: [{ model: "DWD_ICON", code: "MODEL_UNAVAILABLE" }],
+      },
+      hourly: [
+        {
+          time: "2026-08-26T10:00",
+          samples: [],
+          agreement: {
+            modelCount: 2,
+            score: 84,
+            level: "HIGH",
+            factors: [],
+          },
+        },
+      ],
+    });
+
+    expect(result.models.failures[0]?.model).toBe("DWD_ICON");
+    expect(result.hourly[0]?.agreement.score).toBe(84);
+  });
+
   it("accepts coastal locations and their forecast", () => {
     const location = {
       id: "47f72fb6-dd75-4ca2-9f78-ad1e594dbcb4",

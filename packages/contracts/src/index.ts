@@ -68,4 +68,10 @@ export {
   type RouteRequest,
   type RouteResponse,
 } from "./routing/route.contract.js";
+export {
+  weatherModelComparisonResponseSchema,
+  weatherModelSchema,
+  type WeatherModel,
+  type WeatherModelComparisonResponse,
+} from "./weather/weather-model-comparison.contract.js";
 
