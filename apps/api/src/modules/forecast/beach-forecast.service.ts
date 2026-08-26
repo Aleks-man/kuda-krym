@@ -2,13 +2,16 @@ import type { BeachForecast } from "@kuda-krym/contracts";
 
 import type { MarineForecastProvider } from "../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../weather/weather-forecast.js";
+import type { WeatherModelComparisonService } from "../weather/models/comparison/weather-model-comparison.service.js";
 import { mapForecastHours } from "./forecast-hour.mapper.js";
 import type { ForecastBeachRepository } from "./forecast-beach.repository.js";
+import { loadWeatherModelAgreements } from "./load-weather-model-agreements.js";
 
 type BeachForecastServiceDependencies = Readonly<{
   beachRepository: ForecastBeachRepository;
   weatherProvider: WeatherForecastProvider;
   marineProvider: MarineForecastProvider;
+  modelComparisonService: Pick<WeatherModelComparisonService, "compare">;
   now?: () => Date;
 }>;
 
@@ -34,9 +37,14 @@ export class BeachForecastService {
       location: { latitude: beach.latitude, longitude: beach.longitude },
       days,
     } as const;
-    const [weather, marine] = await Promise.all([
+    const [weather, marine, modelAgreements] = await Promise.all([
       this.dependencies.weatherProvider.getForecast(request),
       this.dependencies.marineProvider.getForecast(request),
+      loadWeatherModelAgreements(
+        this.dependencies.modelComparisonService,
+        request.location,
+        days,
+      ),
     ]);
 
     const generatedAt = this.now();
@@ -50,7 +58,10 @@ export class BeachForecastService {
       },
       timezone: "UTC",
       generatedAt: generatedAt.toISOString(),
-      hourly: mapForecastHours(weather, marine, generatedAt),
+      hourly: mapForecastHours(weather, marine, {
+        evaluatedAt: generatedAt,
+        modelAgreements,
+      }),
     };
   }
 }

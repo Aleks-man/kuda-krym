@@ -11,17 +11,27 @@ import type {
   HourlyWeather,
   WeatherForecast,
 } from "../weather/weather-forecast.js";
+import type { ModelAgreementHour } from "./load-weather-model-agreements.js";
 
 type ForecastHour = BeachForecast["hourly"][number];
+
+type ForecastHourMappingOptions = Readonly<{
+  evaluatedAt?: Date;
+  modelAgreements?: readonly ModelAgreementHour[];
+}>;
 
 export function mapForecastHours(
   weather: WeatherForecast,
   marine: MarineForecast,
-  evaluatedAt = new Date(),
+  options: ForecastHourMappingOptions = {},
 ): ForecastHour[] {
   const marineByTime = new Map(
     marine.hourly.map((conditions) => [conditions.time, conditions]),
   );
+  const agreementByTime = new Map(
+    options.modelAgreements?.map((agreement) => [agreement.time, agreement.score]),
+  );
+  const evaluatedAt = options.evaluatedAt ?? new Date();
 
   return weather.hourly.map((conditions) =>
     mapForecastHour(
@@ -29,6 +39,7 @@ export function mapForecastHours(
       marineByTime.get(conditions.time),
       oldestGeneratedAt(weather.generatedAt, marine.generatedAt),
       evaluatedAt,
+      agreementByTime.get(conditions.time),
     ),
   );
 }
@@ -38,6 +49,7 @@ function mapForecastHour(
   marine: HourlyMarineConditions | undefined,
   generatedAt: string,
   evaluatedAt: Date,
+  modelAgreementPercent: number | null | undefined,
 ): ForecastHour {
   const seaSurfaceTemperatureCelsius =
     marine?.seaSurfaceTemperatureCelsius ?? null;
@@ -84,6 +96,9 @@ function mapForecastHour(
       completenessPercent: Math.round(
         (scores.sea.coveragePercent + scores.weather.coveragePercent) / 2,
       ),
+      ...(modelAgreementPercent === undefined
+        ? {}
+        : { modelAgreementPercent }),
       evaluatedAt,
     }),
   };

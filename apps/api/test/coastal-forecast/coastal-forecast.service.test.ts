@@ -26,6 +26,12 @@ describe("CoastalForecastService", () => {
       generatedAt: "2026-08-20T08:00:00.000Z",
       hourly: [],
     });
+    const compareModels = vi.fn().mockResolvedValue({
+      location: location.weatherCoordinates,
+      generatedAt: "2026-08-20T08:00:00.000Z",
+      models: { available: [], failures: [] },
+      hourly: [],
+    });
     const service = new CoastalForecastService({
       locationRepository: {
         findPublished: async () => [location],
@@ -33,6 +39,7 @@ describe("CoastalForecastService", () => {
       },
       weatherProvider: { getForecast: getWeatherForecast },
       marineProvider: { getForecast: getMarineForecast },
+      modelComparisonService: { compare: compareModels },
     });
 
     await service.getForecast("yalta", 2);
@@ -45,5 +52,9 @@ describe("CoastalForecastService", () => {
       location: location.marineCoordinates,
       days: 2,
     });
+    expect(compareModels).toHaveBeenCalledWith(
+      location.weatherCoordinates,
+      2,
+    );
   });
 });

@@ -91,6 +91,15 @@ export function createTestApp({
   routingError = null,
   weatherModelComparison = emptyWeatherModelComparison,
 }: TestAppData = {}) {
+  const modelComparisonService = {
+    compare: async (comparisonLocation: {
+      latitude: number;
+      longitude: number;
+    }) => ({
+      ...weatherModelComparison,
+      location: comparisonLocation,
+    }),
+  };
   const beachRepository: BeachRepository = {
     findPublished: async () => beaches,
     findPublishedBySlug: async (slug) =>
@@ -103,6 +112,7 @@ export function createTestApp({
     },
     weatherProvider: { getForecast: async () => weatherForecast },
     marineProvider: { getForecast: async () => marineForecast },
+    modelComparisonService,
     now: () => new Date("2026-08-20T08:05:00.000Z"),
   });
   const coastalLocationRepository = {
@@ -114,6 +124,7 @@ export function createTestApp({
     locationRepository: coastalLocationRepository,
     weatherProvider: { getForecast: async () => weatherForecast },
     marineProvider: { getForecast: async () => marineForecast },
+    modelComparisonService,
     now: () => new Date("2026-08-20T08:05:00.000Z"),
   });
 
@@ -139,10 +150,7 @@ export function createTestApp({
         },
       },
       weatherModelComparisonService: {
-        compare: async (location) => ({
-          ...weatherModelComparison,
-          location,
-        }),
+        ...modelComparisonService,
       },
     },
   });

@@ -42,12 +42,14 @@ const coastalForecastService = new CoastalForecastService({
   locationRepository: coastalLocationRepository,
   weatherProvider,
   marineProvider,
+  modelComparisonService: weatherModelComparisonService,
 });
 const routingProvider = new OsrmClient({ baseUrl: env.OSRM_BASE_URL });
 const beachForecastService = new BeachForecastService({
   beachRepository: new PrismaForecastBeachRepository(prisma),
   weatherProvider,
   marineProvider,
+  modelComparisonService: weatherModelComparisonService,
 });
 const recommendationService = new RecommendationService({
   candidateService: new RecommendationCandidateService(
