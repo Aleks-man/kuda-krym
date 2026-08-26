@@ -39,6 +39,8 @@ export class BeachForecastService {
       this.dependencies.marineProvider.getForecast(request),
     ]);
 
+    const generatedAt = this.now();
+
     return {
       beach: {
         id: beach.id,
@@ -47,8 +49,8 @@ export class BeachForecastService {
         coordinates: request.location,
       },
       timezone: "UTC",
-      generatedAt: this.now().toISOString(),
-      hourly: mapForecastHours(weather, marine),
+      generatedAt: generatedAt.toISOString(),
+      hourly: mapForecastHours(weather, marine, generatedAt),
     };
   }
 }

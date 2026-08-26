@@ -24,6 +24,12 @@ export {
   type BeachForecast,
 } from "./forecast/beach-forecast.contract.js";
 export {
+  forecastConfidenceFactorSchema,
+  forecastConfidenceSchema,
+  type ForecastConfidence,
+  type ForecastConfidenceFactor,
+} from "./forecast/forecast-confidence.contract.js";
+export {
   forecastCoordinatesSchema,
   forecastHourSchema,
   type ForecastHour,

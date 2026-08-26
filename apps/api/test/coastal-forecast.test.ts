@@ -58,6 +58,7 @@ describe("GET /api/coastal-locations/:slug/forecast", () => {
     expect(body.location.slug).toBe("yalta");
     expect(body.hourly[0]?.marine.waveHeightMeters).toBe(0.32);
     expect(body.hourly[0]?.scores.sea.score).toBeGreaterThan(90);
+    expect(body.hourly[0]?.confidence.factors).toHaveLength(3);
   });
 
   it("returns 404 for an unavailable coastal location", async () => {

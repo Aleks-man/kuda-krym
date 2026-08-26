@@ -5,17 +5,17 @@ export type ForecastConfidenceFactorName =
   | "HORIZON"
   | "COMPLETENESS";
 
-export type ForecastConfidenceFactor = Readonly<{
+export type ForecastConfidenceFactor = {
   name: ForecastConfidenceFactorName;
   score: number;
   weight: number;
-}>;
+};
 
-export type ForecastConfidence = Readonly<{
+export type ForecastConfidence = {
   score: number;
   level: ForecastConfidenceLevel;
-  factors: readonly ForecastConfidenceFactor[];
-}>;
+  factors: ForecastConfidenceFactor[];
+};
 
 export type ForecastConfidenceInput = Readonly<{
   generatedAt: string;

@@ -68,6 +68,10 @@ describe("GET /api/forecast/:beachId", () => {
     expect(body.hourly[0]?.scores.sea.score).toBeGreaterThan(90);
     expect(body.hourly[0]?.scores.sea.coveragePercent).toBe(100);
     expect(body.hourly[0]?.scores.weather.score).toBeGreaterThan(90);
+    expect(body.hourly[0]?.confidence).toMatchObject({
+      score: expect.any(Number),
+      level: expect.stringMatching(/^(LOW|MEDIUM|HIGH)$/),
+    });
     expect(body.hourly[1]?.marine.waveHeightMeters).toBeNull();
     expect(body.hourly[1]?.scores.sea.coveragePercent).toBe(40);
     expect(body.hourly[1]?.scores.sea.factors).toEqual(
