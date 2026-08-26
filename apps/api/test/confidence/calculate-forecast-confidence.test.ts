@@ -50,6 +50,28 @@ describe("calculateForecastConfidence", () => {
     expect(result).toMatchObject({ score: 85, level: "HIGH" });
   });
 
+  it("includes model agreement without changing legacy weights when absent", () => {
+    const result = calculateForecastConfidence({
+      generatedAt: "2026-08-26T08:00:00.000Z",
+      forecastTime: "2026-08-26T15:00:00.000Z",
+      completenessPercent: 100,
+      modelAgreementPercent: 20,
+      evaluatedAt,
+    });
+
+    expect(result).toMatchObject({ score: 76, level: "MEDIUM" });
+    expect(result.factors).toEqual([
+      { name: "FRESHNESS", score: 100, weight: 0.28 },
+      { name: "HORIZON", score: 100, weight: 0.175 },
+      {
+        name: "COMPLETENESS",
+        score: 100,
+        weight: expect.closeTo(0.245),
+      },
+      { name: "MODEL_AGREEMENT", score: 20, weight: 0.3 },
+    ]);
+  });
+
   it("rejects invalid dates and completeness", () => {
     expect(() =>
       calculateForecastConfidence({
@@ -68,5 +90,15 @@ describe("calculateForecastConfidence", () => {
         evaluatedAt,
       }),
     ).toThrow("completenessPercent must be between 0 and 100");
+
+    expect(() =>
+      calculateForecastConfidence({
+        generatedAt: "2026-08-26T08:00:00.000Z",
+        forecastTime: "2026-08-26T15:00:00.000Z",
+        completenessPercent: 100,
+        modelAgreementPercent: -1,
+        evaluatedAt,
+      }),
+    ).toThrow("modelAgreementPercent must be between 0 and 100");
   });
 });

@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 export const forecastConfidenceFactorSchema = z.object({
-  name: z.enum(["FRESHNESS", "HORIZON", "COMPLETENESS"]),
+  name: z.enum([
+    "FRESHNESS",
+    "HORIZON",
+    "COMPLETENESS",
+    "MODEL_AGREEMENT",
+  ]),
   score: z.number().int().min(0).max(100),
   weight: z.number().positive().max(1),
 });
