@@ -7,11 +7,13 @@ import {
   selectUpcomingHours,
 } from "../../model/forecast-view";
 import { ConditionScores } from "../condition-scores/condition-scores";
+import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
 import styles from "./forecast-summary.module.css";
 
 type ForecastSummaryProps = Readonly<{
   currentLabel: string;
   eyebrow: string;
+  generatedAt: string;
   hours: ForecastHour[];
   title: string;
 }>;
@@ -19,6 +21,7 @@ type ForecastSummaryProps = Readonly<{
 export function ForecastSummary({
   currentLabel,
   eyebrow,
+  generatedAt,
   hours: forecastHours,
   title,
 }: ForecastSummaryProps) {
@@ -61,9 +64,7 @@ export function ForecastSummary({
         ))}
       </div>
 
-      <p className={styles.note}>
-        Прогноз Open-Meteo ориентировочный и не предназначен для навигации.
-      </p>
+      <ForecastProvenance generatedAt={generatedAt} />
     </section>
   );
 }

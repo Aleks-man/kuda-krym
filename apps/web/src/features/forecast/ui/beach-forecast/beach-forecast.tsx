@@ -16,6 +16,7 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
     <ForecastSummary
       currentLabel="Сейчас рядом с пляжем"
       eyebrow="Условия у воды"
+      generatedAt={forecast.generatedAt}
       hours={forecast.hourly}
       title="Прогноз на ближайшие часы"
     />

@@ -25,6 +25,7 @@ export async function CoastalLocationForecast({
     <ForecastSummary
       currentLabel={`Сейчас рядом с ${forecast.location.name}`}
       eyebrow="Условия у побережья"
+      generatedAt={forecast.generatedAt}
       hours={forecast.hourly}
       title="Прогноз на ближайшие часы"
     />
