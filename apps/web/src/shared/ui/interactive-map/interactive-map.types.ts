@@ -4,6 +4,8 @@ export type MapPoint = Readonly<{
   id: string;
   label: string;
   position: MapPosition;
+  href?: string;
+  actionLabel?: string;
 }>;
 
 export type InteractiveMapProps = Readonly<{

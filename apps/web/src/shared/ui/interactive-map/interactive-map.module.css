@@ -2,3 +2,21 @@
 .map { width: 100%; min-height: 420px; font-family: inherit; }
 .loading { display: grid; place-items: center; color: var(--muted); font-size: 13px; font-weight: 750; }
 @media (max-width: 680px) { .frame, .loading, .map { min-height: 360px; border-radius: 19px; } }
+
+.popup {
+  display: grid;
+  min-width: 150px;
+  gap: 9px;
+}
+
+.popup strong {
+  color: var(--foreground);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.popup a {
+  color: var(--accent-strong);
+  font-size: 13px;
+  font-weight: 800;
+}

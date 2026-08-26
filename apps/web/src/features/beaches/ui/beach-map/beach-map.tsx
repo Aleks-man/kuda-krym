@@ -15,6 +15,8 @@ export function BeachMap({ beaches }: BeachMapProps) {
   const points: MapPoint[] = beaches.map((beach) => ({
     id: beach.id,
     label: `${beach.name} · ${beach.locality}`,
+    href: `/beaches/${beach.slug}`,
+    actionLabel: "Открыть пляж",
     position: [
       beach.coordinates.latitude,
       beach.coordinates.longitude,
