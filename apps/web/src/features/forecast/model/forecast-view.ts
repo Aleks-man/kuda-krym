@@ -31,6 +31,16 @@ export function formatForecastDate(time: string): string {
   }).format(asUtcDate(time));
 }
 
+export function formatForecastUpdatedAt(time: string): string {
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: crimeaTimeZone,
+  }).format(new Date(time));
+}
+
 export function formatMeasurement(
   value: number | null,
   unit: string,
