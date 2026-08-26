@@ -1,13 +1,20 @@
 import type { ForecastConfidenceFactorName } from "./forecast-confidence.types.js";
 
-export const forecastConfidenceWeights: Record<
+type BaseConfidenceFactorName = Exclude<
   ForecastConfidenceFactorName,
+  "MODEL_AGREEMENT"
+>;
+
+export const baseForecastConfidenceWeights: Record<
+  BaseConfidenceFactorName,
   number
 > = {
   FRESHNESS: 0.4,
   HORIZON: 0.25,
   COMPLETENESS: 0.35,
 };
+
+export const modelAgreementWeight = 0.3;
 
 export const freshnessScoreCurve = [
   [0, 100],

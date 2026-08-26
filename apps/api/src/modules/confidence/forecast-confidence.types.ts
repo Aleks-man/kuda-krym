@@ -3,7 +3,8 @@ export type ForecastConfidenceLevel = "LOW" | "MEDIUM" | "HIGH";
 export type ForecastConfidenceFactorName =
   | "FRESHNESS"
   | "HORIZON"
-  | "COMPLETENESS";
+  | "COMPLETENESS"
+  | "MODEL_AGREEMENT";
 
 export type ForecastConfidenceFactor = {
   name: ForecastConfidenceFactorName;
@@ -21,5 +22,6 @@ export type ForecastConfidenceInput = Readonly<{
   generatedAt: string;
   forecastTime: string;
   completenessPercent: number;
+  modelAgreementPercent?: number | null;
   evaluatedAt?: Date;
 }>;
