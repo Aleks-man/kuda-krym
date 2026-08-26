@@ -57,6 +57,26 @@ describe("GET /api/forecast/:beachId", () => {
           },
         ],
       },
+      weatherModelComparison: {
+        location: { latitude: 44.644844, longitude: 33.536119 },
+        generatedAt: "2026-08-20T08:00:00.000Z",
+        models: {
+          available: ["ECMWF_IFS", "DWD_ICON", "NOAA_GFS"],
+          failures: [],
+        },
+        hourly: [
+          {
+            time: "2026-08-20T10:00",
+            samples: [],
+            agreement: {
+              modelCount: 3,
+              score: 88,
+              level: "HIGH",
+              factors: [],
+            },
+          },
+        ],
+      },
     });
 
     const response = await request(app).get(`/api/forecast/${beachId}?days=1`);
@@ -72,6 +92,16 @@ describe("GET /api/forecast/:beachId", () => {
       score: expect.any(Number),
       level: expect.stringMatching(/^(LOW|MEDIUM|HIGH)$/),
     });
+    expect(body.hourly[0]?.confidence.factors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "MODEL_AGREEMENT", score: 88 }),
+      ]),
+    );
+    expect(body.hourly[1]?.confidence.factors).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "MODEL_AGREEMENT" }),
+      ]),
+    );
     expect(body.hourly[1]?.marine.waveHeightMeters).toBeNull();
     expect(body.hourly[1]?.scores.sea.coveragePercent).toBe(40);
     expect(body.hourly[1]?.scores.sea.factors).toEqual(
