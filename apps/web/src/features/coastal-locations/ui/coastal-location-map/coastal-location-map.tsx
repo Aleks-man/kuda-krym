@@ -18,6 +18,8 @@ export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
   const points: MapPoint[] = locations.map((location) => ({
     id: location.id,
     label: `${location.name} · ${waterBodyLabels[location.waterBody]}`,
+    href: `/coast/${location.slug}`,
+    actionLabel: "Смотреть прогноз",
     position: [
       location.weatherCoordinates.latitude,
       location.weatherCoordinates.longitude,

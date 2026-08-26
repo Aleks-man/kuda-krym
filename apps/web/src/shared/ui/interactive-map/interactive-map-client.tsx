@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   CircleMarker,
   MapContainer,
@@ -54,7 +55,16 @@ export function InteractiveMapClient({
             }}
             radius={8}
           >
-            <Popup>{point.label}</Popup>
+            <Popup>
+              <div className={styles.popup}>
+                <strong>{point.label}</strong>
+                {point.href ? (
+                  <Link href={point.href}>
+                    {point.actionLabel ?? "Открыть"} →
+                  </Link>
+                ) : null}
+              </div>
+            </Popup>
           </CircleMarker>
         ))}
         <MapBounds center={center} positions={positions} zoom={zoom} />
