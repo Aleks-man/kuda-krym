@@ -12,7 +12,12 @@ export type WeatherAgreementFactorName =
   | "WIND_GUST"
   | "CLOUD_COVER";
 
-export type WeatherAgreementUnit = "CELSIUS" | "MILLIMETERS" | "MPS" | "DEGREES" | "PERCENT";
+export type WeatherAgreementUnit =
+  | "CELSIUS"
+  | "MILLIMETERS"
+  | "MPS"
+  | "DEGREES"
+  | "PERCENT";
 
 export type WeatherAgreementFactor = Readonly<{
   name: WeatherAgreementFactorName;
