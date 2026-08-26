@@ -1,4 +1,7 @@
-import type { ForecastHour } from "@kuda-krym/contracts";
+import type {
+  ForecastHour,
+  WeatherModelComparisonResponse,
+} from "@kuda-krym/contracts";
 
 import {
   formatForecastDate,
@@ -9,6 +12,7 @@ import {
 import { ConditionScores } from "../condition-scores/condition-scores";
 import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
+import { WeatherModelComparison } from "../weather-model-comparison/weather-model-comparison";
 import styles from "./forecast-summary.module.css";
 
 type ForecastSummaryProps = Readonly<{
@@ -16,6 +20,7 @@ type ForecastSummaryProps = Readonly<{
   eyebrow: string;
   generatedAt: string;
   hours: ForecastHour[];
+  modelComparison?: WeatherModelComparisonResponse | null;
   title: string;
 }>;
 
@@ -24,6 +29,7 @@ export function ForecastSummary({
   eyebrow,
   generatedAt,
   hours: forecastHours,
+  modelComparison,
   title,
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
@@ -54,6 +60,12 @@ export function ForecastSummary({
 
       <ConditionScores scores={current.scores} />
       <ForecastConfidence confidence={current.confidence} />
+      {modelComparison && (
+        <WeatherModelComparison
+          comparison={modelComparison}
+          targetTime={current.time}
+        />
+      )}
 
       <div className={styles.timeline}>
         {hours.map((hour) => (
