@@ -28,12 +28,38 @@ export function calculateWeatherModelAgreement(
 
   const conditions = hour.samples.map((sample) => sample.conditions);
   const factors = [
-    createFactor("TEMPERATURE", "CELSIUS", range(conditions.map((item) => item.temperatureCelsius))),
-    createFactor("PRECIPITATION", "MILLIMETERS", range(conditions.map((item) => item.precipitationMillimeters))),
-    createFactor("WIND_SPEED", "MPS", range(conditions.map((item) => item.windSpeedMetersPerSecond))),
-    createFactor("WIND_DIRECTION", "DEGREES", calculateCircularSpread(conditions.map((item) => item.windDirectionDegrees))),
-    createFactor("WIND_GUST", "MPS", range(conditions.map((item) => item.windGustMetersPerSecond))),
-    createFactor("CLOUD_COVER", "PERCENT", range(conditions.map((item) => item.cloudCoverPercent))),
+    createFactor(
+      "TEMPERATURE",
+      "CELSIUS",
+      range(conditions.map((item) => item.temperatureCelsius)),
+    ),
+    createFactor(
+      "PRECIPITATION",
+      "MILLIMETERS",
+      range(conditions.map((item) => item.precipitationMillimeters)),
+    ),
+    createFactor(
+      "WIND_SPEED",
+      "MPS",
+      range(conditions.map((item) => item.windSpeedMetersPerSecond)),
+    ),
+    createFactor(
+      "WIND_DIRECTION",
+      "DEGREES",
+      calculateCircularSpread(
+        conditions.map((item) => item.windDirectionDegrees),
+      ),
+    ),
+    createFactor(
+      "WIND_GUST",
+      "MPS",
+      range(conditions.map((item) => item.windGustMetersPerSecond)),
+    ),
+    createFactor(
+      "CLOUD_COVER",
+      "PERCENT",
+      range(conditions.map((item) => item.cloudCoverPercent)),
+    ),
   ];
   const score = Math.round(
     factors.reduce(
