@@ -16,6 +16,10 @@ export const confidenceFactorPresentation: Record<
   ForecastConfidenceFactor["name"],
   Readonly<{ label: string; description: string }>
 > = {
+  MODEL_AGREEMENT: {
+    label: "Согласованность моделей",
+    description: "Насколько близки расчёты ECMWF, ICON и GFS.",
+  },
   FRESHNESS: {
     label: "Свежесть",
     description: "Насколько недавно источники обновили расчёт.",

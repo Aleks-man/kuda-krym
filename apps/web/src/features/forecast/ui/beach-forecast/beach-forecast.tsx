@@ -1,6 +1,7 @@
 import type { BeachForecast as BeachForecastData } from "@kuda-krym/contracts";
 
 import { getBeachForecast } from "../../api/get-beach-forecast";
+import { getWeatherModelComparison } from "../../api/get-weather-model-comparison";
 import { ForecastSummary } from "../forecast-summary/forecast-summary";
 import styles from "./beach-forecast.module.css";
 
@@ -11,6 +12,7 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
   if (!forecast || forecast.hourly.length === 0) {
     return <ForecastUnavailable />;
   }
+  const modelComparison = await loadModelComparison(forecast.beach.coordinates);
 
   return (
     <ForecastSummary
@@ -18,9 +20,20 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
       eyebrow="Условия у воды"
       generatedAt={forecast.generatedAt}
       hours={forecast.hourly}
+      modelComparison={modelComparison}
       title="Прогноз на ближайшие часы"
     />
   );
+}
+
+async function loadModelComparison(
+  coordinates: BeachForecastData["beach"]["coordinates"],
+) {
+  try {
+    return await getWeatherModelComparison(coordinates);
+  } catch {
+    return null;
+  }
 }
 
 async function loadForecast(
