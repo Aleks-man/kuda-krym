@@ -16,6 +16,8 @@ import { createRecommendationRouter } from "./modules/recommendations/recommenda
 import type { RecommendationService } from "./modules/recommendations/recommendation.service.js";
 import { createRoutingRouter } from "./modules/routing/routing.router.js";
 import type { RoutingService } from "./modules/routing/routing.service.js";
+import { createWeatherModelComparisonRouter } from "./modules/weather/models/comparison/weather-model-comparison.router.js";
+import type { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
@@ -27,6 +29,10 @@ export type AppDependencies = Readonly<{
   beachForecastService: BeachForecastService;
   recommendationService: Pick<RecommendationService, "calculate">;
   routingService: Pick<RoutingService, "calculateDrivingRoute">;
+  weatherModelComparisonService: Pick<
+    WeatherModelComparisonService,
+    "compare"
+  >;
 }>;
 
 export type CreateAppOptions = Readonly<{
@@ -57,6 +63,12 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     createBeachForecastRouter(dependencies.beachForecastService),
   );
   app.use("/api/routes", createRoutingRouter(dependencies.routingService));
+  app.use(
+    "/api/weather",
+    createWeatherModelComparisonRouter(
+      dependencies.weatherModelComparisonService,
+    ),
+  );
   app.use(
     "/api/recommendations",
     createRecommendationRouter(dependencies.recommendationService),
