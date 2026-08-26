@@ -1,4 +1,5 @@
 import type { CoastalLocation } from "@kuda-krym/contracts";
+import Link from "next/link";
 
 import {
   coastalRegionLabels,
@@ -35,12 +36,15 @@ export function CoastalLocationGroups({ locations }: CoastalLocationGroupsProps)
               </div>
               <ul className={styles.list}>
                 {regionLocations.map((location) => (
-                  <li className={styles.card} key={location.id}>
-                    <span className={styles.marker} aria-hidden="true" />
-                    <div>
-                      <strong>{location.name}</strong>
-                      <span>{waterBodyLabels[location.waterBody]}</span>
-                    </div>
+                  <li key={location.id}>
+                    <Link className={styles.card} href={`/coast/${location.slug}`}>
+                      <span className={styles.marker} aria-hidden="true" />
+                      <div>
+                        <strong>{location.name}</strong>
+                        <span>{waterBodyLabels[location.waterBody]}</span>
+                      </div>
+                      <span className={styles.arrow} aria-hidden="true">→</span>
+                    </Link>
                   </li>
                 ))}
               </ul>
