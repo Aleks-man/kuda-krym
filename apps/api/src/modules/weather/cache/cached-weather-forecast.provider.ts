@@ -1,4 +1,8 @@
 import type { CacheStore } from "../../../shared/cache/cache-store.js";
+import {
+  InMemoryRequestCoalescer,
+  type RequestCoalescer,
+} from "../../../shared/async/request-coalescer.js";
 import { createForecastCacheKey } from "../../../shared/cache/forecast-cache-key.js";
 import { forecastCacheTtlSeconds } from "../../../shared/cache/forecast-cache-policy.js";
 import type {
@@ -13,19 +17,26 @@ type CachedWeatherForecastProviderOptions = Readonly<{
   cache: CacheStore;
   provider: WeatherForecastProvider;
   onCacheError?: CacheErrorHandler;
+  coalescer?: RequestCoalescer;
 }>;
 
 export class CachedWeatherForecastProvider implements WeatherForecastProvider {
-  constructor(private readonly options: CachedWeatherForecastProviderOptions) {}
+  private readonly coalescer: RequestCoalescer;
+
+  constructor(private readonly options: CachedWeatherForecastProviderOptions) {
+    this.coalescer = options.coalescer ?? new InMemoryRequestCoalescer();
+  }
 
   async getForecast(request: WeatherForecastRequest): Promise<WeatherForecast> {
     const key = createForecastCacheKey("weather", request.location, request.days);
-    const cached = await this.readCache(key);
-    if (cached) return cached;
+    return this.coalescer.run(key, async () => {
+      const cached = await this.readCache(key);
+      if (cached) return cached;
 
-    const forecast = await this.options.provider.getForecast(request);
-    await this.writeCache(key, forecast);
-    return forecast;
+      const forecast = await this.options.provider.getForecast(request);
+      await this.writeCache(key, forecast);
+      return forecast;
+    });
   }
 
   private async readCache(key: string): Promise<WeatherForecast | null> {

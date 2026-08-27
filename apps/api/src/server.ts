@@ -6,6 +6,7 @@ import { createApp } from "./app.js";
 import { parseEnv, requireDatabaseUrl } from "./config/env.js";
 import { createRedisCacheClient } from "./shared/cache/redis-cache.client.js";
 import { RedisCacheStore } from "./shared/cache/redis-cache.store.js";
+import { InMemoryRequestCoalescer } from "./shared/async/request-coalescer.js";
 import { PrismaBeachRepository } from "./modules/beaches/prisma-beach.repository.js";
 import { BeachService } from "./modules/beaches/beach.service.js";
 import { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
@@ -42,11 +43,13 @@ const redisCache = new RedisCacheStore(
     console.error("Redis client error", error);
   }),
 );
+const requestCoalescer = new InMemoryRequestCoalescer();
 void redisCache.connect().catch((error: unknown) => {
   console.error("Redis connection failed; continuing without cache", error);
 });
 const weatherProvider = new CachedWeatherForecastProvider({
   cache: redisCache,
+  coalescer: requestCoalescer,
   provider: new OpenMeteoWeatherClient(),
   onCacheError: (error) => {
     console.error("Weather cache error; using Open-Meteo directly", error);
@@ -54,6 +57,7 @@ const weatherProvider = new CachedWeatherForecastProvider({
 });
 const marineProvider = new CachedMarineForecastProvider({
   cache: redisCache,
+  coalescer: requestCoalescer,
   provider: new OpenMeteoMarineClient(),
   onCacheError: (error) => {
     console.error(
@@ -66,6 +70,7 @@ const weatherModelComparisonService = new WeatherModelComparisonService({
   batchLoader: new WeatherModelBatchLoader(
     new CachedModelWeatherForecastProvider({
       cache: redisCache,
+      coalescer: requestCoalescer,
       provider: new OpenMeteoModelWeatherClient(),
       onCacheError: (error) => {
         console.error(
@@ -84,6 +89,7 @@ const coastalForecastService = new CoastalForecastService({
 });
 const routingProvider = new CachedRoutingProvider({
   cache: redisCache,
+  coalescer: requestCoalescer,
   provider: new OsrmClient({ baseUrl: env.OSRM_BASE_URL }),
   onCacheError: (error) => {
     console.error("Route cache error; using OSRM directly", error);

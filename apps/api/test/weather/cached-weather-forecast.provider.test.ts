@@ -101,4 +101,26 @@ describe("CachedWeatherForecastProvider", () => {
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
   });
+
+  it("coalesces simultaneous cache misses into one upstream request", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    let resolveForecast!: (value: WeatherForecast) => void;
+    const upstreamForecast = new Promise<WeatherForecast>((resolve) => {
+      resolveForecast = resolve;
+    });
+    cacheGet.mockResolvedValue(null);
+    provider.getForecast.mockReturnValue(upstreamForecast);
+    const cachedProvider = new CachedWeatherForecastProvider({ cache, provider });
+
+    const first = cachedProvider.getForecast(request);
+    const second = cachedProvider.getForecast(request);
+    resolveForecast(forecast);
+
+    await expect(Promise.all([first, second])).resolves.toEqual([
+      forecast,
+      forecast,
+    ]);
+    expect(provider.getForecast).toHaveBeenCalledOnce();
+    expect(cacheGet).toHaveBeenCalledOnce();
+  });
 });
