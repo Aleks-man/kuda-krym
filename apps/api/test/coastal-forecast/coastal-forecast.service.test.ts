@@ -29,6 +29,7 @@ describe("CoastalForecastService", () => {
     const compareModels = vi.fn().mockResolvedValue({
       location: location.weatherCoordinates,
       generatedAt: "2026-08-20T08:00:00.000Z",
+      freshness: null,
       models: { available: [], failures: [] },
       hourly: [],
     });

@@ -6,6 +6,7 @@ import type { WeatherModelComparisonService } from "../weather/models/comparison
 import { mapForecastHours } from "./forecast-hour.mapper.js";
 import type { ForecastBeachRepository } from "./forecast-beach.repository.js";
 import { loadWeatherModelAgreements } from "./load-weather-model-agreements.js";
+import { mapForecastFreshness } from "./freshness/forecast-freshness.mapper.js";
 
 type BeachForecastServiceDependencies = Readonly<{
   beachRepository: ForecastBeachRepository;
@@ -37,7 +38,7 @@ export class BeachForecastService {
       location: { latitude: beach.latitude, longitude: beach.longitude },
       days,
     } as const;
-    const [weather, marine, modelAgreements] = await Promise.all([
+    const [weather, marine, modelAgreementLoad] = await Promise.all([
       this.dependencies.weatherProvider.getForecast(request),
       this.dependencies.marineProvider.getForecast(request),
       loadWeatherModelAgreements(
@@ -58,9 +59,14 @@ export class BeachForecastService {
       },
       timezone: "UTC",
       generatedAt: generatedAt.toISOString(),
+      freshness: mapForecastFreshness(
+        weather,
+        marine,
+        modelAgreementLoad.freshness,
+      ),
       hourly: mapForecastHours(weather, marine, {
         evaluatedAt: generatedAt,
-        modelAgreements,
+        modelAgreements: modelAgreementLoad.hours,
       }),
     };
   }

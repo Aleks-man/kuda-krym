@@ -6,6 +6,7 @@ import type { MarineForecastProvider } from "../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../weather/weather-forecast.js";
 import type { WeatherModelComparisonService } from "../weather/models/comparison/weather-model-comparison.service.js";
 import { loadWeatherModelAgreements } from "../forecast/load-weather-model-agreements.js";
+import { mapForecastFreshness } from "../forecast/freshness/forecast-freshness.mapper.js";
 
 type CoastalForecastServiceDependencies = Readonly<{
   locationRepository: CoastalLocationRepository;
@@ -32,7 +33,7 @@ export class CoastalForecastService {
       await this.dependencies.locationRepository.findPublishedBySlug(slug);
     if (!location) return null;
 
-    const [weather, marine, modelAgreements] = await Promise.all([
+    const [weather, marine, modelAgreementLoad] = await Promise.all([
       this.dependencies.weatherProvider.getForecast({
         location: location.weatherCoordinates,
         days,
@@ -54,9 +55,14 @@ export class CoastalForecastService {
       location,
       timezone: "UTC",
       generatedAt: generatedAt.toISOString(),
+      freshness: mapForecastFreshness(
+        weather,
+        marine,
+        modelAgreementLoad.freshness,
+      ),
       hourly: mapForecastHours(weather, marine, {
         evaluatedAt: generatedAt,
-        modelAgreements,
+        modelAgreements: modelAgreementLoad.hours,
       }),
     };
   }

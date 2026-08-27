@@ -64,6 +64,20 @@ describe("API contracts", () => {
       location,
       timezone: "UTC",
       generatedAt: "2026-08-25T08:00:00.000Z",
+      freshness: {
+        status: "FRESH",
+        sources: {
+          weather: {
+            status: "FRESH",
+            generatedAt: "2026-08-25T08:00:00.000Z",
+          },
+          marine: {
+            status: "FRESH",
+            generatedAt: "2026-08-25T08:00:00.000Z",
+          },
+          weatherModels: null,
+        },
+      },
       hourly: [],
     });
 
@@ -222,6 +236,20 @@ describe("API contracts", () => {
       },
       timezone: "UTC",
       generatedAt: "2026-08-20T08:05:00.000Z",
+      freshness: {
+        status: "FRESH",
+        sources: {
+          weather: {
+            status: "FRESH",
+            generatedAt: "2026-08-20T08:00:00.000Z",
+          },
+          marine: {
+            status: "FRESH",
+            generatedAt: "2026-08-20T08:00:00.000Z",
+          },
+          weatherModels: null,
+        },
+      },
       hourly: [
         {
           time: "2026-08-20T10:00",

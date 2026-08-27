@@ -3,6 +3,7 @@ import {
   forecastCoordinatesSchema,
   forecastHourSchema,
 } from "./forecast-hour.contract.js";
+import { forecastFreshnessSchema } from "./forecast-freshness.contract.js";
 
 export const beachForecastSchema = z.object({
   beach: z.object({
@@ -13,6 +14,7 @@ export const beachForecastSchema = z.object({
   }),
   timezone: z.literal("UTC"),
   generatedAt: z.iso.datetime(),
+  freshness: forecastFreshnessSchema,
   hourly: z.array(forecastHourSchema),
 });
 
