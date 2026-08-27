@@ -4,6 +4,7 @@ import type {
   ModelWeatherForecastRequest,
   WeatherModel,
 } from "../model-weather-forecast.js";
+import { createFetchWithTimeout } from "../../../../shared/http/fetch-with-timeout.js";
 import { mapOpenMeteoModelResponse } from "./open-meteo-model.mapper.js";
 import { openMeteoModelConfig } from "./open-meteo-model.config.js";
 import { openMeteoModelResponseSchema } from "./open-meteo-model-response.schema.js";
@@ -21,6 +22,7 @@ type OpenMeteoModelWeatherClientOptions = Readonly<{
   fetch?: typeof globalThis.fetch;
   baseUrls?: Partial<Record<WeatherModel, string>>;
   now?: () => Date;
+  timeoutMs?: number;
 }>;
 
 export class OpenMeteoModelWeatherClient
@@ -31,7 +33,12 @@ export class OpenMeteoModelWeatherClient
   private readonly now: () => Date;
 
   public constructor(options: OpenMeteoModelWeatherClientOptions = {}) {
-    this.fetch = options.fetch ?? globalThis.fetch;
+    this.fetch = createFetchWithTimeout({
+      ...(options.fetch !== undefined ? { fetch: options.fetch } : {}),
+      ...(options.timeoutMs !== undefined
+        ? { timeoutMs: options.timeoutMs }
+        : {}),
+    });
     this.baseUrls = options.baseUrls ?? {};
     this.now = options.now ?? (() => new Date());
   }
@@ -41,7 +48,6 @@ export class OpenMeteoModelWeatherClient
   ): Promise<ModelWeatherForecast> {
     const response = await this.fetch(this.createUrl(request), {
       headers: { accept: "application/json" },
-      signal: AbortSignal.timeout(8_000),
     });
 
     if (!response.ok) {
