@@ -1,10 +1,7 @@
-import {
-  apiErrorSchema,
-  beachDetailSchema,
-  beachListResponseSchema,
-} from "@kuda-krym/contracts";
+import { beachDetailSchema, beachListResponseSchema } from "@kuda-krym/contracts";
 import { Router } from "express";
 
+import { HttpError } from "../../shared/http/http-error.js";
 import type { BeachService } from "./beach.service.js";
 
 export function createBeachRouter(beachService: BeachService): Router {
@@ -19,32 +16,23 @@ export function createBeachRouter(beachService: BeachService): Router {
   router.get("/:slug", async (request, response) => {
     const slug = request.params.slug;
 
-    if (!slug) {
-      response.status(404).json(
-        apiErrorSchema.parse({
-          error: { code: "BEACH_NOT_FOUND", message: "Пляж не найден" },
-        }),
-      );
-      return;
-    }
+    if (!slug) throw beachNotFoundError();
 
     const beach = await beachService.getPublishedBySlug(slug);
 
-    if (!beach) {
-      response.status(404).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "BEACH_NOT_FOUND",
-            message: "Пляж не найден",
-          },
-        }),
-      );
-      return;
-    }
+    if (!beach) throw beachNotFoundError();
 
     response.status(200).json(beachDetailSchema.parse(beach));
   });
 
   return router;
+}
+
+function beachNotFoundError(): HttpError {
+  return new HttpError({
+    status: 404,
+    code: "BEACH_NOT_FOUND",
+    message: "Пляж не найден",
+  });
 }
 

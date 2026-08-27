@@ -1,7 +1,8 @@
-import { apiErrorSchema, beachForecastSchema } from "@kuda-krym/contracts";
+import { beachForecastSchema } from "@kuda-krym/contracts";
 import { Router } from "express";
 import { z } from "zod";
 
+import { HttpError } from "../../shared/http/http-error.js";
 import type { BeachForecastService } from "./beach-forecast.service.js";
 
 const paramsSchema = z.object({ beachId: z.uuid() });
@@ -14,22 +15,20 @@ export function createBeachForecastRouter(service: BeachForecastService): Router
     const params = paramsSchema.safeParse(request.params);
     const query = querySchema.safeParse(request.query);
     if (!params.success || !query.success) {
-      response.status(400).json(
-        apiErrorSchema.parse({
-          error: { code: "INVALID_FORECAST_REQUEST", message: "Некорректные параметры прогноза" },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 400,
+        code: "INVALID_FORECAST_REQUEST",
+        message: "Некорректные параметры прогноза",
+      });
     }
 
     const forecast = await service.getForecast(params.data.beachId, query.data.days);
     if (!forecast) {
-      response.status(404).json(
-        apiErrorSchema.parse({
-          error: { code: "BEACH_NOT_FOUND", message: "Пляж не найден" },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 404,
+        code: "BEACH_NOT_FOUND",
+        message: "Пляж не найден",
+      });
     }
 
     response.status(200).json(beachForecastSchema.parse(forecast));

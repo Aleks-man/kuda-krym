@@ -1,9 +1,7 @@
-import {
-  apiErrorSchema,
-  routeRequestSchema,
-  routeResponseSchema,
-} from "@kuda-krym/contracts";
+import { routeRequestSchema, routeResponseSchema } from "@kuda-krym/contracts";
 import { Router } from "express";
+
+import { HttpError } from "../../shared/http/http-error.js";
 import { mapRouteResponse } from "./route-response.mapper.js";
 import type { RoutingService } from "./routing.service.js";
 
@@ -16,15 +14,11 @@ export function createRoutingRouter(
     const parsedRequest = routeRequestSchema.safeParse(request.body);
 
     if (!parsedRequest.success) {
-      response.status(400).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "INVALID_ROUTE_REQUEST",
-            message: "Некорректные параметры маршрута",
-          },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 400,
+        code: "INVALID_ROUTE_REQUEST",
+        message: "Некорректные параметры маршрута",
+      });
     }
 
     try {
@@ -34,24 +28,23 @@ export function createRoutingRouter(
       );
 
       if (!route) {
-        response.status(404).json(
-          apiErrorSchema.parse({
-            error: { code: "BEACH_NOT_FOUND", message: "Пляж не найден" },
-          }),
-        );
-        return;
+        throw new HttpError({
+          status: 404,
+          code: "BEACH_NOT_FOUND",
+          message: "Пляж не найден",
+        });
       }
 
       response.status(200).json(routeResponseSchema.parse(mapRouteResponse(route)));
-    } catch {
-      response.status(502).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "ROUTING_PROVIDER_UNAVAILABLE",
-            message: "Не удалось построить маршрут",
-          },
-        }),
-      );
+    } catch (error) {
+      if (error instanceof HttpError) throw error;
+
+      throw new HttpError({
+        status: 502,
+        code: "ROUTING_PROVIDER_UNAVAILABLE",
+        message: "Не удалось построить маршрут",
+        cause: error,
+      });
     }
   });
 

@@ -47,6 +47,28 @@ describe("API error handling", () => {
     expect(onUnexpectedError).toHaveBeenCalledWith(internalError);
   });
 
+  it("reports the internal cause of a public upstream error", async () => {
+    const onUnexpectedError = vi.fn();
+    const providerError = new Error("Private provider response");
+    const app = express();
+    app.get("/upstream", () => {
+      throw new HttpError({
+        status: 502,
+        code: "UPSTREAM_UNAVAILABLE",
+        message: "Внешний сервис недоступен",
+        cause: providerError,
+      });
+    });
+    app.use(createErrorHandler({ onUnexpectedError }));
+
+    const response = await request(app).get("/upstream");
+
+    expect(response.status).toBe(502);
+    expect(response.body.error.code).toBe("UPSTREAM_UNAVAILABLE");
+    expect(response.body.error.message).toBe("Внешний сервис недоступен");
+    expect(onUnexpectedError).toHaveBeenCalledWith(providerError);
+  });
+
   it("returns a structured error for an unknown API route", async () => {
     const app = express();
     app.use(notFoundHandler);

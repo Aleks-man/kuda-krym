@@ -28,6 +28,10 @@ export function createErrorHandler(
     }
 
     if (error instanceof HttpError) {
+      if (error.status >= 500) {
+        onUnexpectedError(error.cause ?? error);
+      }
+
       const body: ApiError = {
         error: { code: error.code, message: error.message },
       };
