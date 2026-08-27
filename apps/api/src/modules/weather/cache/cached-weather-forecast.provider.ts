@@ -1,4 +1,5 @@
 import type { CacheStore } from "../../../shared/cache/cache-store.js";
+import { markDataFreshness } from "../../../shared/cache/cache-freshness.js";
 import {
   createCacheEnvelope,
   getCacheFreshness,
@@ -42,15 +43,15 @@ export class CachedWeatherForecastProvider implements WeatherForecastProvider {
     return this.coalescer.run(key, async () => {
       const cached = await this.readCache(key);
       if (cached && getCacheFreshness(cached, this.currentTime()) === "FRESH") {
-        return cached.value;
+        return markDataFreshness(cached.value, "FRESH");
       }
 
       try {
         const forecast = await this.options.provider.getForecast(request);
         await this.writeCache(key, forecast);
-        return forecast;
+        return markDataFreshness(forecast, "FRESH");
       } catch (error) {
-        if (cached) return cached.value;
+        if (cached) return markDataFreshness(cached.value, "STALE");
         throw error;
       }
     });

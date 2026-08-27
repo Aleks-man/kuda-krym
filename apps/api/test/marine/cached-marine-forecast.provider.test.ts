@@ -58,7 +58,7 @@ describe("CachedMarineForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).not.toHaveBeenCalled();
     expect(cacheSet).not.toHaveBeenCalled();
@@ -74,7 +74,7 @@ describe("CachedMarineForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledWith(request);
     expect(cacheSet).toHaveBeenCalledWith(
@@ -100,7 +100,7 @@ describe("CachedMarineForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledOnce();
     expect(onCacheError).toHaveBeenCalledWith(cacheError);
@@ -118,7 +118,7 @@ describe("CachedMarineForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
   });
 
@@ -137,7 +137,7 @@ describe("CachedMarineForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(provider.getForecast).toHaveBeenCalledOnce();
   });
 

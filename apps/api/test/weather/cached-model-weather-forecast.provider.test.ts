@@ -60,7 +60,7 @@ describe("CachedModelWeatherForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(provider.getForecast).not.toHaveBeenCalled();
     expect(cacheSet).not.toHaveBeenCalled();
   });
@@ -75,7 +75,7 @@ describe("CachedModelWeatherForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledWith(request);
     expect(cacheSet).toHaveBeenCalledWith(
@@ -101,7 +101,7 @@ describe("CachedModelWeatherForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(onCacheError).toHaveBeenCalledWith(cacheError);
   });
 
@@ -117,7 +117,7 @@ describe("CachedModelWeatherForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
   });
 
@@ -134,7 +134,7 @@ describe("CachedModelWeatherForecastProvider", () => {
       now,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(provider.getForecast).toHaveBeenCalledOnce();
   });
 
