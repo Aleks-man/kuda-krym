@@ -27,6 +27,7 @@ import { CandidateForecastLoader } from "./modules/recommendations/forecasts/can
 import { RecommendationService } from "./modules/recommendations/recommendation.service.js";
 import { CandidateRouteLoader } from "./modules/recommendations/routes/candidate-route.loader.js";
 import { OsrmClient } from "./modules/routing/osrm/osrm.client.js";
+import { CachedRoutingProvider } from "./modules/routing/cache/cached-routing.provider.js";
 import { PrismaRoutingBeachRepository } from "./modules/routing/prisma-routing-beach.repository.js";
 import { RoutingService } from "./modules/routing/routing.service.js";
 
@@ -81,7 +82,13 @@ const coastalForecastService = new CoastalForecastService({
   marineProvider,
   modelComparisonService: weatherModelComparisonService,
 });
-const routingProvider = new OsrmClient({ baseUrl: env.OSRM_BASE_URL });
+const routingProvider = new CachedRoutingProvider({
+  cache: redisCache,
+  provider: new OsrmClient({ baseUrl: env.OSRM_BASE_URL }),
+  onCacheError: (error) => {
+    console.error("Route cache error; using OSRM directly", error);
+  },
+});
 const beachForecastService = new BeachForecastService({
   beachRepository: new PrismaForecastBeachRepository(prisma),
   weatherProvider,

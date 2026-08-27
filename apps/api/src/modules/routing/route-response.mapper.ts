@@ -13,7 +13,7 @@ export function mapRouteResponse(route: DrivingRoute): RouteResponse {
     meta: {
       source: route.source,
       calculatedAt: route.calculatedAt,
-      cached: false,
+      cached: route.cached ?? false,
     },
   };
 }

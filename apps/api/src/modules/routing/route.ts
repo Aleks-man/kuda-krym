@@ -19,6 +19,7 @@ export type DrivingRoute = Readonly<{
   }>;
   source: "OSRM";
   calculatedAt: string;
+  cached?: boolean;
 }>;
 
 export interface RoutingProvider {
