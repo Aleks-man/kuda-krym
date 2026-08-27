@@ -1,3 +1,5 @@
+import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
+
 export type MarineForecastRequest = Readonly<{
   location: Readonly<{ latitude: number; longitude: number }>;
   days: 1 | 2;
@@ -16,6 +18,7 @@ export type MarineForecast = Readonly<{
   timezone: "UTC";
   generatedAt: string;
   hourly: HourlyMarineConditions[];
+  freshness?: ForecastSourceFreshness;
 }>;
 
 export interface MarineForecastProvider {

@@ -6,7 +6,7 @@ import type {
   MarineForecastProvider,
 } from "../../src/modules/marine/marine-forecast.js";
 import type { CacheStore } from "../../src/shared/cache/cache-store.js";
-import { forecastCacheTtlSeconds } from "../../src/shared/cache/forecast-cache-policy.js";
+import { forecastCacheRetentionSeconds } from "../../src/shared/cache/forecast-cache-policy.js";
 
 const request = {
   location: { latitude: 44.61, longitude: 33.47 },
@@ -19,6 +19,14 @@ const forecast: MarineForecast = {
   generatedAt: "2026-08-27T07:00:00.000Z",
   hourly: [],
 };
+
+const freshEnvelope = {
+  value: forecast,
+  storedAt: "2026-08-27T07:00:00.000Z",
+  freshUntil: "2026-08-27T07:30:00.000Z",
+};
+
+const now = () => new Date("2026-08-27T07:05:00.000Z");
 
 function createDependencies() {
   const cacheGet = vi.fn<(key: string) => Promise<unknown | null>>();
@@ -43,10 +51,14 @@ function createDependencies() {
 describe("CachedMarineForecastProvider", () => {
   it("returns a cache hit without calling Open-Meteo Marine", async () => {
     const { cache, cacheGet, cacheSet, provider } = createDependencies();
-    cacheGet.mockResolvedValue(forecast);
-    const cachedProvider = new CachedMarineForecastProvider({ cache, provider });
+    cacheGet.mockResolvedValue(freshEnvelope);
+    const cachedProvider = new CachedMarineForecastProvider({
+      cache,
+      provider,
+      now,
+    });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).not.toHaveBeenCalled();
     expect(cacheSet).not.toHaveBeenCalled();
@@ -56,15 +68,23 @@ describe("CachedMarineForecastProvider", () => {
     const { cache, cacheGet, cacheSet, provider } = createDependencies();
     cacheGet.mockResolvedValue(null);
     provider.getForecast.mockResolvedValue(forecast);
-    const cachedProvider = new CachedMarineForecastProvider({ cache, provider });
+    const cachedProvider = new CachedMarineForecastProvider({
+      cache,
+      provider,
+      now,
+    });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledWith(request);
     expect(cacheSet).toHaveBeenCalledWith(
       "forecast:marine:44.6100,33.4700:days:2",
-      forecast,
-      forecastCacheTtlSeconds.marine,
+      {
+        value: forecast,
+        storedAt: "2026-08-27T07:05:00.000Z",
+        freshUntil: "2026-08-27T07:35:00.000Z",
+      },
+      forecastCacheRetentionSeconds.marine,
     );
   });
 
@@ -80,7 +100,7 @@ describe("CachedMarineForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledOnce();
     expect(onCacheError).toHaveBeenCalledWith(cacheError);
@@ -98,7 +118,38 @@ describe("CachedMarineForecastProvider", () => {
       onCacheError,
     });
 
-    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
+  });
+
+  it("returns stale marine data only when Open-Meteo Marine fails", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue({
+      ...freshEnvelope,
+      freshUntil: "2026-08-27T07:04:00.000Z",
+    });
+    provider.getForecast.mockRejectedValue(
+      new Error("Open-Meteo Marine unavailable"),
+    );
+    const cachedProvider = new CachedMarineForecastProvider({
+      cache,
+      provider,
+      now,
+    });
+
+    await expect(cachedProvider.getForecast(request)).resolves.toMatchObject(forecast);
+    expect(provider.getForecast).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the upstream error when no stale marine data exists", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue(null);
+    provider.getForecast.mockRejectedValue(
+      new Error("Open-Meteo Marine unavailable"),
+    );
+
+    await expect(
+      new CachedMarineForecastProvider({ cache, provider }).getForecast(request),
+    ).rejects.toThrow("Open-Meteo Marine unavailable");
   });
 });

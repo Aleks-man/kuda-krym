@@ -74,6 +74,7 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
 const emptyWeatherModelComparison: WeatherModelComparisonResponse = {
   location: { latitude: 0, longitude: 0 },
   generatedAt: "2026-08-20T08:00:00.000Z",
+  freshness: null,
   models: { available: [], failures: [] },
   hourly: [],
 };

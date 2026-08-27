@@ -35,6 +35,14 @@ export {
   type ForecastHour,
 } from "./forecast/forecast-hour.contract.js";
 export {
+  forecastFreshnessSchema,
+  forecastFreshnessStatusSchema,
+  forecastSourceFreshnessSchema,
+  type ForecastFreshness,
+  type ForecastFreshnessStatus,
+  type ForecastSourceFreshness,
+} from "./forecast/forecast-freshness.contract.js";
+export {
   coastalLocationListResponseSchema,
   coastalLocationSchema,
   waterBodySchema,

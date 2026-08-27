@@ -1,3 +1,5 @@
+import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
+
 export type ForecastLocation = Readonly<{
   latitude: number;
   longitude: number;
@@ -24,6 +26,7 @@ export type WeatherForecast = Readonly<{
   timezone: "UTC";
   generatedAt: string;
   hourly: HourlyWeather[];
+  freshness?: ForecastSourceFreshness;
 }>;
 
 export interface WeatherForecastProvider {

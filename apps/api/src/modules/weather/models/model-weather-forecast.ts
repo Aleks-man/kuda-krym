@@ -1,3 +1,5 @@
+import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
+
 import type { ForecastLocation } from "../weather-forecast.js";
 
 export type WeatherModel = "ECMWF_IFS" | "DWD_ICON" | "NOAA_GFS";
@@ -24,6 +26,7 @@ export type ModelWeatherForecast = Readonly<{
   timezone: "UTC";
   generatedAt: string;
   hourly: HourlyModelWeather[];
+  freshness?: ForecastSourceFreshness;
 }>;
 
 export interface ModelWeatherForecastProvider {

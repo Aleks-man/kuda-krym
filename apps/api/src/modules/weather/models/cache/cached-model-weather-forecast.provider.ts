@@ -1,10 +1,20 @@
 import type { CacheStore } from "../../../../shared/cache/cache-store.js";
+import { markDataFreshness } from "../../../../shared/cache/cache-freshness.js";
+import {
+  createCacheEnvelope,
+  getCacheFreshness,
+  parseCacheEnvelope,
+  type CacheEnvelope,
+} from "../../../../shared/cache/cache-envelope.js";
 import {
   InMemoryRequestCoalescer,
   type RequestCoalescer,
 } from "../../../../shared/async/request-coalescer.js";
 import { createWeatherModelCacheKey } from "../../../../shared/cache/forecast-cache-key.js";
-import { forecastCacheTtlSeconds } from "../../../../shared/cache/forecast-cache-policy.js";
+import {
+  forecastCacheRetentionSeconds,
+  forecastCacheTtlSeconds,
+} from "../../../../shared/cache/forecast-cache-policy.js";
 import type {
   ModelWeatherForecast,
   ModelWeatherForecastProvider,
@@ -18,6 +28,7 @@ type CachedModelWeatherForecastProviderOptions = Readonly<{
   provider: ModelWeatherForecastProvider;
   onCacheError?: CacheErrorHandler;
   coalescer?: RequestCoalescer;
+  now?: () => Date;
 }>;
 
 export class CachedModelWeatherForecastProvider
@@ -41,17 +52,29 @@ export class CachedModelWeatherForecastProvider
     );
     return this.coalescer.run(key, async () => {
       const cached = await this.readCache(key);
-      if (cached) return cached;
+      if (cached && getCacheFreshness(cached, this.currentTime()) === "FRESH") {
+        return markDataFreshness(cached.value, "FRESH");
+      }
 
-      const forecast = await this.options.provider.getForecast(request);
-      await this.writeCache(key, forecast);
-      return forecast;
+      try {
+        const forecast = await this.options.provider.getForecast(request);
+        await this.writeCache(key, forecast);
+        return markDataFreshness(forecast, "FRESH");
+      } catch (error) {
+        if (cached) return markDataFreshness(cached.value, "STALE");
+        throw error;
+      }
     });
   }
 
-  private async readCache(key: string): Promise<ModelWeatherForecast | null> {
+  private async readCache(
+    key: string,
+  ): Promise<CacheEnvelope<ModelWeatherForecast> | null> {
     try {
-      return await this.options.cache.get<ModelWeatherForecast>(key);
+      const cached = await this.options.cache.get<unknown>(key);
+      return cached === null
+        ? null
+        : parseCacheEnvelope<ModelWeatherForecast>(cached);
     } catch (error) {
       this.options.onCacheError?.(error);
       return null;
@@ -65,11 +88,19 @@ export class CachedModelWeatherForecastProvider
     try {
       await this.options.cache.set(
         key,
-        forecast,
-        forecastCacheTtlSeconds["weather-models"],
+        createCacheEnvelope(
+          forecast,
+          forecastCacheTtlSeconds["weather-models"],
+          this.options.now,
+        ),
+        forecastCacheRetentionSeconds["weather-models"],
       );
     } catch (error) {
       this.options.onCacheError?.(error);
     }
+  }
+
+  private currentTime(): Date {
+    return this.options.now?.() ?? new Date();
   }
 }

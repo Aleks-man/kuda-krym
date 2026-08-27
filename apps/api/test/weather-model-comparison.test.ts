@@ -11,6 +11,10 @@ describe("GET /api/weather/model-comparison", () => {
         weatherModelComparison: {
           location: { latitude: 0, longitude: 0 },
           generatedAt: "2026-08-26T08:05:00.000Z",
+          freshness: {
+            status: "FRESH",
+            generatedAt: "2026-08-26T08:00:00.000Z",
+          },
           models: {
             available: ["ECMWF_IFS", "NOAA_GFS"],
             failures: [

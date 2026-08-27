@@ -9,6 +9,7 @@ describe("loadWeatherModelAgreements", () => {
     const compare = vi.fn().mockResolvedValue({
       location,
       generatedAt: "2026-08-26T08:00:00.000Z",
+      freshness: null,
       models: { available: [], failures: [] },
       hourly: [
         {
@@ -26,7 +27,10 @@ describe("loadWeatherModelAgreements", () => {
 
     await expect(
       loadWeatherModelAgreements({ compare }, location, 2),
-    ).resolves.toEqual([{ time: "2026-08-26T10:00", score: 88 }]);
+    ).resolves.toEqual({
+      hours: [{ time: "2026-08-26T10:00", score: 88 }],
+      freshness: null,
+    });
     expect(compare).toHaveBeenCalledWith(location, 2);
   });
 
@@ -35,6 +39,6 @@ describe("loadWeatherModelAgreements", () => {
 
     await expect(
       loadWeatherModelAgreements({ compare }, location, 1),
-    ).resolves.toEqual([]);
+    ).resolves.toEqual({ hours: [], freshness: null });
   });
 });
