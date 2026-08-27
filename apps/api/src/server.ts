@@ -20,6 +20,7 @@ import { CachedWeatherForecastProvider } from "./modules/weather/cache/cached-we
 import { WeatherModelBatchLoader } from "./modules/weather/models/comparison/weather-model-batch.loader.js";
 import { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
 import { OpenMeteoModelWeatherClient } from "./modules/weather/models/open-meteo/open-meteo-model-weather.client.js";
+import { CachedModelWeatherForecastProvider } from "./modules/weather/models/cache/cached-model-weather-forecast.provider.js";
 import { RecommendationCandidateService } from "./modules/recommendations/candidates/recommendation-candidate.service.js";
 import { PrismaRecommendationCandidateRepository } from "./modules/recommendations/candidates/prisma-recommendation-candidate.repository.js";
 import { CandidateForecastLoader } from "./modules/recommendations/forecasts/candidate-forecast.loader.js";
@@ -62,7 +63,16 @@ const marineProvider = new CachedMarineForecastProvider({
 });
 const weatherModelComparisonService = new WeatherModelComparisonService({
   batchLoader: new WeatherModelBatchLoader(
-    new OpenMeteoModelWeatherClient(),
+    new CachedModelWeatherForecastProvider({
+      cache: redisCache,
+      provider: new OpenMeteoModelWeatherClient(),
+      onCacheError: (error) => {
+        console.error(
+          "Weather model cache error; using Open-Meteo directly",
+          error,
+        );
+      },
+    }),
   ),
 });
 const coastalForecastService = new CoastalForecastService({
