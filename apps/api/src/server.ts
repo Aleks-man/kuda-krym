@@ -4,6 +4,8 @@ import { createPrismaClient } from "@kuda-krym/database";
 
 import { createApp } from "./app.js";
 import { parseEnv, requireDatabaseUrl } from "./config/env.js";
+import { createRedisCacheClient } from "./shared/cache/redis-cache.client.js";
+import { RedisCacheStore } from "./shared/cache/redis-cache.store.js";
 import { PrismaBeachRepository } from "./modules/beaches/prisma-beach.repository.js";
 import { BeachService } from "./modules/beaches/beach.service.js";
 import { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
@@ -13,6 +15,7 @@ import { BeachForecastService } from "./modules/forecast/beach-forecast.service.
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
 import { OpenMeteoMarineClient } from "./modules/marine/open-meteo/open-meteo-marine.client.js";
 import { OpenMeteoWeatherClient } from "./modules/weather/open-meteo/open-meteo-weather.client.js";
+import { CachedWeatherForecastProvider } from "./modules/weather/cache/cached-weather-forecast.provider.js";
 import { WeatherModelBatchLoader } from "./modules/weather/models/comparison/weather-model-batch.loader.js";
 import { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
 import { OpenMeteoModelWeatherClient } from "./modules/weather/models/open-meteo/open-meteo-model-weather.client.js";
@@ -31,7 +34,21 @@ const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
 const coastalLocationService = new CoastalLocationService(coastalLocationRepository);
-const weatherProvider = new OpenMeteoWeatherClient();
+const redisCache = new RedisCacheStore(
+  createRedisCacheClient(env.REDIS_URL, (error) => {
+    console.error("Redis client error", error);
+  }),
+);
+void redisCache.connect().catch((error: unknown) => {
+  console.error("Redis connection failed; continuing without cache", error);
+});
+const weatherProvider = new CachedWeatherForecastProvider({
+  cache: redisCache,
+  provider: new OpenMeteoWeatherClient(),
+  onCacheError: (error) => {
+    console.error("Weather cache error; using Open-Meteo directly", error);
+  },
+});
 const marineProvider = new OpenMeteoMarineClient();
 const weatherModelComparisonService = new WeatherModelComparisonService({
   batchLoader: new WeatherModelBatchLoader(
