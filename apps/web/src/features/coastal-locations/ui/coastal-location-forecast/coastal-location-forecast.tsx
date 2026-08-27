@@ -30,6 +30,7 @@ export async function CoastalLocationForecast({
       currentLabel={`Сейчас рядом с ${forecast.location.name}`}
       eyebrow="Условия у побережья"
       generatedAt={forecast.generatedAt}
+      freshness={forecast.freshness}
       hours={forecast.hourly}
       modelComparison={modelComparison}
       title="Прогноз на ближайшие часы"

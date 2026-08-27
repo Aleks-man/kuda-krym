@@ -1,0 +1,47 @@
+.notice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  margin-bottom: 18px;
+  padding: clamp(18px, 3vw, 24px);
+  border: 1px solid #efd28a;
+  border-radius: 20px;
+  gap: 16px;
+  background: linear-gradient(135deg, #fff9e9, #fff3cf);
+  box-shadow: 0 14px 38px rgb(118 89 27 / 8%);
+  color: #654a13;
+}
+
+.icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 12px;
+  background: #e9b849;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.notice p {
+  margin: 1px 0 5px;
+  color: #96701f;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.notice h3 {
+  margin: 0;
+  font-size: clamp(17px, 2.5vw, 21px);
+}
+
+.notice span {
+  display: block;
+  margin-top: 7px;
+  color: #76591b;
+  font-size: 13px;
+  line-height: 1.55;
+}

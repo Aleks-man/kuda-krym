@@ -1,4 +1,5 @@
 import type {
+  ForecastFreshness,
   ForecastHour,
   WeatherModelComparisonResponse,
 } from "@kuda-krym/contracts";
@@ -12,6 +13,7 @@ import {
 import { ConditionScores } from "../condition-scores/condition-scores";
 import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
+import { ForecastFreshnessNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
 import { WeatherModelComparison } from "../weather-model-comparison/weather-model-comparison";
 import styles from "./forecast-summary.module.css";
 
@@ -19,6 +21,7 @@ type ForecastSummaryProps = Readonly<{
   currentLabel: string;
   eyebrow: string;
   generatedAt: string;
+  freshness: ForecastFreshness;
   hours: ForecastHour[];
   modelComparison?: WeatherModelComparisonResponse | null;
   title: string;
@@ -28,6 +31,7 @@ export function ForecastSummary({
   currentLabel,
   eyebrow,
   generatedAt,
+  freshness,
   hours: forecastHours,
   modelComparison,
   title,
@@ -44,6 +48,8 @@ export function ForecastSummary({
         </div>
         <p className={styles.date}>{formatForecastDate(current.time)}</p>
       </div>
+
+      <ForecastFreshnessNotice freshness={freshness} />
 
       <div className={styles.now}>
         <div>
