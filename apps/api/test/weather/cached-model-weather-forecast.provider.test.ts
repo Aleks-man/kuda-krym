@@ -6,7 +6,7 @@ import type {
   ModelWeatherForecastProvider,
 } from "../../src/modules/weather/models/model-weather-forecast.js";
 import type { CacheStore } from "../../src/shared/cache/cache-store.js";
-import { forecastCacheTtlSeconds } from "../../src/shared/cache/forecast-cache-policy.js";
+import { forecastCacheRetentionSeconds } from "../../src/shared/cache/forecast-cache-policy.js";
 
 const request = {
   model: "ECMWF_IFS",
@@ -21,6 +21,14 @@ const forecast: ModelWeatherForecast = {
   generatedAt: "2026-08-27T08:00:00.000Z",
   hourly: [],
 };
+
+const freshEnvelope = {
+  value: forecast,
+  storedAt: "2026-08-27T08:00:00.000Z",
+  freshUntil: "2026-08-27T08:15:00.000Z",
+};
+
+const now = () => new Date("2026-08-27T08:05:00.000Z");
 
 function createDependencies() {
   const cacheGet = vi.fn<(key: string) => Promise<unknown | null>>();
@@ -45,10 +53,11 @@ function createDependencies() {
 describe("CachedModelWeatherForecastProvider", () => {
   it("returns a model forecast from cache", async () => {
     const { cache, cacheGet, cacheSet, provider } = createDependencies();
-    cacheGet.mockResolvedValue(forecast);
+    cacheGet.mockResolvedValue(freshEnvelope);
     const cachedProvider = new CachedModelWeatherForecastProvider({
       cache,
       provider,
+      now,
     });
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
@@ -63,6 +72,7 @@ describe("CachedModelWeatherForecastProvider", () => {
     const cachedProvider = new CachedModelWeatherForecastProvider({
       cache,
       provider,
+      now,
     });
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
@@ -70,8 +80,12 @@ describe("CachedModelWeatherForecastProvider", () => {
     expect(provider.getForecast).toHaveBeenCalledWith(request);
     expect(cacheSet).toHaveBeenCalledWith(
       "forecast:weather-models:ECMWF_IFS:44.4950,34.1660:days:2",
-      forecast,
-      forecastCacheTtlSeconds["weather-models"],
+      {
+        value: forecast,
+        storedAt: "2026-08-27T08:05:00.000Z",
+        freshUntil: "2026-08-27T08:20:00.000Z",
+      },
+      forecastCacheRetentionSeconds["weather-models"],
     );
   });
 
@@ -105,5 +119,35 @@ describe("CachedModelWeatherForecastProvider", () => {
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
+  });
+
+  it("returns a stale model only when its upstream request fails", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue({
+      ...freshEnvelope,
+      freshUntil: "2026-08-27T08:04:00.000Z",
+    });
+    provider.getForecast.mockRejectedValue(new Error("ECMWF unavailable"));
+    const cachedProvider = new CachedModelWeatherForecastProvider({
+      cache,
+      provider,
+      now,
+    });
+
+    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    expect(provider.getForecast).toHaveBeenCalledOnce();
+  });
+
+  it("keeps a model failure when no stale copy exists", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue(null);
+    provider.getForecast.mockRejectedValue(new Error("ECMWF unavailable"));
+
+    await expect(
+      new CachedModelWeatherForecastProvider({
+        cache,
+        provider,
+      }).getForecast(request),
+    ).rejects.toThrow("ECMWF unavailable");
   });
 });
