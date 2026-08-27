@@ -18,6 +18,8 @@ import { createRoutingRouter } from "./modules/routing/routing.router.js";
 import type { RoutingService } from "./modules/routing/routing.service.js";
 import { createWeatherModelComparisonRouter } from "./modules/weather/models/comparison/weather-model-comparison.router.js";
 import type { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
+import { createErrorHandler } from "./shared/http/error-handler.js";
+import { notFoundHandler } from "./shared/http/not-found-handler.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
@@ -73,6 +75,8 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     "/api/recommendations",
     createRecommendationRouter(dependencies.recommendationService),
   );
+  app.use(notFoundHandler);
+  app.use(createErrorHandler());
 
   return app;
 }
