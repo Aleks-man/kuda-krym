@@ -14,6 +14,7 @@ import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/pri
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
 import { OpenMeteoMarineClient } from "./modules/marine/open-meteo/open-meteo-marine.client.js";
+import { CachedMarineForecastProvider } from "./modules/marine/cache/cached-marine-forecast.provider.js";
 import { OpenMeteoWeatherClient } from "./modules/weather/open-meteo/open-meteo-weather.client.js";
 import { CachedWeatherForecastProvider } from "./modules/weather/cache/cached-weather-forecast.provider.js";
 import { WeatherModelBatchLoader } from "./modules/weather/models/comparison/weather-model-batch.loader.js";
@@ -49,7 +50,16 @@ const weatherProvider = new CachedWeatherForecastProvider({
     console.error("Weather cache error; using Open-Meteo directly", error);
   },
 });
-const marineProvider = new OpenMeteoMarineClient();
+const marineProvider = new CachedMarineForecastProvider({
+  cache: redisCache,
+  provider: new OpenMeteoMarineClient(),
+  onCacheError: (error) => {
+    console.error(
+      "Marine forecast cache error; using Open-Meteo directly",
+      error,
+    );
+  },
+});
 const weatherModelComparisonService = new WeatherModelComparisonService({
   batchLoader: new WeatherModelBatchLoader(
     new OpenMeteoModelWeatherClient(),
