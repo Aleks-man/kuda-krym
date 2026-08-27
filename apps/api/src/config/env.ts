@@ -8,6 +8,7 @@ const envSchema = z.object({
   WEB_ORIGIN: z.url().default("http://localhost:3000"),
   DATABASE_URL: z.url().optional(),
   OSRM_BASE_URL: z.url().default("https://router.project-osrm.org/"),
+  REDIS_URL: z.url().default("redis://127.0.0.1:6379"),
 });
 
 export type AppEnv = z.infer<typeof envSchema>;
