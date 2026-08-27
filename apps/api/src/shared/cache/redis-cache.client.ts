@@ -15,7 +15,11 @@ export function createRedisCacheClient(
   url: string,
   onError: RedisErrorHandler,
 ): RedisCacheClient {
-  const client = createClient({ url });
+  const client = createClient({
+    url,
+    disableOfflineQueue: true,
+    socket: { connectTimeout: 2_000, reconnectStrategy: false },
+  });
   client.on("error", onError);
 
   return {
