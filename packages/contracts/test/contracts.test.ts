@@ -20,6 +20,10 @@ describe("API contracts", () => {
     const result = weatherModelComparisonResponseSchema.parse({
       location: { latitude: 44.495, longitude: 34.166 },
       generatedAt: "2026-08-26T08:05:00.000Z",
+      freshness: {
+        status: "FRESH",
+        generatedAt: "2026-08-26T08:00:00.000Z",
+      },
       models: {
         available: ["ECMWF_IFS", "NOAA_GFS"],
         failures: [{ model: "DWD_ICON", code: "MODEL_UNAVAILABLE" }],

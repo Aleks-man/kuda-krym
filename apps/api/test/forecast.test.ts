@@ -20,6 +20,10 @@ describe("GET /api/forecast/:beachId", () => {
         location: { latitude: 44.65, longitude: 33.53 },
         timezone: "UTC",
         generatedAt: "2026-08-20T08:00:00.000Z",
+        freshness: {
+          status: "FRESH",
+          generatedAt: "2026-08-20T08:00:00.000Z",
+        },
         hourly: [
           {
             time: "2026-08-20T10:00",
@@ -60,6 +64,10 @@ describe("GET /api/forecast/:beachId", () => {
       weatherModelComparison: {
         location: { latitude: 44.644844, longitude: 33.536119 },
         generatedAt: "2026-08-20T08:00:00.000Z",
+        freshness: {
+          status: "FRESH",
+          generatedAt: "2026-08-20T08:00:00.000Z",
+        },
         models: {
           available: ["ECMWF_IFS", "DWD_ICON", "NOAA_GFS"],
           failures: [],

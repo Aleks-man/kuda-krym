@@ -1,6 +1,7 @@
 import type { ForecastLocation } from "../../weather-forecast.js";
 import { calculateWeatherModelAgreement } from "../agreement/calculate-weather-model-agreement.js";
 import { alignWeatherModelForecasts } from "./align-weather-model-forecasts.js";
+import { summarizeWeatherModelFreshness } from "./weather-model-freshness.js";
 import type { WeatherModelBatchLoader } from "./weather-model-batch.loader.js";
 import type {
   WeatherModelComparison,
@@ -31,6 +32,7 @@ export class WeatherModelComparisonService {
     return {
       location,
       generatedAt: this.now().toISOString(),
+      freshness: summarizeWeatherModelFreshness(batch.available),
       models: {
         available: batch.available.map((forecast) => forecast.model),
         failures: batch.failures,

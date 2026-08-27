@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { forecastCoordinatesSchema } from "../forecast/forecast-hour.contract.js";
+import { forecastSourceFreshnessSchema } from "../forecast/forecast-freshness.contract.js";
 
 export const weatherModelSchema = z.enum([
   "ECMWF_IFS",
@@ -47,6 +48,7 @@ const agreementSchema = z.object({
 export const weatherModelComparisonResponseSchema = z.object({
   location: forecastCoordinatesSchema,
   generatedAt: z.iso.datetime(),
+  freshness: forecastSourceFreshnessSchema.nullable(),
   models: z.object({
     available: z.array(weatherModelSchema),
     failures: z.array(

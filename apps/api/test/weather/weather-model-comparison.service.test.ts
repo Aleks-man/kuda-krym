@@ -32,6 +32,10 @@ describe("WeatherModelComparisonService", () => {
       },
     });
     expect(result.hourly).toHaveLength(1);
+    expect(result.freshness).toEqual({
+      status: "FRESH",
+      generatedAt: "2026-08-26T08:00:00.000Z",
+    });
     expect(result.hourly[0]).toMatchObject({
       time: "2026-08-26T10:00",
       agreement: { modelCount: 3, score: expect.any(Number) },
@@ -79,6 +83,7 @@ describe("WeatherModelComparisonService", () => {
     const result = await service.compare(location, 1);
 
     expect(result.hourly).toEqual([]);
+    expect(result.freshness).toBeNull();
     expect(result.models.available).toEqual([]);
     expect(result.models.failures).toHaveLength(3);
   });

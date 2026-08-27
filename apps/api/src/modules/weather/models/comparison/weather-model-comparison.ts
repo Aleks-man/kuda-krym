@@ -1,3 +1,5 @@
+import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
+
 import type { ForecastLocation } from "../../weather-forecast.js";
 import type { WeatherModel } from "../model-weather-forecast.js";
 import type { WeatherModelAgreement } from "../agreement/weather-model-agreement.types.js";
@@ -13,6 +15,7 @@ export type WeatherModelComparisonHour = Readonly<{
 export type WeatherModelComparison = Readonly<{
   location: ForecastLocation;
   generatedAt: string;
+  freshness: ForecastSourceFreshness | null;
   models: Readonly<{
     available: WeatherModel[];
     failures: WeatherModelFailure[];
