@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { CacheStore } from "../../src/shared/cache/cache-store.js";
-import { forecastCacheTtlSeconds } from "../../src/shared/cache/forecast-cache-policy.js";
+import {
+  forecastCacheRetentionSeconds,
+} from "../../src/shared/cache/forecast-cache-policy.js";
 import { CachedWeatherForecastProvider } from "../../src/modules/weather/cache/cached-weather-forecast.provider.js";
 import type {
   WeatherForecast,
@@ -19,6 +21,14 @@ const forecast: WeatherForecast = {
   generatedAt: "2026-08-27T06:00:00.000Z",
   hourly: [],
 };
+
+const freshEnvelope = {
+  value: forecast,
+  storedAt: "2026-08-27T06:00:00.000Z",
+  freshUntil: "2026-08-27T06:15:00.000Z",
+};
+
+const now = () => new Date("2026-08-27T06:05:00.000Z");
 
 function createDependencies() {
   const cacheGet = vi.fn<(key: string) => Promise<unknown | null>>();
@@ -43,8 +53,12 @@ function createDependencies() {
 describe("CachedWeatherForecastProvider", () => {
   it("returns a cache hit without calling Open-Meteo", async () => {
     const { cache, cacheGet, cacheSet, provider } = createDependencies();
-    cacheGet.mockResolvedValue(forecast);
-    const cachedProvider = new CachedWeatherForecastProvider({ cache, provider });
+    cacheGet.mockResolvedValue(freshEnvelope);
+    const cachedProvider = new CachedWeatherForecastProvider({
+      cache,
+      provider,
+      now,
+    });
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
 
@@ -56,15 +70,23 @@ describe("CachedWeatherForecastProvider", () => {
     const { cache, cacheGet, cacheSet, provider } = createDependencies();
     cacheGet.mockResolvedValue(null);
     provider.getForecast.mockResolvedValue(forecast);
-    const cachedProvider = new CachedWeatherForecastProvider({ cache, provider });
+    const cachedProvider = new CachedWeatherForecastProvider({
+      cache,
+      provider,
+      now,
+    });
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
 
     expect(provider.getForecast).toHaveBeenCalledWith(request);
     expect(cacheSet).toHaveBeenCalledWith(
       "forecast:weather:44.6500,33.5300:days:2",
-      forecast,
-      forecastCacheTtlSeconds.weather,
+      {
+        value: forecast,
+        storedAt: "2026-08-27T06:05:00.000Z",
+        freshUntil: "2026-08-27T06:20:00.000Z",
+      },
+      forecastCacheRetentionSeconds.weather,
     );
   });
 
@@ -100,6 +122,34 @@ describe("CachedWeatherForecastProvider", () => {
 
     await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
     expect(onCacheError).toHaveBeenCalledOnce();
+  });
+
+  it("returns stale data only when Open-Meteo fails", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue({
+      ...freshEnvelope,
+      freshUntil: "2026-08-27T06:04:00.000Z",
+    });
+    provider.getForecast.mockRejectedValue(new Error("Open-Meteo unavailable"));
+    const cachedProvider = new CachedWeatherForecastProvider({
+      cache,
+      provider,
+      now,
+    });
+
+    await expect(cachedProvider.getForecast(request)).resolves.toBe(forecast);
+    expect(provider.getForecast).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the upstream error when no stale data exists", async () => {
+    const { cache, cacheGet, provider } = createDependencies();
+    cacheGet.mockResolvedValue(null);
+    provider.getForecast.mockRejectedValue(new Error("Open-Meteo unavailable"));
+    const cachedProvider = new CachedWeatherForecastProvider({ cache, provider });
+
+    await expect(cachedProvider.getForecast(request)).rejects.toThrow(
+      "Open-Meteo unavailable",
+    );
   });
 
   it("coalesces simultaneous cache misses into one upstream request", async () => {
