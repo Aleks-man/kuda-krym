@@ -16,19 +16,22 @@ const surfaceLabels: Partial<Record<BeachListItem["surface"], string>> = {
 };
 
 const childSuitabilityLabels: Partial<
-  Record<
-  BeachListItem["childSuitability"],
-  string
-  >
+  Record<BeachListItem["childSuitability"], string>
 > = {
   SUITABLE: "Подходит для детей",
   LIMITED: "Для детей с ограничениями",
   UNSUITABLE: "Не подходит для детей",
 };
 
+export function getBeachRegionLabel(
+  region: BeachListItem["region"],
+): string {
+  return regionLabels[region];
+}
+
 export function getBeachLabels(beach: BeachListItem) {
   return {
-    region: regionLabels[beach.region],
+    region: getBeachRegionLabel(beach.region),
     facts: [
       surfaceLabels[beach.surface],
       childSuitabilityLabels[beach.childSuitability],
