@@ -11,11 +11,4 @@
 .summary div { padding: 18px 20px; border-bottom: 1px solid rgb(255 255 255 / 10%); }
 .summary dt { color: #a9cbc7; font-size: 13px; }
 .summary dd { margin: 8px 0 0; font-size: 21px; font-weight: 750; }
-.timeline { display: grid; grid-template-columns: repeat(8, minmax(126px, 1fr)); overflow-x: auto; margin-top: 14px; border: 1px solid var(--border); border-radius: 20px; background: rgb(255 255 255 / 82%); }
-.hour { display: grid; gap: 12px; padding: 20px 17px; border-right: 1px solid var(--border); }
-.hour:last-child { border-right: 0; }
-.hour time, .hour small { color: var(--muted); font-size: 12px; }
-.hour strong { font-size: 28px; }
-.hour span { font-size: 13px; font-weight: 700; }
-.confidence { color: var(--accent-strong); font-size: 11px; font-style: normal; font-weight: 750; }
 @media (max-width: 720px) { .heading { align-items: start; flex-direction: column; gap: 10px; } .now { grid-template-columns: 1fr; } .now > div:first-child { min-height: 190px; } .summary { padding: 10px; } }

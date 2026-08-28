@@ -6,7 +6,6 @@ import type {
 
 import {
   formatForecastDate,
-  formatForecastTime,
   formatMeasurement,
   selectUpcomingHours,
 } from "../../model/forecast-view";
@@ -14,6 +13,7 @@ import { ConditionScores } from "../condition-scores/condition-scores";
 import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
 import { ForecastFreshnessNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
+import { TwoDayForecast } from "../two-day-forecast/two-day-forecast";
 import { WeatherModelComparison } from "../weather-model-comparison/weather-model-comparison";
 import styles from "./forecast-summary.module.css";
 
@@ -73,19 +73,7 @@ export function ForecastSummary({
         />
       )}
 
-      <div className={styles.timeline}>
-        {hours.map((hour) => (
-          <article className={styles.hour} key={hour.time}>
-            <time dateTime={`${hour.time}Z`}>{formatForecastTime(hour.time)}</time>
-            <strong>{Math.round(hour.weather.temperatureCelsius)}°</strong>
-            <span>Волна {formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</span>
-            <small>Ветер {hour.weather.windSpeedMetersPerSecond.toFixed(1)} м/с</small>
-            <em className={styles.confidence}>
-              Уверенность {hour.confidence.score}%
-            </em>
-          </article>
-        ))}
-      </div>
+      <TwoDayForecast hours={forecastHours} />
 
       <ForecastProvenance generatedAt={generatedAt} />
     </section>
