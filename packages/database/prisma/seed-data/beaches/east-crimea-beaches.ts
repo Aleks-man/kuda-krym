@@ -3,8 +3,22 @@ import { OsmType, Region } from "../../../src/generated/prisma/client.js";
 import type { SeedBeach } from "./beach-seed.types.js";
 
 const sourceRetrievedAt = "2026-08-20T00:00:00.000Z";
+const expansionSourceRetrievedAt = "2026-08-28T00:00:00.000Z";
 
 export const eastCrimeaBeaches = [
+  {
+    slug: "novy-svet-tsarsky-beach",
+    name: "Царский пляж в Новом Свете",
+    officialName: "Царский пляж",
+    region: Region.EAST_CRIMEA,
+    locality: "Новый Свет",
+    coastalLocationSlug: "novy-svet",
+    latitude: "44.820886",
+    longitude: "34.905340",
+    osmType: OsmType.WAY,
+    osmId: 126219214n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
   {
     slug: "sudak-central",
     name: "Центральный городской пляж Судака",
@@ -19,6 +33,45 @@ export const eastCrimeaBeaches = [
     sourceRetrievedAt,
   },
   {
+    slug: "koktebel-tikhaya-bay-beach",
+    name: "Пляж в Тихой бухте",
+    officialName: "Тихая бухта",
+    region: Region.EAST_CRIMEA,
+    locality: "Коктебель",
+    coastalLocationSlug: "koktebel",
+    latitude: "44.966858",
+    longitude: "35.301455",
+    osmType: OsmType.WAY,
+    osmId: 391520545n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
+    slug: "ordzhonikidze-central-beach",
+    name: "Центральный пляж Орджоникидзе",
+    officialName: "Центральный пляж",
+    region: Region.EAST_CRIMEA,
+    locality: "Орджоникидзе",
+    coastalLocationSlug: "ordzhonikidze",
+    latitude: "44.964081",
+    longitude: "35.350963",
+    osmType: OsmType.RELATION,
+    osmId: 2980499n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
+    slug: "feodosia-kameshki-beach",
+    name: "Пляж Камешки в Феодосии",
+    officialName: "Пляж Камешки",
+    region: Region.EAST_CRIMEA,
+    locality: "Феодосия",
+    coastalLocationSlug: "feodosia",
+    latitude: "45.035421",
+    longitude: "35.383434",
+    osmType: OsmType.WAY,
+    osmId: 123081537n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
     slug: "feodosia-golden-beach",
     name: "Золотой пляж",
     officialName: "Золотой пляж",
@@ -30,5 +83,18 @@ export const eastCrimeaBeaches = [
     osmType: OsmType.RELATION,
     osmId: 9338571n,
     sourceRetrievedAt,
+  },
+  {
+    slug: "primorsky-sandy-gully-beach",
+    name: "Пляж Песчаная балка у Приморского",
+    officialName: "Пляж «Песчаная балка»",
+    region: Region.EAST_CRIMEA,
+    locality: "Приморский",
+    coastalLocationSlug: "primorsky",
+    latitude: "45.123301",
+    longitude: "35.523486",
+    osmType: OsmType.RELATION,
+    osmId: 3890424n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
   },
 ] as const satisfies readonly SeedBeach[];
