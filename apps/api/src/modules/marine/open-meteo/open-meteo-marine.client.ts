@@ -3,6 +3,7 @@ import type {
   MarineForecastProvider,
   MarineForecastRequest,
 } from "../marine-forecast.js";
+import { createFetchWithTimeout } from "../../../shared/http/fetch-with-timeout.js";
 import { mapOpenMeteoMarineResponse } from "./open-meteo-marine.mapper.js";
 import { openMeteoMarineResponseSchema } from "./open-meteo-marine-response.schema.js";
 
@@ -17,6 +18,7 @@ type OpenMeteoMarineClientOptions = Readonly<{
   fetch?: typeof globalThis.fetch;
   baseUrl?: string;
   now?: () => Date;
+  timeoutMs?: number;
 }>;
 
 export class OpenMeteoMarineClient implements MarineForecastProvider {
@@ -25,7 +27,12 @@ export class OpenMeteoMarineClient implements MarineForecastProvider {
   private readonly now: () => Date;
 
   public constructor(options: OpenMeteoMarineClientOptions = {}) {
-    this.fetch = options.fetch ?? globalThis.fetch;
+    this.fetch = createFetchWithTimeout({
+      ...(options.fetch !== undefined ? { fetch: options.fetch } : {}),
+      ...(options.timeoutMs !== undefined
+        ? { timeoutMs: options.timeoutMs }
+        : {}),
+    });
     this.baseUrl =
       options.baseUrl ?? "https://marine-api.open-meteo.com/v1/marine";
     this.now = options.now ?? (() => new Date());
@@ -36,7 +43,6 @@ export class OpenMeteoMarineClient implements MarineForecastProvider {
   ): Promise<MarineForecast> {
     const response = await this.fetch(this.createUrl(request), {
       headers: { accept: "application/json" },
-      signal: AbortSignal.timeout(8_000),
     });
 
     if (!response.ok) {

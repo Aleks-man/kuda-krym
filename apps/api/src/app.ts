@@ -11,15 +11,26 @@ import { createCoastalLocationRouter } from "./modules/coastal-locations/coastal
 import type { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
-import { healthRouter } from "./modules/health/health.router.js";
+import { createHealthRouter } from "./modules/health/health.router.js";
+import type { HealthService } from "./modules/health/health.service.js";
 import { createRecommendationRouter } from "./modules/recommendations/recommendation.router.js";
 import type { RecommendationService } from "./modules/recommendations/recommendation.service.js";
 import { createRoutingRouter } from "./modules/routing/routing.router.js";
 import type { RoutingService } from "./modules/routing/routing.service.js";
 import { createWeatherModelComparisonRouter } from "./modules/weather/models/comparison/weather-model-comparison.router.js";
 import type { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
+import { createErrorHandler } from "./shared/http/error-handler.js";
+import { notFoundHandler } from "./shared/http/not-found-handler.js";
+import {
+  createRequestIdMiddleware,
+  getRequestId,
+} from "./shared/http/request-id.js";
+import { createRequestLogger } from "./shared/http/request-logger.js";
+import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
+import type { Logger } from "./shared/logging/logger.js";
 
 export type AppDependencies = Readonly<{
+  healthService: Pick<HealthService, "getReadiness">;
   beachService: BeachService;
   coastalLocationService: Pick<
     CoastalLocationService,
@@ -38,17 +49,24 @@ export type AppDependencies = Readonly<{
 export type CreateAppOptions = Readonly<{
   env: AppEnv;
   dependencies: AppDependencies;
+  logger?: Logger;
 }>;
 
-export function createApp({ env, dependencies }: CreateAppOptions) {
+export function createApp({
+  env,
+  dependencies,
+  logger = new ConsoleJsonLogger(),
+}: CreateAppOptions) {
   const app = express();
 
   app.disable("x-powered-by");
+  app.use(createRequestIdMiddleware());
+  app.use(createRequestLogger({ logger }));
   app.use(helmet());
   app.use(cors({ origin: env.WEB_ORIGIN }));
   app.use(express.json());
 
-  app.use("/api/health", healthRouter);
+  app.use("/api/health", createHealthRouter(dependencies.healthService));
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
   app.use(
     "/api/coastal-locations",
@@ -72,6 +90,19 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
   app.use(
     "/api/recommendations",
     createRecommendationRouter(dependencies.recommendationService),
+  );
+  app.use(notFoundHandler);
+  app.use(
+    createErrorHandler({
+      onUnexpectedError: (error, request, response) => {
+        logger.error("http.request.failed", {
+          requestId: getRequestId(response),
+          method: request.method,
+          path: request.path,
+          error,
+        });
+      },
+    }),
   );
 
   return app;

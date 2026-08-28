@@ -14,6 +14,8 @@ import { CoastalLocationService } from "./modules/coastal-locations/coastal-loca
 import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/prisma-coastal-location.repository.js";
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
+import { HealthService } from "./modules/health/health.service.js";
+import { PrismaDatabaseHealthProbe } from "./modules/health/prisma-database-health.probe.js";
 import { OpenMeteoMarineClient } from "./modules/marine/open-meteo/open-meteo-marine.client.js";
 import { CachedMarineForecastProvider } from "./modules/marine/cache/cached-marine-forecast.provider.js";
 import { OpenMeteoWeatherClient } from "./modules/weather/open-meteo/open-meteo-weather.client.js";
@@ -31,28 +33,34 @@ import { OsrmClient } from "./modules/routing/osrm/osrm.client.js";
 import { CachedRoutingProvider } from "./modules/routing/cache/cached-routing.provider.js";
 import { PrismaRoutingBeachRepository } from "./modules/routing/prisma-routing-beach.repository.js";
 import { RoutingService } from "./modules/routing/routing.service.js";
+import { closeHttpServer } from "./shared/lifecycle/close-http-server.js";
+import { createGracefulShutdown } from "./shared/lifecycle/graceful-shutdown.js";
+import { registerShutdownSignals } from "./shared/lifecycle/shutdown-signals.js";
+import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 
 const env = parseEnv(process.env);
+const logger = new ConsoleJsonLogger();
 const prisma = createPrismaClient(requireDatabaseUrl(env));
+const healthService = new HealthService(new PrismaDatabaseHealthProbe(prisma));
 const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
 const coastalLocationService = new CoastalLocationService(coastalLocationRepository);
 const redisCache = new RedisCacheStore(
   createRedisCacheClient(env.REDIS_URL, (error) => {
-    console.error("Redis client error", error);
+    logger.error("redis.client.error", { error });
   }),
 );
 const requestCoalescer = new InMemoryRequestCoalescer();
-void redisCache.connect().catch((error: unknown) => {
-  console.error("Redis connection failed; continuing without cache", error);
+const redisConnection = redisCache.connect().catch((error: unknown) => {
+  logger.warn("redis.connection.failed", { error, cacheEnabled: false });
 });
 const weatherProvider = new CachedWeatherForecastProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
   provider: new OpenMeteoWeatherClient(),
   onCacheError: (error) => {
-    console.error("Weather cache error; using Open-Meteo directly", error);
+    logger.warn("cache.weather.failed", { error });
   },
 });
 const marineProvider = new CachedMarineForecastProvider({
@@ -60,10 +68,7 @@ const marineProvider = new CachedMarineForecastProvider({
   coalescer: requestCoalescer,
   provider: new OpenMeteoMarineClient(),
   onCacheError: (error) => {
-    console.error(
-      "Marine forecast cache error; using Open-Meteo directly",
-      error,
-    );
+    logger.warn("cache.marine.failed", { error });
   },
 });
 const weatherModelComparisonService = new WeatherModelComparisonService({
@@ -73,10 +78,7 @@ const weatherModelComparisonService = new WeatherModelComparisonService({
       coalescer: requestCoalescer,
       provider: new OpenMeteoModelWeatherClient(),
       onCacheError: (error) => {
-        console.error(
-          "Weather model cache error; using Open-Meteo directly",
-          error,
-        );
+        logger.warn("cache.weather_models.failed", { error });
       },
     }),
   ),
@@ -92,7 +94,7 @@ const routingProvider = new CachedRoutingProvider({
   coalescer: requestCoalescer,
   provider: new OsrmClient({ baseUrl: env.OSRM_BASE_URL }),
   onCacheError: (error) => {
-    console.error("Route cache error; using OSRM directly", error);
+    logger.warn("cache.routes.failed", { error });
   },
 });
 const beachForecastService = new BeachForecastService({
@@ -121,7 +123,9 @@ const routingService = new RoutingService({
 });
 const app = createApp({
   env,
+  logger,
   dependencies: {
+    healthService,
     beachService,
     coastalLocationService,
     coastalForecastService,
@@ -132,7 +136,26 @@ const app = createApp({
   },
 });
 
-app.listen(env.PORT, () => {
-  console.log(`API is running at http://localhost:${env.PORT}`);
+const server = app.listen(env.PORT, () => {
+  logger.info("app.started", { port: env.PORT });
 });
+
+const shutdown = createGracefulShutdown({
+  logger,
+  stopServer: () => closeHttpServer(server),
+  resources: [
+    {
+      name: "redis",
+      close: async () => {
+        await redisConnection;
+        await redisCache.disconnect();
+      },
+    },
+    { name: "postgresql", close: () => prisma.$disconnect() },
+  ],
+  onFailure: () => {
+    process.exitCode = 1;
+  },
+});
+registerShutdownSignals(shutdown);
 

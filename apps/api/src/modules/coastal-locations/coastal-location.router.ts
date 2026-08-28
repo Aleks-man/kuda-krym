@@ -1,9 +1,10 @@
 import {
-  apiErrorSchema,
   coastalLocationListResponseSchema,
   coastalLocationSchema,
 } from "@kuda-krym/contracts";
 import { Router } from "express";
+
+import { HttpError } from "../../shared/http/http-error.js";
 import type { CoastalLocationService } from "./coastal-location.service.js";
 
 export function createCoastalLocationRouter(
@@ -22,15 +23,11 @@ export function createCoastalLocationRouter(
       : null;
 
     if (!location) {
-      response.status(404).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "COASTAL_LOCATION_NOT_FOUND",
-            message: "Прибрежная зона не найдена",
-          },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 404,
+        code: "COASTAL_LOCATION_NOT_FOUND",
+        message: "Прибрежная зона не найдена",
+      });
     }
 
     response.status(200).json(coastalLocationSchema.parse(location));

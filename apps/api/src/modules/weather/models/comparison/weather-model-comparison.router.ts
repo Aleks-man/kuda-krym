@@ -1,10 +1,8 @@
-import {
-  apiErrorSchema,
-  weatherModelComparisonResponseSchema,
-} from "@kuda-krym/contracts";
+import { weatherModelComparisonResponseSchema } from "@kuda-krym/contracts";
 import { Router } from "express";
 import { z } from "zod";
 
+import { HttpError } from "../../../../shared/http/http-error.js";
 import type { WeatherModelComparisonService } from "./weather-model-comparison.service.js";
 
 const querySchema = z.object({
@@ -24,15 +22,11 @@ export function createWeatherModelComparisonRouter(
   router.get("/model-comparison", async (request, response) => {
     const query = querySchema.safeParse(request.query);
     if (!query.success) {
-      response.status(400).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "INVALID_WEATHER_MODEL_COMPARISON_REQUEST",
-            message: "Некорректные параметры сравнения моделей",
-          },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 400,
+        code: "INVALID_WEATHER_MODEL_COMPARISON_REQUEST",
+        message: "Некорректные параметры сравнения моделей",
+      });
     }
 
     const comparison = await service.compare(

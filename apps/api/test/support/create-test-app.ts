@@ -17,6 +17,13 @@ import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js
 import type { WeatherForecast } from "../../src/modules/weather/weather-forecast.js";
 import type { RecommendationCalculation } from "../../src/modules/recommendations/recommendation-calculation.js";
 import type { DrivingRoute } from "../../src/modules/routing/route.js";
+import type { Logger } from "../../src/shared/logging/logger.js";
+
+const silentLogger: Logger = {
+  info: () => undefined,
+  warn: () => undefined,
+  error: () => undefined,
+};
 
 type TestAppData = Readonly<{
   beaches?: BeachListItem[];
@@ -30,6 +37,7 @@ type TestAppData = Readonly<{
   drivingRoute?: DrivingRoute | null;
   routingError?: Error | null;
   weatherModelComparison?: WeatherModelComparisonResponse;
+  databaseReady?: boolean;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -91,6 +99,7 @@ export function createTestApp({
   drivingRoute = null,
   routingError = null,
   weatherModelComparison = emptyWeatherModelComparison,
+  databaseReady = true,
 }: TestAppData = {}) {
   const modelComparisonService = {
     compare: async (comparisonLocation: {
@@ -131,7 +140,14 @@ export function createTestApp({
 
   return createApp({
     env: parseEnv({ NODE_ENV: "test" }),
+    logger: silentLogger,
     dependencies: {
+      healthService: {
+        getReadiness: async () =>
+          databaseReady
+            ? { status: "ready", checks: { database: "up" } }
+            : { status: "not_ready", checks: { database: "down" } },
+      },
       beachService: new BeachService(beachRepository),
       coastalLocationService: new CoastalLocationService({
         ...coastalLocationRepository,

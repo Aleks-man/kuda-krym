@@ -1,7 +1,8 @@
-import { apiErrorSchema, coastalForecastSchema } from "@kuda-krym/contracts";
+import { coastalForecastSchema } from "@kuda-krym/contracts";
 import { Router } from "express";
 import { z } from "zod";
 
+import { HttpError } from "../../shared/http/http-error.js";
 import type { CoastalForecastService } from "./coastal-forecast.service.js";
 
 const paramsSchema = z.object({ slug: z.string().trim().min(1) });
@@ -22,15 +23,11 @@ export function createCoastalForecastRouter(
     const query = querySchema.safeParse(request.query);
 
     if (!params.success || !query.success) {
-      response.status(400).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "INVALID_COASTAL_FORECAST_REQUEST",
-            message: "Некорректные параметры прогноза",
-          },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 400,
+        code: "INVALID_COASTAL_FORECAST_REQUEST",
+        message: "Некорректные параметры прогноза",
+      });
     }
 
     const forecast = await service.getForecast(
@@ -39,15 +36,11 @@ export function createCoastalForecastRouter(
     );
 
     if (!forecast) {
-      response.status(404).json(
-        apiErrorSchema.parse({
-          error: {
-            code: "COASTAL_LOCATION_NOT_FOUND",
-            message: "Прибрежная зона не найдена",
-          },
-        }),
-      );
-      return;
+      throw new HttpError({
+        status: 404,
+        code: "COASTAL_LOCATION_NOT_FOUND",
+        message: "Прибрежная зона не найдена",
+      });
     }
 
     response.status(200).json(coastalForecastSchema.parse(forecast));

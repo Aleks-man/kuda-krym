@@ -3,6 +3,7 @@ import type {
   RouteRequest,
   RoutingProvider,
 } from "../route.js";
+import { createFetchWithTimeout } from "../../../shared/http/fetch-with-timeout.js";
 import { mapOsrmResponse } from "./osrm.mapper.js";
 import { osrmResponseSchema } from "./osrm-response.schema.js";
 
@@ -10,6 +11,7 @@ type OsrmClientOptions = Readonly<{
   fetch?: typeof globalThis.fetch;
   baseUrl?: string;
   now?: () => Date;
+  timeoutMs?: number;
 }>;
 
 export class OsrmClient implements RoutingProvider {
@@ -18,7 +20,12 @@ export class OsrmClient implements RoutingProvider {
   private readonly now: () => Date;
 
   public constructor(options: OsrmClientOptions = {}) {
-    this.fetch = options.fetch ?? globalThis.fetch;
+    this.fetch = createFetchWithTimeout({
+      ...(options.fetch !== undefined ? { fetch: options.fetch } : {}),
+      ...(options.timeoutMs !== undefined
+        ? { timeoutMs: options.timeoutMs }
+        : {}),
+    });
     this.baseUrl = options.baseUrl ?? "https://router.project-osrm.org/";
     this.now = options.now ?? (() => new Date());
   }
@@ -26,7 +33,6 @@ export class OsrmClient implements RoutingProvider {
   public async getDrivingRoute(request: RouteRequest): Promise<DrivingRoute> {
     const response = await this.fetch(this.createUrl(request), {
       headers: { accept: "application/json" },
-      signal: AbortSignal.timeout(8_000),
     });
 
     if (!response.ok) {
