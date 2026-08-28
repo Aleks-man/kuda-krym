@@ -17,8 +17,6 @@ if (!databaseUrl) {
 }
 
 const prisma = createPrismaClient(databaseUrl);
-const retrievedAt = new Date("2026-08-20T00:00:00.000Z");
-
 function getOsmUrl(osmType: string, osmId: bigint): string {
   return `https://www.openstreetmap.org/${osmType.toLowerCase()}/${osmId}`;
 }
@@ -28,6 +26,7 @@ async function seed() {
 
   for (const item of seedBeaches) {
     await prisma.$transaction(async (transaction) => {
+      const retrievedAt = new Date(item.sourceRetrievedAt);
       const sourceUrl = getOsmUrl(item.osmType, item.osmId);
       const existingSource = await transaction.dataSource.findFirst({
         where: { url: sourceUrl },
