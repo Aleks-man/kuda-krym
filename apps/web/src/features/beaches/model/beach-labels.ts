@@ -8,29 +8,34 @@ const regionLabels: Record<BeachListItem["region"], string> = {
   KERCH_PENINSULA: "Керченский полуостров",
 };
 
-const surfaceLabels: Record<BeachListItem["surface"], string> = {
-  UNKNOWN: "Покрытие уточняется",
+const surfaceLabels: Partial<Record<BeachListItem["surface"], string>> = {
   SAND: "Песок",
   PEBBLE: "Галька",
   MIXED: "Смешанное покрытие",
   ROCK: "Скалы",
 };
 
-const childSuitabilityLabels: Record<
-  BeachListItem["childSuitability"],
-  string
+const childSuitabilityLabels: Partial<
+  Record<BeachListItem["childSuitability"], string>
 > = {
-  UNKNOWN: "Для детей: нет проверенных данных",
   SUITABLE: "Подходит для детей",
   LIMITED: "Для детей с ограничениями",
   UNSUITABLE: "Не подходит для детей",
 };
 
+export function getBeachRegionLabel(
+  region: BeachListItem["region"],
+): string {
+  return regionLabels[region];
+}
+
 export function getBeachLabels(beach: BeachListItem) {
   return {
-    region: regionLabels[beach.region],
-    surface: surfaceLabels[beach.surface],
-    childSuitability: childSuitabilityLabels[beach.childSuitability],
+    region: getBeachRegionLabel(beach.region),
+    facts: [
+      surfaceLabels[beach.surface],
+      childSuitabilityLabels[beach.childSuitability],
+    ].filter((value): value is string => value !== undefined),
   };
 }
 

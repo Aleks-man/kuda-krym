@@ -3,6 +3,12 @@ export {
   type BeachDetail,
 } from "./beaches/beach-detail.contract.js";
 export {
+  beachCatalogFilterOptionsSchema,
+  beachCatalogQuerySchema,
+  type BeachCatalogFilterOptions,
+  type BeachCatalogQuery,
+} from "./beaches/beach-catalog-filter.contract.js";
+export {
   apiErrorSchema,
   type ApiError,
 } from "./common/api-error.contract.js";

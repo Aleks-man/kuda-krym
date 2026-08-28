@@ -1,4 +1,9 @@
-import type { BeachDetail, BeachListItem } from "@kuda-krym/contracts";
+import type {
+  BeachCatalogFilterOptions,
+  BeachCatalogQuery,
+  BeachDetail,
+  BeachListItem,
+} from "@kuda-krym/contracts";
 import {
   PublicationStatus,
   VerificationStatus,
@@ -6,16 +11,16 @@ import {
 } from "@kuda-krym/database";
 
 import type { BeachRepository } from "./beach.repository.js";
+import { createPublishedBeachWhere } from "./beach-catalog.where.js";
 
 export class PrismaBeachRepository implements BeachRepository {
   public constructor(private readonly prisma: PrismaClient) {}
 
-  public async findPublished(): Promise<BeachListItem[]> {
+  public async findPublished(
+    query: BeachCatalogQuery = {},
+  ): Promise<BeachListItem[]> {
     const beaches = await this.prisma.beach.findMany({
-      where: {
-        publicationStatus: PublicationStatus.PUBLISHED,
-        profile: { isNot: null },
-      },
+      where: createPublishedBeachWhere(query),
       select: {
         id: true,
         slug: true,
@@ -59,6 +64,33 @@ export class PrismaBeachRepository implements BeachRepository {
         coverImageUrl: beach.images[0]?.url ?? null,
       };
     });
+  }
+
+  public async findPublishedFilterOptions(): Promise<
+    BeachCatalogFilterOptions["data"]
+  > {
+    const publishedWhere = createPublishedBeachWhere({});
+    const [regionRows, localityRows] = await Promise.all([
+      this.prisma.beach.findMany({
+        where: publishedWhere,
+        select: { region: true },
+        distinct: ["region"],
+        orderBy: { region: "asc" },
+      }),
+      this.prisma.beach.findMany({
+        where: { ...publishedWhere, locality: { not: null } },
+        select: { locality: true },
+        distinct: ["locality"],
+        orderBy: { locality: "asc" },
+      }),
+    ]);
+
+    return {
+      regions: regionRows.map(({ region }) => region),
+      localities: localityRows.flatMap(({ locality }) =>
+        locality === null ? [] : [locality],
+      ),
+    };
   }
 
   public async findPublishedBySlug(slug: string): Promise<BeachDetail | null> {

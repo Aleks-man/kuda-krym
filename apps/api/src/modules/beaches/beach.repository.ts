@@ -1,7 +1,13 @@
-import type { BeachDetail, BeachListItem } from "@kuda-krym/contracts";
+import type {
+  BeachCatalogFilterOptions,
+  BeachCatalogQuery,
+  BeachDetail,
+  BeachListItem,
+} from "@kuda-krym/contracts";
 
 export interface BeachRepository {
-  findPublished(): Promise<BeachListItem[]>;
+  findPublished(query?: BeachCatalogQuery): Promise<BeachListItem[]>;
+  findPublishedFilterOptions(): Promise<BeachCatalogFilterOptions["data"]>;
   findPublishedBySlug(slug: string): Promise<BeachDetail | null>;
 }
 

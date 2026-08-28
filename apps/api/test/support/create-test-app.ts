@@ -111,7 +111,37 @@ export function createTestApp({
     }),
   };
   const beachRepository: BeachRepository = {
-    findPublished: async () => beaches,
+    findPublished: async (query = {}) =>
+      beaches.filter((beach) => {
+        const search = query.q?.toLocaleLowerCase("ru-RU");
+        const matchesSearch = search
+          ? [beach.name, beach.locality]
+              .filter((value): value is string => value !== null)
+              .some((value) =>
+                value.toLocaleLowerCase("ru-RU").includes(search),
+              )
+          : true;
+        const matchesRegion = query.region
+          ? beach.region === query.region
+          : true;
+        const matchesLocality = query.locality
+          ? beach.locality?.localeCompare(query.locality, "ru-RU", {
+              sensitivity: "accent",
+            }) === 0
+          : true;
+
+        return matchesSearch && matchesRegion && matchesLocality;
+      }),
+    findPublishedFilterOptions: async () => ({
+      regions: [...new Set(beaches.map(({ region }) => region))],
+      localities: [
+        ...new Set(
+          beaches.flatMap(({ locality }) =>
+            locality === null ? [] : [locality],
+          ),
+        ),
+      ],
+    }),
     findPublishedBySlug: async (slug) =>
       details.find((beach) => beach.slug === slug) ?? null,
   };
