@@ -3,8 +3,22 @@ import { OsmType, Region } from "../../../src/generated/prisma/client.js";
 import type { SeedBeach } from "./beach-seed.types.js";
 
 const sourceRetrievedAt = "2026-08-20T00:00:00.000Z";
+const expansionSourceRetrievedAt = "2026-08-28T00:00:00.000Z";
 
 export const sevastopolBeaches = [
+  {
+    slug: "kacha-german-gully-beach",
+    name: "Пляж Немецкая балка",
+    officialName: "Немецкая балка",
+    region: Region.SEVASTOPOL,
+    locality: null,
+    coastalLocationSlug: "kacha",
+    latitude: "44.751254",
+    longitude: "33.541913",
+    osmType: OsmType.WAY,
+    osmId: 1019242473n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
   {
     slug: "uchkuevka",
     name: "Пляж Учкуевка",
@@ -32,6 +46,32 @@ export const sevastopolBeaches = [
     sourceRetrievedAt,
   },
   {
+    slug: "sevastopol-khrustalny-beach",
+    name: "Хрустальный пляж в Севастополе",
+    officialName: "Хрустальный пляж",
+    region: Region.SEVASTOPOL,
+    locality: "Севастополь",
+    coastalLocationSlug: "sevastopol-west",
+    latitude: "44.616628",
+    longitude: "33.517585",
+    osmType: OsmType.WAY,
+    osmId: 363596604n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
+    slug: "sevastopol-victory-park-beach",
+    name: "Пляж Парк Победы в Севастополе",
+    officialName: "Пляж «Парк Победы»",
+    region: Region.SEVASTOPOL,
+    locality: "Севастополь",
+    coastalLocationSlug: "sevastopol-west",
+    latitude: "44.609213",
+    longitude: "33.456287",
+    osmType: OsmType.WAY,
+    osmId: 91331964n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
     slug: "omega",
     name: "Пляж Омега",
     officialName: "Пляж Омега",
@@ -56,5 +96,18 @@ export const sevastopolBeaches = [
     osmType: OsmType.WAY,
     osmId: 410891199n,
     sourceRetrievedAt,
+  },
+  {
+    slug: "balaklava-vasili-beach",
+    name: "Пляж Васили у Балаклавы",
+    officialName: "Васили",
+    region: Region.SEVASTOPOL,
+    locality: "Балаклава",
+    coastalLocationSlug: "balaklava",
+    latitude: "44.492139",
+    longitude: "33.578085",
+    osmType: OsmType.WAY,
+    osmId: 133239652n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
   },
 ] as const satisfies readonly SeedBeach[];
