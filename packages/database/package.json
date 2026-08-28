@@ -23,6 +23,7 @@
     "studio": "prisma studio",
     "typecheck": "npm run generate && tsc --noEmit",
     "validate": "prisma validate",
+    "validate:beach-seed": "tsx scripts/validate-beach-seed.ts",
     "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts"
   },
   "dependencies": {

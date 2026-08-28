@@ -8,7 +8,7 @@ export type SeedBeach = Readonly<{
   name: string;
   officialName: string;
   region: Region;
-  locality: string;
+  locality: string | null;
   coastalLocationSlug: string;
   latitude: string;
   longitude: string;
