@@ -1,9 +1,13 @@
 import type { ApiError } from "@kuda-krym/contracts";
-import type { ErrorRequestHandler } from "express";
+import type { ErrorRequestHandler, Request, Response } from "express";
 
 import { HttpError } from "./http-error.js";
 
-type UnexpectedErrorHandler = (error: unknown) => void;
+type UnexpectedErrorHandler = (
+  error: unknown,
+  request: Request,
+  response: Response,
+) => void;
 
 export type ErrorHandlerOptions = Readonly<{
   onUnexpectedError?: UnexpectedErrorHandler;
@@ -21,7 +25,7 @@ export function createErrorHandler(
 ): ErrorRequestHandler {
   const onUnexpectedError = options.onUnexpectedError ?? console.error;
 
-  return (error, _request, response, next) => {
+  return (error, request, response, next) => {
     if (response.headersSent) {
       next(error);
       return;
@@ -29,7 +33,7 @@ export function createErrorHandler(
 
     if (error instanceof HttpError) {
       if (error.status >= 500) {
-        onUnexpectedError(error.cause ?? error);
+        onUnexpectedError(error.cause ?? error, request, response);
       }
 
       const body: ApiError = {
@@ -39,7 +43,7 @@ export function createErrorHandler(
       return;
     }
 
-    onUnexpectedError(error);
+    onUnexpectedError(error, request, response);
     response.status(500).json(internalError);
   };
 }

@@ -44,7 +44,11 @@ describe("API error handling", () => {
         message: "Внутренняя ошибка сервера",
       },
     });
-    expect(onUnexpectedError).toHaveBeenCalledWith(internalError);
+    expect(onUnexpectedError).toHaveBeenCalledWith(
+      internalError,
+      expect.anything(),
+      expect.anything(),
+    );
   });
 
   it("reports the internal cause of a public upstream error", async () => {
@@ -66,7 +70,11 @@ describe("API error handling", () => {
     expect(response.status).toBe(502);
     expect(response.body.error.code).toBe("UPSTREAM_UNAVAILABLE");
     expect(response.body.error.message).toBe("Внешний сервис недоступен");
-    expect(onUnexpectedError).toHaveBeenCalledWith(providerError);
+    expect(onUnexpectedError).toHaveBeenCalledWith(
+      providerError,
+      expect.anything(),
+      expect.anything(),
+    );
   });
 
   it("returns a structured error for an unknown API route", async () => {

@@ -20,6 +20,13 @@ import { createWeatherModelComparisonRouter } from "./modules/weather/models/com
 import type { WeatherModelComparisonService } from "./modules/weather/models/comparison/weather-model-comparison.service.js";
 import { createErrorHandler } from "./shared/http/error-handler.js";
 import { notFoundHandler } from "./shared/http/not-found-handler.js";
+import {
+  createRequestIdMiddleware,
+  getRequestId,
+} from "./shared/http/request-id.js";
+import { createRequestLogger } from "./shared/http/request-logger.js";
+import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
+import type { Logger } from "./shared/logging/logger.js";
 
 export type AppDependencies = Readonly<{
   beachService: BeachService;
@@ -40,12 +47,19 @@ export type AppDependencies = Readonly<{
 export type CreateAppOptions = Readonly<{
   env: AppEnv;
   dependencies: AppDependencies;
+  logger?: Logger;
 }>;
 
-export function createApp({ env, dependencies }: CreateAppOptions) {
+export function createApp({
+  env,
+  dependencies,
+  logger = new ConsoleJsonLogger(),
+}: CreateAppOptions) {
   const app = express();
 
   app.disable("x-powered-by");
+  app.use(createRequestIdMiddleware());
+  app.use(createRequestLogger({ logger }));
   app.use(helmet());
   app.use(cors({ origin: env.WEB_ORIGIN }));
   app.use(express.json());
@@ -76,7 +90,18 @@ export function createApp({ env, dependencies }: CreateAppOptions) {
     createRecommendationRouter(dependencies.recommendationService),
   );
   app.use(notFoundHandler);
-  app.use(createErrorHandler());
+  app.use(
+    createErrorHandler({
+      onUnexpectedError: (error, request, response) => {
+        logger.error("http.request.failed", {
+          requestId: getRequestId(response),
+          method: request.method,
+          path: request.path,
+          error,
+        });
+      },
+    }),
+  );
 
   return app;
 }
