@@ -31,7 +31,7 @@ export function TwoDayForecast({ hours }: TwoDayForecastProps) {
           <section className={styles.day} key={day.dateKey}>
             <header>
               <h4>{day.label}</h4>
-              <span>{day.hours.length} точек прогноза</span>
+              <span>Ключевые интервалы</span>
             </header>
 
             <div className={styles.timeline}>

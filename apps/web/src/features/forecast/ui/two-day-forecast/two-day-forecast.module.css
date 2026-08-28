@@ -68,7 +68,8 @@
 
 .timeline {
   display: grid;
-  grid-template-columns: repeat(8, minmax(142px, 1fr));
+  grid-auto-columns: minmax(142px, 1fr);
+  grid-auto-flow: column;
   overflow-x: auto;
   scrollbar-color: var(--border) transparent;
   scrollbar-width: thin;
