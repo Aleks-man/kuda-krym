@@ -39,3 +39,25 @@
   color: var(--accent-strong);
   font-size: 40px;
 }
+
+.reset {
+  display: inline-grid;
+  min-height: 48px;
+  margin-top: 24px;
+  padding: 0 20px;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--foreground);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgb(22 48 43 / 16%);
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.reset:hover {
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}

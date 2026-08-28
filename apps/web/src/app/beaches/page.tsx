@@ -41,7 +41,7 @@ export default async function BeachesPage({ searchParams }: BeachesPageProps) {
           Проверенные места для поездки — с понятными характеристиками и без
           догадок о важных условиях.
         </p>
-        {meta.total > 0 && (
+        {(meta.total > 0 || hasActiveFilters) && (
           <p className={styles.count} aria-live="polite">
             {hasActiveFilters ? "Найдено" : "Опубликовано"}: {meta.total}
           </p>
@@ -56,7 +56,7 @@ export default async function BeachesPage({ searchParams }: BeachesPageProps) {
           <BeachGrid beaches={beaches} />
         </>
       ) : (
-        <BeachEmptyState />
+        <BeachEmptyState filtered={hasActiveFilters} />
       )}
     </main>
   );
