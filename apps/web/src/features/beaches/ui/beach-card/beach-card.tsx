@@ -20,10 +20,13 @@ export function BeachCard({ beach }: BeachCardProps) {
         <p className={styles.region}>{labels.region}</p>
         <h2 className={styles.title}>{beach.name}</h2>
         <p className={styles.locality}>{beach.locality ?? labels.region}</p>
-        <ul className={styles.facts}>
-          <li>{labels.surface}</li>
-          <li>{labels.childSuitability}</li>
-        </ul>
+        {labels.facts.length > 0 ? (
+          <ul className={styles.facts}>
+            {labels.facts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
+        ) : null}
         <Link className={styles.link} href={`/beaches/${beach.slug}`}>
           Подробнее <span aria-hidden="true">→</span>
         </Link>
