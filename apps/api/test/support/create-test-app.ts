@@ -112,6 +112,16 @@ export function createTestApp({
   };
   const beachRepository: BeachRepository = {
     findPublished: async () => beaches,
+    findPublishedFilterOptions: async () => ({
+      regions: [...new Set(beaches.map(({ region }) => region))],
+      localities: [
+        ...new Set(
+          beaches.flatMap(({ locality }) =>
+            locality === null ? [] : [locality],
+          ),
+        ),
+      ],
+    }),
     findPublishedBySlug: async (slug) =>
       details.find((beach) => beach.slug === slug) ?? null,
   };
