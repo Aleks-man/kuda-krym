@@ -14,6 +14,8 @@ import { CoastalLocationService } from "./modules/coastal-locations/coastal-loca
 import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/prisma-coastal-location.repository.js";
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
+import { HealthService } from "./modules/health/health.service.js";
+import { PrismaDatabaseHealthProbe } from "./modules/health/prisma-database-health.probe.js";
 import { OpenMeteoMarineClient } from "./modules/marine/open-meteo/open-meteo-marine.client.js";
 import { CachedMarineForecastProvider } from "./modules/marine/cache/cached-marine-forecast.provider.js";
 import { OpenMeteoWeatherClient } from "./modules/weather/open-meteo/open-meteo-weather.client.js";
@@ -39,6 +41,7 @@ import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 const env = parseEnv(process.env);
 const logger = new ConsoleJsonLogger();
 const prisma = createPrismaClient(requireDatabaseUrl(env));
+const healthService = new HealthService(new PrismaDatabaseHealthProbe(prisma));
 const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
@@ -122,6 +125,7 @@ const app = createApp({
   env,
   logger,
   dependencies: {
+    healthService,
     beachService,
     coastalLocationService,
     coastalForecastService,

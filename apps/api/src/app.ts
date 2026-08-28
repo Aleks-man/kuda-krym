@@ -11,7 +11,8 @@ import { createCoastalLocationRouter } from "./modules/coastal-locations/coastal
 import type { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
-import { healthRouter } from "./modules/health/health.router.js";
+import { createHealthRouter } from "./modules/health/health.router.js";
+import type { HealthService } from "./modules/health/health.service.js";
 import { createRecommendationRouter } from "./modules/recommendations/recommendation.router.js";
 import type { RecommendationService } from "./modules/recommendations/recommendation.service.js";
 import { createRoutingRouter } from "./modules/routing/routing.router.js";
@@ -29,6 +30,7 @@ import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 import type { Logger } from "./shared/logging/logger.js";
 
 export type AppDependencies = Readonly<{
+  healthService: Pick<HealthService, "getReadiness">;
   beachService: BeachService;
   coastalLocationService: Pick<
     CoastalLocationService,
@@ -64,7 +66,7 @@ export function createApp({
   app.use(cors({ origin: env.WEB_ORIGIN }));
   app.use(express.json());
 
-  app.use("/api/health", healthRouter);
+  app.use("/api/health", createHealthRouter(dependencies.healthService));
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
   app.use(
     "/api/coastal-locations",

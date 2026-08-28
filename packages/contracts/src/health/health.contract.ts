@@ -6,3 +6,12 @@ export const healthResponseSchema = z.object({
 
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 
+export const readinessResponseSchema = z.object({
+  status: z.enum(["ready", "not_ready"]),
+  checks: z.object({
+    database: z.enum(["up", "down"]),
+  }),
+});
+
+export type ReadinessResponse = z.infer<typeof readinessResponseSchema>;
+

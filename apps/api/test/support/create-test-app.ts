@@ -37,6 +37,7 @@ type TestAppData = Readonly<{
   drivingRoute?: DrivingRoute | null;
   routingError?: Error | null;
   weatherModelComparison?: WeatherModelComparisonResponse;
+  databaseReady?: boolean;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -98,6 +99,7 @@ export function createTestApp({
   drivingRoute = null,
   routingError = null,
   weatherModelComparison = emptyWeatherModelComparison,
+  databaseReady = true,
 }: TestAppData = {}) {
   const modelComparisonService = {
     compare: async (comparisonLocation: {
@@ -140,6 +142,12 @@ export function createTestApp({
     env: parseEnv({ NODE_ENV: "test" }),
     logger: silentLogger,
     dependencies: {
+      healthService: {
+        getReadiness: async () =>
+          databaseReady
+            ? { status: "ready", checks: { database: "up" } }
+            : { status: "not_ready", checks: { database: "down" } },
+      },
       beachService: new BeachService(beachRepository),
       coastalLocationService: new CoastalLocationService({
         ...coastalLocationRepository,
