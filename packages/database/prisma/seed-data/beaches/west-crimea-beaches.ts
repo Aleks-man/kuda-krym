@@ -3,8 +3,22 @@ import { OsmType, Region } from "../../../src/generated/prisma/client.js";
 import type { SeedBeach } from "./beach-seed.types.js";
 
 const sourceRetrievedAt = "2026-08-20T00:00:00.000Z";
+const expansionSourceRetrievedAt = "2026-08-28T00:00:00.000Z";
 
 export const westCrimeaBeaches = [
+  {
+    slug: "chernomorskoe-city-beach",
+    name: "Городской пляж Черноморского",
+    officialName: "Городской пляж",
+    region: Region.WEST_CRIMEA,
+    locality: "Черноморское",
+    coastalLocationSlug: "chernomorskoe",
+    latitude: "45.515397",
+    longitude: "32.709091",
+    osmType: OsmType.WAY,
+    osmId: 241117129n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
   {
     slug: "olenevka-miami",
     name: "Пляж Майами",
@@ -19,6 +33,19 @@ export const westCrimeaBeaches = [
     sourceRetrievedAt,
   },
   {
+    slug: "mezhvodnoe-city-beach",
+    name: "Городской пляж Межводного",
+    officialName: "Городской пляж",
+    region: Region.WEST_CRIMEA,
+    locality: "Межводное",
+    coastalLocationSlug: "mezhvodnoe",
+    latitude: "45.577484",
+    longitude: "32.844174",
+    osmType: OsmType.RELATION,
+    osmId: 14050780n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
     slug: "popovka",
     name: "Пляж Поповка",
     officialName: "Пляж Поповка",
@@ -30,6 +57,32 @@ export const westCrimeaBeaches = [
     osmType: OsmType.RELATION,
     osmId: 7114030n,
     sourceRetrievedAt,
+  },
+  {
+    slug: "evpatoria-solyaris-beach",
+    name: "Пляж Солярис в Евпатории",
+    officialName: "Солярис",
+    region: Region.WEST_CRIMEA,
+    locality: "Евпатория",
+    coastalLocationSlug: "evpatoria",
+    latitude: "45.198208",
+    longitude: "33.387880",
+    osmType: OsmType.RELATION,
+    osmId: 2881399n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
+  },
+  {
+    slug: "zaozernoe-settlement-beach",
+    name: "Поселковый пляж Заозёрного",
+    officialName: "Поселковый пляж",
+    region: Region.WEST_CRIMEA,
+    locality: "Заозёрное",
+    coastalLocationSlug: "zaozernoe",
+    latitude: "45.158594",
+    longitude: "33.293971",
+    osmType: OsmType.WAY,
+    osmId: 1110686646n,
+    sourceRetrievedAt: expansionSourceRetrievedAt,
   },
   {
     slug: "nikolaevka-skif",
