@@ -19,6 +19,9 @@
     "dev:api": "npm run dev --workspace @kuda-krym/api",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run build && playwright test",
+    "test:e2e:install": "playwright install chromium",
+    "test:e2e:report": "playwright show-report",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database"
   },
