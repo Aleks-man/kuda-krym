@@ -33,6 +33,7 @@ export function BeachMap({ beaches }: BeachMapProps) {
       <InteractiveMap
         ariaLabel="Карта опубликованных пляжей Крыма"
         center={[...crimeaCenter]}
+        clusterPoints
         points={points}
         zoom={8}
       />

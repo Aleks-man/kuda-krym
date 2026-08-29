@@ -10,6 +10,7 @@ export type MapPoint = Readonly<{
 
 export type InteractiveMapProps = Readonly<{
   center: MapPosition;
+  clusterPoints?: boolean;
   points?: readonly MapPoint[];
   route?: readonly MapPosition[];
   zoom?: number;
