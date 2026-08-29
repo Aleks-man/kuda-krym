@@ -1,5 +1,7 @@
 # Куда.Крым
 
+[![CI](https://github.com/Aleks-man/kuda-krym/actions/workflows/ci.yml/badge.svg)](https://github.com/Aleks-man/kuda-krym/actions/workflows/ci.yml)
+
 Веб-сервис для выбора места отдыха на побережье Крыма. Приложение показывает
 пляжи и прибрежные города, прогноз погоды и моря, сравнивает погодные модели и
 подбирает варианты с учётом предпочтений пользователя и времени в пути.
@@ -152,13 +154,15 @@ HTTP-статус и длительность запроса. Внутренни
 
 ## Проверка проекта
 
+Полный локальный набор проверок запускается одной командой:
+
 ```powershell
-npm run validate:beach-seed --workspace @kuda-krym/database
-npm run typecheck
-npm run lint
-npm test
-npm run build
+npm run check
 ```
+
+Команда валидирует seed-данные, проверяет типы и lint, запускает тесты и
+production-сборку. GitHub Actions выполняет тот же набор при каждом push, для
+pull request в `main` и при ручном запуске workflow `CI`.
 
 Локальные `.env`-файлы не должны попадать в Git — для документации настроек
 используются только файлы `.env.example`.
