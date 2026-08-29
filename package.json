@@ -12,13 +12,15 @@
   },
   "scripts": {
     "build": "npm run build --workspace @kuda-krym/contracts && npm run build --workspace @kuda-krym/database && npm run build --workspace @kuda-krym/api && npm run build --workspace @kuda-krym/web",
+    "check": "npm run validate:data && npm run typecheck && npm run lint && npm test && npm run build",
     "predev": "npm run build --workspace @kuda-krym/contracts",
     "dev": "concurrently --names contracts,web,api --prefix-colors yellow,cyan,green \"npm run dev --workspace @kuda-krym/contracts\" \"npm run dev --workspace @kuda-krym/web\" \"npm run dev --workspace @kuda-krym/api\"",
     "dev:web": "npm run dev --workspace @kuda-krym/web",
     "dev:api": "npm run dev --workspace @kuda-krym/api",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
