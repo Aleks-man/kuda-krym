@@ -58,3 +58,24 @@
 .clusterLabel::before {
   display: none;
 }
+
+.clusterMarker {
+  cursor: zoom-in;
+  filter: drop-shadow(0 5px 8px rgb(89 45 28 / 22%));
+  transition: filter 160ms ease, fill 160ms ease;
+}
+
+.clusterMarker:hover {
+  filter: brightness(1.06) drop-shadow(0 7px 11px rgb(89 45 28 / 28%));
+}
+
+.clusterMarker:active {
+  filter: brightness(.94) drop-shadow(0 3px 5px rgb(89 45 28 / 20%));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clusterMarker,
+  .popupAction {
+    transition: none;
+  }
+}

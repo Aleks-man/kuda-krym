@@ -51,6 +51,7 @@ export function MapPointsLayer({
         }}
         key={cluster.id}
         pathOptions={{
+          className: styles.clusterMarker,
           color: "#ffffff",
           fillColor: "#e66d3f",
           fillOpacity: 1,
@@ -98,5 +99,5 @@ function PointMarker({ point }: Readonly<{ point: MapPoint }>) {
 }
 
 function clusterRadius(pointCount: number): number {
-  return Math.min(22, 13 + Math.sqrt(pointCount) * 2);
+  return Math.min(26, 20 + Math.sqrt(pointCount) * 1.5);
 }
