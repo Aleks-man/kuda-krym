@@ -3,6 +3,7 @@ export type MapPosition = [latitude: number, longitude: number];
 export type MapPoint = Readonly<{
   id: string;
   label: string;
+  description?: string;
   position: MapPosition;
   href?: string;
   actionLabel?: string;
@@ -10,6 +11,7 @@ export type MapPoint = Readonly<{
 
 export type InteractiveMapProps = Readonly<{
   center: MapPosition;
+  clusterPoints?: boolean;
   points?: readonly MapPoint[];
   route?: readonly MapPosition[];
   zoom?: number;

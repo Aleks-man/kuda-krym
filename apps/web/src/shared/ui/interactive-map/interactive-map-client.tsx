@@ -1,22 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import {
   AttributionControl,
-  CircleMarker,
   MapContainer,
   Polyline,
-  Popup,
   TileLayer,
 } from "react-leaflet";
 import type { InteractiveMapProps } from "./interactive-map.types";
 import { MapBounds } from "./map-bounds";
+import { MapPointsLayer } from "./map-points-layer";
 import styles from "./interactive-map.module.css";
 
 const openStreetMapTiles = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 export function InteractiveMapClient({
   center,
+  clusterPoints = false,
   points = [],
   route = [],
   zoom = 9,
@@ -46,30 +45,7 @@ export function InteractiveMapClient({
             positions={[...route]}
           />
         ) : null}
-        {points.map((point) => (
-          <CircleMarker
-            center={point.position}
-            key={point.id}
-            pathOptions={{
-              color: "#ffffff",
-              fillColor: "#087f8c",
-              fillOpacity: 1,
-              weight: 3,
-            }}
-            radius={8}
-          >
-            <Popup>
-              <div className={styles.popup}>
-                <strong>{point.label}</strong>
-                {point.href ? (
-                  <Link href={point.href}>
-                    {point.actionLabel ?? "Открыть"} →
-                  </Link>
-                ) : null}
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
+        <MapPointsLayer clusterPoints={clusterPoints} points={points} />
         <MapBounds center={center} positions={positions} zoom={zoom} />
       </MapContainer>
     </div>

@@ -17,7 +17,8 @@ const crimeaCenter = [45.15, 34.35] as const;
 export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
   const points: MapPoint[] = locations.map((location) => ({
     id: location.id,
-    label: `${location.name} · ${waterBodyLabels[location.waterBody]}`,
+    label: location.name,
+    description: waterBodyLabels[location.waterBody],
     href: `/coast/${location.slug}`,
     actionLabel: "Смотреть прогноз",
     position: [
