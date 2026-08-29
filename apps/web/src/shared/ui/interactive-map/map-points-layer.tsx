@@ -85,8 +85,9 @@ function PointMarker({ point }: Readonly<{ point: MapPoint }>) {
       <Popup>
         <div className={styles.popup}>
           <strong>{point.label}</strong>
+          {point.description ? <span>{point.description}</span> : null}
           {point.href ? (
-            <Link href={point.href}>
+            <Link className={styles.popupAction} href={point.href}>
               {point.actionLabel ?? "Открыть"} →
             </Link>
           ) : null}
