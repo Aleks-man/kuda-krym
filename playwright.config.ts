@@ -1,14 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
 
+import { getE2eDatabaseUrl } from "./tests/e2e/support/e2e-database";
+
 const apiPort = 4100;
 const webPort = 3100;
 const apiUrl = `http://127.0.0.1:${apiPort}`;
 const webUrl = `http://127.0.0.1:${webPort}`;
-const databaseUrl = process.env.E2E_DATABASE_URL
-  ?? "postgresql://postgres:postgres@127.0.0.1:5432/kuda_krym_e2e?schema=public";
+const databaseUrl = getE2eDatabaseUrl();
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  globalSetup: "./tests/e2e/support/global-setup.ts",
   outputDir: "./test-results/e2e-artifacts",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
