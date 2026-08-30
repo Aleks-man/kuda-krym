@@ -19,9 +19,20 @@ function runDatabaseScript(
   script: "migrate:deploy" | "seed",
   environment: NodeJS.ProcessEnv,
 ): void {
+  const npmExecutable = process.env.npm_execpath;
+  if (!npmExecutable) {
+    throw new Error("npm_execpath is required to prepare the E2E database");
+  }
+
   execFileSync(
-    process.platform === "win32" ? "npm.cmd" : "npm",
-    ["run", script, "--workspace", "@kuda-krym/database"],
+    process.execPath,
+    [
+      npmExecutable,
+      "run",
+      script,
+      "--workspace",
+      "@kuda-krym/database",
+    ],
     {
       env: environment,
       stdio: "inherit",
