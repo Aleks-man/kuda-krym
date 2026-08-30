@@ -20,6 +20,15 @@ RUN npm run build --workspace @kuda-krym/contracts \
     && npm run build --workspace @kuda-krym/database \
     && npm run build --workspace @kuda-krym/api
 
+FROM builder AS migrator
+
+ENV NODE_ENV=production
+WORKDIR /app
+
+USER node
+
+CMD ["npm", "run", "deploy", "--workspace", "@kuda-krym/database"]
+
 FROM node:20.19.1-bookworm-slim AS production-dependencies
 
 ENV NODE_ENV=production
