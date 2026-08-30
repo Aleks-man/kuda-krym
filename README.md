@@ -31,7 +31,7 @@
 - Node.js, Express 5 и Zod — API;
 - PostgreSQL, Prisma и `pg` — хранение данных;
 - Redis — кеш внешних прогнозов и маршрутов;
-- Vitest, TypeScript и ESLint — тесты и контроль качества;
+- Vitest, Playwright, TypeScript и ESLint — тесты и контроль качества;
 - npm workspaces — организация монорепозитория.
 
 ## Структура проекта
@@ -41,6 +41,7 @@
 - `packages/contracts` — общие схемы Zod и типы API;
 - `packages/database` — Prisma-схема, миграции, seed и клиент базы данных;
 - `packages/config` — переиспользуемые настройки инструментов;
+- `tests/e2e` — Playwright smoke-сценарии ключевых пользовательских путей;
 - `docs` — требования и архитектурные решения.
 
 ## Требования
@@ -163,6 +164,18 @@ npm run check
 Команда валидирует seed-данные, проверяет типы и lint, запускает тесты и
 production-сборку. GitHub Actions выполняет тот же набор при каждом push, для
 pull request в `main` и при ручном запуске workflow `CI`.
+
+Браузерные smoke-тесты работают с отдельной PostgreSQL-базой, имя которой должно
+заканчиваться на `_e2e`. После создания базы `kuda_krym_e2e` установите Chromium и
+запустите сценарии:
+
+```powershell
+npm run test:e2e:install
+npm run test:e2e
+```
+
+Переменная `E2E_DATABASE_URL` позволяет указать другое безопасное E2E-подключение.
+GitHub Actions запускает эти тесты в отдельном job с собственным PostgreSQL-сервисом.
 
 Локальные `.env`-файлы не должны попадать в Git — для документации настроек
 используются только файлы `.env.example`.
