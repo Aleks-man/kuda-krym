@@ -40,6 +40,21 @@ jobs:
       - name: Run quality checks
         run: npm run check
 
+  containers:
+    name: Container builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Validate Compose configuration
+        run: docker compose --env-file compose.env.example config --quiet
+
+      - name: Build production containers
+        run: docker compose --env-file compose.env.example build
+
   e2e:
     name: E2E smoke tests
     runs-on: ubuntu-latest
