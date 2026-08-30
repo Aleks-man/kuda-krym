@@ -31,6 +31,7 @@
 - Node.js, Express 5 и Zod — API;
 - PostgreSQL, Prisma и `pg` — хранение данных;
 - Redis — кеш внешних прогнозов и маршрутов;
+- Docker и Docker Compose — production-сборка и запуск полного стека;
 - Vitest, Playwright, TypeScript и ESLint — тесты и контроль качества;
 - npm workspaces — организация монорепозитория.
 
@@ -49,7 +50,8 @@
 - Node.js 20.19 или новее;
 - npm 10 или новее;
 - PostgreSQL;
-- Redis — рекомендуется для кеширования, но API может работать без него.
+- Redis — рекомендуется для кеширования, но API может работать без него;
+- Docker Desktop — для запуска контейнерного production-стека.
 
 ## Локальный запуск
 
@@ -83,6 +85,44 @@ npm run dev
 
 После запуска веб-приложение доступно по адресу `http://localhost:3000`, API —
 по адресу `http://localhost:4000`.
+
+## Запуск в Docker
+
+Production-стек состоит из отдельных контейнеров web, API, PostgreSQL и Redis.
+Одноразовый контейнер `migrate` перед запуском API применяет Prisma-миграции и
+идемпотентно добавляет начальный каталог пляжей и прибрежных локаций.
+
+Создайте локальный файл настроек Compose:
+
+```powershell
+Copy-Item compose.env.example .env
+```
+
+Замените пароль в `POSTGRES_PASSWORD` и тот же пароль в `DATABASE_URL`. Для
+публичного развёртывания также укажите фактический адрес сайта в `WEB_ORIGIN`.
+Файл `.env` не должен попадать в Git.
+
+Соберите и запустите стек:
+
+```powershell
+docker compose up -d --build
+docker compose ps
+```
+
+После успешного запуска сайт доступен по адресу `http://localhost:3000`. PostgreSQL,
+Redis и API доступны только внутри сети Compose; наружу публикуется только web.
+Состояние и журналы сервисов можно посмотреть командами:
+
+```powershell
+docker compose ps
+docker compose logs -f api web
+```
+
+Остановка не удаляет данные из именованных томов:
+
+```powershell
+docker compose down
+```
 
 ## Переменные окружения
 
