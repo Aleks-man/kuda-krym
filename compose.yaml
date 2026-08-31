@@ -55,7 +55,11 @@ services:
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
       NODE_ENV: production
       OSRM_BASE_URL: ${OSRM_BASE_URL:-https://router.project-osrm.org/}
+      RATE_LIMIT_EXPENSIVE_MAX_REQUESTS: ${RATE_LIMIT_EXPENSIVE_MAX_REQUESTS:-10}
+      RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-120}
+      RATE_LIMIT_WINDOW_SECONDS: ${RATE_LIMIT_WINDOW_SECONDS:-60}
       REDIS_URL: redis://redis:6379
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-1}
       WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:3000}
     depends_on:
       migrate:

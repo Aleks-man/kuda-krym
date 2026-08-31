@@ -26,6 +26,9 @@ import {
   getRequestId,
 } from "./shared/http/request-id.js";
 import { createRequestLogger } from "./shared/http/request-logger.js";
+import { createRateLimitMiddleware } from "./shared/http/rate-limit/rate-limit.middleware.js";
+import { createRateLimitPolicies } from "./shared/http/rate-limit/rate-limit.policy.js";
+import type { RateLimitStores } from "./shared/http/rate-limit/redis-rate-limit.store.js";
 import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 import type { Logger } from "./shared/logging/logger.js";
 
@@ -50,23 +53,39 @@ export type CreateAppOptions = Readonly<{
   env: AppEnv;
   dependencies: AppDependencies;
   logger?: Logger;
+  rateLimitStores?: RateLimitStores;
 }>;
 
 export function createApp({
   env,
   dependencies,
   logger = new ConsoleJsonLogger(),
+  rateLimitStores,
 }: CreateAppOptions) {
   const app = express();
 
   app.disable("x-powered-by");
+  if (env.TRUST_PROXY_HOPS > 0) {
+    app.set("trust proxy", env.TRUST_PROXY_HOPS);
+  }
   app.use(createRequestIdMiddleware());
   app.use(createRequestLogger({ logger }));
   app.use(helmet());
   app.use(cors({ origin: env.WEB_ORIGIN }));
   app.use(express.json());
 
+  const rateLimitPolicies = createRateLimitPolicies(env);
+  const globalRateLimit = createRateLimitMiddleware(
+    rateLimitPolicies.global,
+    rateLimitStores?.global,
+  );
+  const expensiveRateLimit = createRateLimitMiddleware(
+    rateLimitPolicies.expensive,
+    rateLimitStores?.expensive,
+  );
+
   app.use("/api/health", createHealthRouter(dependencies.healthService));
+  app.use("/api", globalRateLimit);
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
   app.use(
     "/api/coastal-locations",
@@ -80,7 +99,11 @@ export function createApp({
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
   );
-  app.use("/api/routes", createRoutingRouter(dependencies.routingService));
+  app.use(
+    "/api/routes",
+    expensiveRateLimit,
+    createRoutingRouter(dependencies.routingService),
+  );
   app.use(
     "/api/weather",
     createWeatherModelComparisonRouter(
@@ -89,6 +112,7 @@ export function createApp({
   );
   app.use(
     "/api/recommendations",
+    expensiveRateLimit,
     createRecommendationRouter(dependencies.recommendationService),
   );
   app.use(notFoundHandler);

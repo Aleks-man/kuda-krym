@@ -14,6 +14,7 @@ function createClientMock(initiallyOpen = false) {
   const get = vi.fn<RedisCacheClient["get"]>();
   const setWithTtl = vi.fn<RedisCacheClient["setWithTtl"]>();
   const deleteValue = vi.fn<RedisCacheClient["delete"]>();
+  const sendCommand = vi.fn<RedisCacheClient["sendCommand"]>();
 
   const client: RedisCacheClient = {
     get isOpen() {
@@ -24,6 +25,7 @@ function createClientMock(initiallyOpen = false) {
     get,
     setWithTtl,
     delete: deleteValue,
+    sendCommand,
   };
 
   return { client, connect, deleteValue, disconnect, get, setWithTtl };

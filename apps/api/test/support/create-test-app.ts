@@ -38,6 +38,7 @@ type TestAppData = Readonly<{
   routingError?: Error | null;
   weatherModelComparison?: WeatherModelComparisonResponse;
   databaseReady?: boolean;
+  environment?: NodeJS.ProcessEnv;
 }>;
 
 const emptyWeatherForecast: WeatherForecast = {
@@ -100,6 +101,7 @@ export function createTestApp({
   routingError = null,
   weatherModelComparison = emptyWeatherModelComparison,
   databaseReady = true,
+  environment = {},
 }: TestAppData = {}) {
   const modelComparisonService = {
     compare: async (comparisonLocation: {
@@ -169,7 +171,7 @@ export function createTestApp({
   });
 
   return createApp({
-    env: parseEnv({ NODE_ENV: "test" }),
+    env: parseEnv({ NODE_ENV: "test", ...environment }),
     logger: silentLogger,
     dependencies: {
       healthService: {
