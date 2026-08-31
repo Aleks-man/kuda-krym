@@ -1,19 +1,14 @@
-import {
-  apiErrorSchema,
-  recommendationRequestSchema,
-} from "@kuda-krym/contracts";
+import { recommendationRequestSchema } from "@kuda-krym/contracts";
 import { NextResponse } from "next/server";
 import {
   requestRecommendations,
 } from "@/features/recommendations/api/request-recommendations";
 import { ApiGatewayError } from "@/shared/api/api-gateway-error";
 import { createApiProxyHeaders } from "@/shared/api/api-proxy-headers";
-
-function errorResponse(code: string, message: string, status: number) {
-  return NextResponse.json(apiErrorSchema.parse({ error: { code, message } }), {
-    status,
-  });
-}
+import {
+  createApiErrorResponse,
+  createApiGatewayErrorResponse,
+} from "@/shared/api/api-error-response";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +16,11 @@ export async function POST(request: Request) {
     const parsed = recommendationRequestSchema.safeParse(body);
 
     if (!parsed.success) {
-      return errorResponse("VALIDATION_ERROR", "Проверьте параметры подбора", 400);
+      return createApiErrorResponse({
+        code: "VALIDATION_ERROR",
+        message: "Проверьте параметры подбора",
+        status: 400,
+      });
     }
 
     return NextResponse.json(
@@ -32,14 +31,13 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     if (error instanceof ApiGatewayError) {
-      const status = error.status >= 400 && error.status < 500 ? error.status : 502;
-      return errorResponse(error.code, error.message, status);
+      return createApiGatewayErrorResponse(error);
     }
 
-    return errorResponse(
-      "RECOMMENDATIONS_UNAVAILABLE",
-      "Сервис рекомендаций временно недоступен",
-      503,
-    );
+    return createApiErrorResponse({
+      code: "RECOMMENDATIONS_UNAVAILABLE",
+      message: "Сервис рекомендаций временно недоступен",
+      status: 503,
+    });
   }
 }

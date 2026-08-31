@@ -5,6 +5,7 @@ import {
   type RouteRequest,
 } from "@kuda-krym/contracts";
 import { ApiGatewayError } from "@/shared/api/api-gateway-error";
+import { getApiGatewayHeaders } from "@/shared/api/api-gateway-headers";
 
 const defaultApiUrl = "http://127.0.0.1:4000";
 
@@ -21,11 +22,12 @@ export async function requestRoute(request: RouteRequest, headers: HeadersInit) 
 
   if (!response.ok) {
     const error = apiErrorSchema.safeParse(body);
-    throw new ApiGatewayError(
-      error.success ? error.data.error.message : "Сервис маршрутов недоступен",
-      response.status,
-      error.success ? error.data.error.code : "UPSTREAM_ERROR",
-    );
+    throw new ApiGatewayError({
+      message: error.success ? error.data.error.message : "Сервис маршрутов недоступен",
+      status: response.status,
+      code: error.success ? error.data.error.code : "UPSTREAM_ERROR",
+      headers: getApiGatewayHeaders(response.headers),
+    });
   }
 
   return routeResponseSchema.parse(body);
