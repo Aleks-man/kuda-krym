@@ -27,6 +27,7 @@ const envSchema = z.object({
     .max(3_600)
     .default(60),
   REDIS_URL: z.url().default("redis://127.0.0.1:6379"),
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(10).default(0),
 }).refine(
   (env) =>
     env.RATE_LIMIT_EXPENSIVE_MAX_REQUESTS <= env.RATE_LIMIT_MAX_REQUESTS,

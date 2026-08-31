@@ -52,4 +52,13 @@ describe("API environment", () => {
       "RATE_LIMIT_EXPENSIVE_MAX_REQUESTS must not exceed RATE_LIMIT_MAX_REQUESTS",
     );
   });
+
+  it("does not trust reverse proxies by default", () => {
+    expect(parseEnv({ NODE_ENV: "production" }).TRUST_PROXY_HOPS).toBe(0);
+  });
+
+  it("accepts a bounded number of trusted proxy hops", () => {
+    expect(parseEnv({ TRUST_PROXY_HOPS: "1" }).TRUST_PROXY_HOPS).toBe(1);
+    expect(() => parseEnv({ TRUST_PROXY_HOPS: "11" })).toThrow();
+  });
 });

@@ -52,4 +52,27 @@ describe("API rate limiting", () => {
 
     expect(limited.body.error.code).toBe("RATE_LIMIT_EXCEEDED");
   });
+
+  it("keeps separate budgets for clients behind a trusted proxy", async () => {
+    const app = createTestApp({
+      environment: {
+        RATE_LIMIT_MAX_REQUESTS: "1",
+        RATE_LIMIT_EXPENSIVE_MAX_REQUESTS: "1",
+        TRUST_PROXY_HOPS: "1",
+      },
+    });
+
+    await request(app)
+      .get("/api/beaches")
+      .set("x-forwarded-for", "198.51.100.10")
+      .expect(200);
+    await request(app)
+      .get("/api/beaches")
+      .set("x-forwarded-for", "198.51.100.11")
+      .expect(200);
+    await request(app)
+      .get("/api/beaches")
+      .set("x-forwarded-for", "198.51.100.10")
+      .expect(429);
+  });
 });
