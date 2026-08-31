@@ -8,12 +8,15 @@ import { ApiGatewayError } from "@/shared/api/api-gateway-error";
 
 const defaultApiUrl = "http://127.0.0.1:4000";
 
-export async function requestRecommendations(request: RecommendationRequest) {
+export async function requestRecommendations(
+  request: RecommendationRequest,
+  headers: HeadersInit,
+) {
   const payload = recommendationRequestSchema.parse(request);
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(`${apiUrl}/api/recommendations`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers,
     body: JSON.stringify(payload),
     cache: "no-store",
   });
