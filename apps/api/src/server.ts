@@ -37,6 +37,7 @@ import { closeHttpServer } from "./shared/lifecycle/close-http-server.js";
 import { createGracefulShutdown } from "./shared/lifecycle/graceful-shutdown.js";
 import { registerShutdownSignals } from "./shared/lifecycle/shutdown-signals.js";
 import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
+import { createRedisRateLimitStores } from "./shared/http/rate-limit/redis-rate-limit.store.js";
 
 const env = parseEnv(process.env);
 const logger = new ConsoleJsonLogger();
@@ -46,15 +47,21 @@ const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
 const coastalLocationService = new CoastalLocationService(coastalLocationRepository);
-const redisCache = new RedisCacheStore(
-  createRedisCacheClient(env.REDIS_URL, (error) => {
-    logger.error("redis.client.error", { error });
-  }),
-);
-const requestCoalescer = new InMemoryRequestCoalescer();
-const redisConnection = redisCache.connect().catch((error: unknown) => {
-  logger.warn("redis.connection.failed", { error, cacheEnabled: false });
+const redisClient = createRedisCacheClient(env.REDIS_URL, (error) => {
+  logger.error("redis.client.error", { error });
 });
+const redisCache = new RedisCacheStore(redisClient);
+const requestCoalescer = new InMemoryRequestCoalescer();
+const redisConnected = await redisCache
+  .connect()
+  .then(() => true)
+  .catch((error: unknown) => {
+    logger.warn("redis.connection.failed", { error, cacheEnabled: false });
+    return false;
+  });
+const rateLimitStores = redisConnected
+  ? createRedisRateLimitStores(redisClient)
+  : undefined;
 const weatherProvider = new CachedWeatherForecastProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
@@ -124,6 +131,7 @@ const routingService = new RoutingService({
 const app = createApp({
   env,
   logger,
+  ...(rateLimitStores ? { rateLimitStores } : {}),
   dependencies: {
     healthService,
     beachService,
@@ -147,7 +155,6 @@ const shutdown = createGracefulShutdown({
     {
       name: "redis",
       close: async () => {
-        await redisConnection;
         await redisCache.disconnect();
       },
     },

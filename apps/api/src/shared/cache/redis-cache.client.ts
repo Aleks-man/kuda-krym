@@ -7,7 +7,14 @@ export interface RedisCacheClient {
   get(key: string): Promise<string | null>;
   setWithTtl(key: string, value: string, ttlSeconds: number): Promise<void>;
   delete(key: string): Promise<void>;
+  sendCommand(...args: string[]): Promise<RedisCommandReply>;
 }
+
+export type RedisCommandReply =
+  | boolean
+  | number
+  | string
+  | Array<boolean | number | string>;
 
 type RedisErrorHandler = (error: Error) => void;
 
@@ -40,6 +47,9 @@ export function createRedisCacheClient(
     },
     async delete(key) {
       await client.del(key);
+    },
+    sendCommand(...args) {
+      return client.sendCommand<RedisCommandReply>(args);
     },
   };
 }

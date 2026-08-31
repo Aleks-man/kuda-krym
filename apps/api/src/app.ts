@@ -28,6 +28,7 @@ import {
 import { createRequestLogger } from "./shared/http/request-logger.js";
 import { createRateLimitMiddleware } from "./shared/http/rate-limit/rate-limit.middleware.js";
 import { createRateLimitPolicies } from "./shared/http/rate-limit/rate-limit.policy.js";
+import type { RateLimitStores } from "./shared/http/rate-limit/redis-rate-limit.store.js";
 import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 import type { Logger } from "./shared/logging/logger.js";
 
@@ -52,12 +53,14 @@ export type CreateAppOptions = Readonly<{
   env: AppEnv;
   dependencies: AppDependencies;
   logger?: Logger;
+  rateLimitStores?: RateLimitStores;
 }>;
 
 export function createApp({
   env,
   dependencies,
   logger = new ConsoleJsonLogger(),
+  rateLimitStores,
 }: CreateAppOptions) {
   const app = express();
 
@@ -72,9 +75,13 @@ export function createApp({
   app.use(express.json());
 
   const rateLimitPolicies = createRateLimitPolicies(env);
-  const globalRateLimit = createRateLimitMiddleware(rateLimitPolicies.global);
+  const globalRateLimit = createRateLimitMiddleware(
+    rateLimitPolicies.global,
+    rateLimitStores?.global,
+  );
   const expensiveRateLimit = createRateLimitMiddleware(
     rateLimitPolicies.expensive,
+    rateLimitStores?.expensive,
   );
 
   app.use("/api/health", createHealthRouter(dependencies.healthService));
