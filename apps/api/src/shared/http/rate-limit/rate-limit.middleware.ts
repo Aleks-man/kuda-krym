@@ -8,6 +8,7 @@ export function createRateLimitMiddleware(policy: RateLimitPolicy) {
     identifier: policy.identifier,
     legacyHeaders: false,
     limit: policy.maxRequests,
+    skip: (request) => request.method === "OPTIONS",
     standardHeaders: "draft-8",
     windowMs: policy.windowMs,
     handler: (_request, response) => {

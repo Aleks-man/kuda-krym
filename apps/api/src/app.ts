@@ -26,6 +26,8 @@ import {
   getRequestId,
 } from "./shared/http/request-id.js";
 import { createRequestLogger } from "./shared/http/request-logger.js";
+import { createRateLimitMiddleware } from "./shared/http/rate-limit/rate-limit.middleware.js";
+import { createRateLimitPolicies } from "./shared/http/rate-limit/rate-limit.policy.js";
 import { ConsoleJsonLogger } from "./shared/logging/console-json.logger.js";
 import type { Logger } from "./shared/logging/logger.js";
 
@@ -66,7 +68,14 @@ export function createApp({
   app.use(cors({ origin: env.WEB_ORIGIN }));
   app.use(express.json());
 
+  const rateLimitPolicies = createRateLimitPolicies(env);
+  const globalRateLimit = createRateLimitMiddleware(rateLimitPolicies.global);
+  const expensiveRateLimit = createRateLimitMiddleware(
+    rateLimitPolicies.expensive,
+  );
+
   app.use("/api/health", createHealthRouter(dependencies.healthService));
+  app.use("/api", globalRateLimit);
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
   app.use(
     "/api/coastal-locations",
@@ -80,7 +89,11 @@ export function createApp({
     "/api/forecast",
     createBeachForecastRouter(dependencies.beachForecastService),
   );
-  app.use("/api/routes", createRoutingRouter(dependencies.routingService));
+  app.use(
+    "/api/routes",
+    expensiveRateLimit,
+    createRoutingRouter(dependencies.routingService),
+  );
   app.use(
     "/api/weather",
     createWeatherModelComparisonRouter(
@@ -89,6 +102,7 @@ export function createApp({
   );
   app.use(
     "/api/recommendations",
+    expensiveRateLimit,
     createRecommendationRouter(dependencies.recommendationService),
   );
   app.use(notFoundHandler);
