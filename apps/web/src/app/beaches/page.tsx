@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 import { getBeachCatalogFilterOptions } from "@/features/beaches/api/get-beach-catalog-filter-options";
 import { getBeaches } from "@/features/beaches/api/get-beaches";
 import {
@@ -10,13 +8,15 @@ import { BeachCatalogFilters } from "@/features/beaches/ui/beach-catalog-filters
 import { BeachEmptyState } from "@/features/beaches/ui/beach-empty-state/beach-empty-state";
 import { BeachGrid } from "@/features/beaches/ui/beach-grid/beach-grid";
 import { BeachMap } from "@/features/beaches/ui/beach-map/beach-map";
+import { createPageMetadata } from "@/shared/seo/page-metadata";
 
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Пляжи Крыма",
   description: "Каталог пляжей Крыма с проверенными характеристиками.",
-};
+  pathname: "/beaches",
+});
 
 export const dynamic = "force-dynamic";
 

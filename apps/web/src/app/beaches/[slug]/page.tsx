@@ -8,18 +8,31 @@ import { BeachFacts } from "@/features/beaches/ui/beach-facts/beach-facts";
 import { BeachSources } from "@/features/beaches/ui/beach-sources/beach-sources";
 import { BeachForecast } from "@/features/forecast/ui/beach-forecast/beach-forecast";
 import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
+import { createPageMetadata } from "@/shared/seo/page-metadata";
 
 import styles from "./page.module.css";
 
 type BeachPageProps = Readonly<{ params: Promise<{ slug: string }> }>;
 
-export async function generateMetadata({ params }: BeachPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BeachPageProps): Promise<Metadata> {
   const { slug } = await params;
   const beach = await getBeach(slug);
 
-  return beach
-    ? { title: beach.name, description: beach.description ?? `Пляж ${beach.name} в каталоге Куда.Крым` }
-    : { title: "Пляж не найден" };
+  if (!beach) {
+    return {
+      title: "Пляж не найден",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return createPageMetadata({
+    title: beach.name,
+    description:
+      beach.description ?? `Пляж ${beach.name} в каталоге Куда.Крым`,
+    pathname: `/beaches/${beach.slug}`,
+  });
 }
 
 export default async function BeachPage({ params }: BeachPageProps) {

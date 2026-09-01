@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { getComparisonBeaches } from "@/features/comparison/api/get-comparison-beaches";
 import { normalizeComparisonSlugs } from "@/features/comparison/model/normalize-comparison-slugs";
 import { BeachComparison } from "@/features/comparison/ui/beach-comparison/beach-comparison";
+import { createPageMetadata } from "@/shared/seo/page-metadata";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Сравнение пляжей",
   description: "Сравнение характеристик пляжей Крыма.",
-};
+  pathname: "/compare",
+});
 
 type ComparePageProps = {
   searchParams: Promise<{ beaches?: string | string[] }>;

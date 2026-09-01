@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-
 import { getCoastalLocations } from "@/features/coastal-locations/api/get-coastal-locations";
 import { CoastalLocationGroups } from "@/features/coastal-locations/ui/coastal-location-groups/coastal-location-groups";
 import { CoastalLocationMap } from "@/features/coastal-locations/ui/coastal-location-map/coastal-location-map";
+import { createPageMetadata } from "@/shared/seo/page-metadata";
 
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Побережье Крыма",
   description: "Карта прибрежных городов и зон морского прогноза Крыма.",
-};
+  pathname: "/coast",
+});
 
 export const dynamic = "force-dynamic";
 
