@@ -6,6 +6,8 @@ import {
   defaultSiteDescription,
   siteName,
 } from "@/shared/seo/page-metadata";
+import { JsonLd } from "@/shared/seo/json-ld";
+import { createWebsiteStructuredData } from "@/shared/seo/structured-data";
 
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
@@ -43,6 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ru">
       <body>
+        <JsonLd data={createWebsiteStructuredData(getSiteUrl())} />
         <SiteHeader />
         {children}
       </body>

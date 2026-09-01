@@ -7,6 +7,9 @@ import { CoastalLocationForecast } from "@/features/coastal-locations/ui/coastal
 import { CoastalLocationHero } from "@/features/coastal-locations/ui/coastal-location-hero/coastal-location-hero";
 import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
 import { createPageMetadata } from "@/shared/seo/page-metadata";
+import { JsonLd } from "@/shared/seo/json-ld";
+import { createPlaceStructuredData } from "@/shared/seo/structured-data";
+import { getSiteUrl } from "@/shared/config/site-url";
 
 import styles from "./page.module.css";
 
@@ -41,13 +44,26 @@ export default async function CoastLocationPage({
   const location = await getCoastalLocation(slug);
 
   if (!location) notFound();
+  const description = `Погода, ветер, волны и температура моря в ${location.name}.`;
 
   return (
-    <main className={styles.main}>
-      <CoastalLocationHero location={location} />
-      <Suspense fallback={<BeachForecastSkeleton />}>
-        <CoastalLocationForecast slug={location.slug} />
-      </Suspense>
-    </main>
+    <>
+      <JsonLd
+        data={createPlaceStructuredData({
+          type: "Place",
+          name: location.name,
+          description,
+          pathname: `/coast/${location.slug}`,
+          coordinates: location.weatherCoordinates,
+          siteUrl: getSiteUrl(),
+        })}
+      />
+      <main className={styles.main}>
+        <CoastalLocationHero location={location} />
+        <Suspense fallback={<BeachForecastSkeleton />}>
+          <CoastalLocationForecast slug={location.slug} />
+        </Suspense>
+      </main>
+    </>
   );
 }
