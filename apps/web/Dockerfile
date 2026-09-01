@@ -14,6 +14,8 @@ RUN npm ci
 
 FROM dependencies AS builder
 
+ARG SITE_URL=http://localhost:3000
+ENV SITE_URL=$SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 
