@@ -72,11 +72,14 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       target: runner
+      args:
+        SITE_URL: ${SITE_URL:-http://localhost:3000}
     restart: unless-stopped
     init: true
     environment:
       API_URL: http://api:4000
       NODE_ENV: production
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
     depends_on:
       api:
         condition: service_healthy
