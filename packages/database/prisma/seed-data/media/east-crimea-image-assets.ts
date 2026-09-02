@@ -36,13 +36,31 @@ export const feodosiaBeachImage = image(
   "https://creativecommons.org/licenses/by/4.0/",
 );
 
+export const beregovoeVillageImage = image(
+  "beregovoe-village-2015",
+  "Church_BeregovoeFeo_1.jpg",
+  "Троицкая церковь в селе Береговое",
+  "FrostDre",
+  "CC BY-SA 3.0",
+  "https://creativecommons.org/licenses/by-sa/3.0/",
+);
+
+export const primorskyVillageImage = image(
+  "primorsky-village-2008",
+  "%D0%9A%D1%80%D1%8B%D0%BC_%D0%9F%D1%80%D0%B8%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B8%D0%B9_%D0%9F%D1%8F%D1%82%D0%B8%D1%8D%D1%82%D0%B0%D0%B6%D0%BA%D0%B8.jpg",
+  "Вид на посёлок Приморский",
+  "Водник",
+  "Public domain",
+  null,
+);
+
 function image(
   localName: string,
   commonsFileName: string,
   title: string,
   author: string,
   license: LicensedImageAsset["license"],
-  licenseUrl: NonNullable<LicensedImageAsset["licenseUrl"]>,
+  licenseUrl: LicensedImageAsset["licenseUrl"],
 ): LicensedImageAsset {
   return {
     localUrl: `/images/places/${localName}.webp`,
