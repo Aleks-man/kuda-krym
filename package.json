@@ -23,7 +23,7 @@
     "test:e2e:install": "playwright install chromium",
     "test:e2e:report": "playwright show-report",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database"
+    "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:beach-images --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
