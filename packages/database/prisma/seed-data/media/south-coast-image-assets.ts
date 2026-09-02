@@ -72,6 +72,15 @@ export const rybachyeBeachImage = image(
   "https://creativecommons.org/licenses/by-sa/3.0/",
 );
 
+export const malorechenskoeImage = image(
+  "malorechenskoe-2011",
+  "Malorechenskoe_1.JPG",
+  "Malorechenskoe village, Crimea",
+  "В. С. Білецький",
+  "CC0 1.0",
+  "https://creativecommons.org/publicdomain/zero/1.0/",
+);
+
 function image(
   localName: string,
   commonsFileName: string,

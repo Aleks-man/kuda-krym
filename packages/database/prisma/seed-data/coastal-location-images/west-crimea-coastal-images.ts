@@ -7,6 +7,11 @@ import {
   olenevkaBeachImage,
   popovkaSunsetImage,
 } from "../media/verified-image-assets.js";
+import {
+  mezhvodnoeSunsetImage,
+  steregushcheeCoastImage,
+  zaozernoeSunsetImage,
+} from "../media/west-crimea-supplement-image-assets.js";
 
 export const westCrimeaCoastalImages = [
   cover(
@@ -15,7 +20,14 @@ export const westCrimeaCoastalImages = [
     "Пляж и побережье Черноморского",
   ),
   cover("olenevka", olenevkaBeachImage, "Песчаное побережье Оленевки"),
+  cover("mezhvodnoe", mezhvodnoeSunsetImage, "Закат над побережьем Межводного"),
+  cover(
+    "steregushchee",
+    steregushcheeCoastImage,
+    "Бакальская коса у Стерегущего",
+  ),
   cover("evpatoria", evpatoriaBeachImage, "Побережье Евпатории"),
+  cover("zaozernoe", zaozernoeSunsetImage, "Закат над побережьем Заозёрного"),
   cover("popovka", popovkaSunsetImage, "Закат над побережьем Поповки"),
   cover(
     "novofedorovka",

@@ -4,6 +4,7 @@ import {
   alushtaCoastImage,
   forosCoastImage,
   gurzufCoastImage,
+  malorechenskoeImage,
   partenitImage,
   rybachyeBeachImage,
   simeizCoastImage,
@@ -18,6 +19,11 @@ export const southCoastCoastalImages = [
   cover("gurzuf", gurzufCoastImage, "Побережье Гурзуфа"),
   cover("partenit", partenitImage, "Партенит у подножия гор"),
   cover("alushta", alushtaCoastImage, "Побережье Алушты"),
+  cover(
+    "malorechenskoe",
+    malorechenskoeImage,
+    "Малореченское и окружающее побережье",
+  ),
   cover("rybachye", rybachyeBeachImage, "Пляж и побережье Рыбачьего"),
 ] as const satisfies readonly SeedCoastalLocationImage[];
 
