@@ -3,6 +3,8 @@ export const supportedImageLicenses = [
   "CC BY 3.0",
   "CC BY-SA 4.0",
   "CC BY-SA 3.0",
+  "CC BY-SA 2.0",
+  "CC0 1.0",
   "Public domain",
 ] as const;
 
