@@ -1,11 +1,10 @@
 import type { CoastalLocation } from "@kuda-krym/contracts";
-import Link from "next/link";
 
 import {
   coastalRegionLabels,
   coastalRegionOrder,
-  waterBodyLabels,
 } from "../../model/coastal-location-labels";
+import { CoastalLocationCard } from "../coastal-location-card/coastal-location-card";
 import styles from "./coastal-location-groups.module.css";
 
 type CoastalLocationGroupsProps = Readonly<{
@@ -37,14 +36,7 @@ export function CoastalLocationGroups({ locations }: CoastalLocationGroupsProps)
               <ul className={styles.list}>
                 {regionLocations.map((location) => (
                   <li key={location.id}>
-                    <Link className={styles.card} href={`/coast/${location.slug}`}>
-                      <span className={styles.marker} aria-hidden="true" />
-                      <div>
-                        <strong>{location.name}</strong>
-                        <span>{waterBodyLabels[location.waterBody]}</span>
-                      </div>
-                      <span className={styles.arrow} aria-hidden="true">→</span>
-                    </Link>
+                    <CoastalLocationCard location={location} />
                   </li>
                 ))}
               </ul>
