@@ -22,6 +22,7 @@
     "migrate:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
     "studio": "prisma studio",
+    "images:download": "tsx scripts/download-place-images.ts",
     "typecheck": "npm run generate && tsc --noEmit",
     "validate": "prisma validate",
     "validate:beach-seed": "tsx scripts/validate-beach-seed.ts",
