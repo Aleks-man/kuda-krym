@@ -28,7 +28,8 @@
     "validate:beach-seed": "tsx scripts/validate-beach-seed.ts",
     "validate:beach-images": "tsx scripts/validate-beach-images.ts",
     "validate:coastal-location-images": "tsx scripts/validate-coastal-location-images.ts",
-    "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts"
+    "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts",
+    "validate:place-image-files": "tsx scripts/validate-place-image-files.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
