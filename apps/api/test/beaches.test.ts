@@ -21,7 +21,7 @@ describe("GET /api/beaches", () => {
           coordinates: { latitude: 44.644844, longitude: 33.536119 },
           surface: "UNKNOWN",
           childSuitability: "UNKNOWN",
-          coverImageUrl: null,
+          coverImage: null,
         },
       ],
     });
@@ -113,7 +113,7 @@ describe("GET /api/beaches", () => {
           coordinates: { latitude: 44.644844, longitude: 33.536119 },
           surface: "UNKNOWN",
           childSuitability: "UNKNOWN",
-          coverImageUrl: null,
+          coverImage: null,
           profile: {
             waterEntry: "UNKNOWN",
             childSuitability: "UNKNOWN",
@@ -166,7 +166,7 @@ function createBeach(
     coordinates: { latitude: 44.5, longitude: 34.1 },
     surface: "UNKNOWN" as const,
     childSuitability: "UNKNOWN" as const,
-    coverImageUrl: null,
+    coverImage: null,
     ...overrides,
   };
 }

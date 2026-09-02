@@ -345,7 +345,7 @@ describe("API contracts", () => {
           coordinates: { latitude: 44.644844, longitude: 33.536119 },
           surface: "UNKNOWN",
           childSuitability: "UNKNOWN",
-          coverImageUrl: null,
+          coverImage: null,
         },
       ],
       meta: { total: 1 },
@@ -366,7 +366,7 @@ describe("API contracts", () => {
       coordinates: { latitude: 44.644844, longitude: 33.536119 },
       surface: "UNKNOWN",
       childSuitability: "UNKNOWN",
-      coverImageUrl: null,
+      coverImage: null,
       profile: {
         waterEntry: "UNKNOWN",
         childSuitability: "UNKNOWN",

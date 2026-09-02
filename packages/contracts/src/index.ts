@@ -15,10 +15,12 @@ export {
 export {
   beachListItemSchema,
   beachListResponseSchema,
+  beachCoverImageSchema,
   beachRegionSchema,
   beachSurfaceSchema,
   childSuitabilitySchema,
   type BeachListItem,
+  type BeachCoverImage,
   type BeachListResponse,
 } from "./beaches/beach-list.contract.js";
 export {

@@ -11,7 +11,18 @@ import {
 } from "@kuda-krym/database";
 
 import type { BeachRepository } from "./beach.repository.js";
+import { selectBeachCoverImage } from "./beach-cover-image.js";
 import { createPublishedBeachWhere } from "./beach-catalog.where.js";
+
+const coverImageSelect = {
+  url: true,
+  alt: true,
+  title: true,
+  author: true,
+  license: true,
+  licenseUrl: true,
+  sourceUrl: true,
+} as const;
 
 export class PrismaBeachRepository implements BeachRepository {
   public constructor(private readonly prisma: PrismaClient) {}
@@ -37,8 +48,17 @@ export class PrismaBeachRepository implements BeachRepository {
         },
         images: {
           where: { isCover: true },
-          select: { url: true },
+          select: coverImageSelect,
           take: 1,
+        },
+        coastalLocation: {
+          select: {
+            images: {
+              where: { isCover: true },
+              select: coverImageSelect,
+              take: 1,
+            },
+          },
         },
       },
       orderBy: { name: "asc" },
@@ -61,7 +81,10 @@ export class PrismaBeachRepository implements BeachRepository {
         },
         surface: beach.profile.surface,
         childSuitability: beach.profile.childSuitability,
-        coverImageUrl: beach.images[0]?.url ?? null,
+        coverImage: selectBeachCoverImage(
+          beach.images,
+          beach.coastalLocation?.images ?? [],
+        ),
       };
     });
   }
@@ -128,12 +151,23 @@ export class PrismaBeachRepository implements BeachRepository {
           select: {
             url: true,
             alt: true,
+            title: true,
             author: true,
             license: true,
+            licenseUrl: true,
             sourceUrl: true,
             isCover: true,
           },
           orderBy: [{ isCover: "desc" }, { sortOrder: "asc" }],
+        },
+        coastalLocation: {
+          select: {
+            images: {
+              where: { isCover: true },
+              select: coverImageSelect,
+              take: 1,
+            },
+          },
         },
         evidence: {
           where: {
@@ -175,7 +209,10 @@ export class PrismaBeachRepository implements BeachRepository {
       },
       surface: beach.profile.surface,
       childSuitability: beach.profile.childSuitability,
-      coverImageUrl: beach.images.find((image) => image.isCover)?.url ?? null,
+      coverImage: selectBeachCoverImage(
+        beach.images.filter((image) => image.isCover),
+        beach.coastalLocation?.images ?? [],
+      ),
       profile: {
         waterEntry: beach.profile.waterEntry,
         childSuitability: beach.profile.childSuitability,
@@ -187,7 +224,10 @@ export class PrismaBeachRepository implements BeachRepository {
         hasShower: beach.profile.hasShower,
         hasChangingRoom: beach.profile.hasChangingRoom,
       },
-      images: beach.images.map(({ isCover: _isCover, ...image }) => image),
+      images: beach.images.map(
+        ({ isCover: _isCover, title: _title, licenseUrl: _licenseUrl, ...image }) =>
+          image,
+      ),
       sources: beach.evidence.map((evidence) => ({
         field: evidence.field,
         title: evidence.source.title,
