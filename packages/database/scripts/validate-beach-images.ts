@@ -24,8 +24,13 @@ for (const image of seedBeachImages) {
   if (!image.sourceUrl.startsWith("https://commons.wikimedia.org/wiki/File:")) {
     failures.push(`${label}: source must be a Wikimedia Commons file page`);
   }
-  if (!image.downloadUrl.startsWith("https://upload.wikimedia.org/")) {
-    failures.push(`${label}: download must use Wikimedia's media host`);
+  if (
+    !image.downloadUrl.startsWith("https://upload.wikimedia.org/") &&
+    !image.downloadUrl.startsWith(
+      "https://commons.wikimedia.org/wiki/Special:Redirect/file/",
+    )
+  ) {
+    failures.push(`${label}: download must use a Wikimedia media URL`);
   }
   if (!supportedImageLicenses.includes(image.license)) {
     failures.push(`${label}: unsupported license`);
