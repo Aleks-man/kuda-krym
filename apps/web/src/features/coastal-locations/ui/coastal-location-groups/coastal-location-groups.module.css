@@ -57,52 +57,9 @@
 
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   margin: 0;
   padding: 0;
-  gap: 12px;
+  gap: 16px;
   list-style: none;
 }
-
-.card {
-  display: flex;
-  min-height: 86px;
-  padding: 18px;
-  align-items: flex-start;
-  gap: 13px;
-  border: 1px solid rgb(255 255 255 / 82%);
-  border-radius: 18px;
-  background: rgb(255 255 255 / 58%);
-  box-shadow: 0 12px 34px rgb(19 77 80 / 7%);
-  transition: transform 160ms ease, box-shadow 160ms ease;
-}
-
-.card:hover { transform: translateY(-2px); box-shadow: 0 18px 42px rgb(19 77 80 / 12%); }
-
-.marker {
-  width: 9px;
-  height: 9px;
-  margin-top: 6px;
-  flex: 0 0 auto;
-  border: 2px solid white;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.card div {
-  display: grid;
-  gap: 5px;
-}
-
-.card strong {
-  font-size: 16px;
-  line-height: 1.25;
-}
-
-.card div span {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.arrow { margin-left: auto; color: var(--accent-strong); font-weight: 800; }

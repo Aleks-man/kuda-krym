@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { placeImageSchema } from "../media/place-image.contract.js";
 
 export const beachRegionSchema = z.enum([
   "WEST_CRIMEA",
@@ -23,6 +24,10 @@ export const childSuitabilitySchema = z.enum([
   "UNSUITABLE",
 ]);
 
+export const beachCoverImageSchema = placeImageSchema.extend({
+  context: z.enum(["BEACH", "COASTAL_LOCATION"]),
+});
+
 export const beachListItemSchema = z.object({
   id: z.uuid(),
   slug: z.string().min(1),
@@ -35,7 +40,7 @@ export const beachListItemSchema = z.object({
   }),
   surface: beachSurfaceSchema,
   childSuitability: childSuitabilitySchema,
-  coverImageUrl: z.url().nullable(),
+  coverImage: beachCoverImageSchema.nullable(),
 });
 
 export const beachListResponseSchema = z.object({
@@ -46,5 +51,6 @@ export const beachListResponseSchema = z.object({
 });
 
 export type BeachListItem = z.infer<typeof beachListItemSchema>;
+export type BeachCoverImage = z.infer<typeof beachCoverImageSchema>;
 export type BeachListResponse = z.infer<typeof beachListResponseSchema>;
 

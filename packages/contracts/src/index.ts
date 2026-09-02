@@ -15,10 +15,12 @@ export {
 export {
   beachListItemSchema,
   beachListResponseSchema,
+  beachCoverImageSchema,
   beachRegionSchema,
   beachSurfaceSchema,
   childSuitabilitySchema,
   type BeachListItem,
+  type BeachCoverImage,
   type BeachListResponse,
 } from "./beaches/beach-list.contract.js";
 export {
@@ -57,6 +59,10 @@ export {
   type CoastalLocation,
   type CoastalLocationListResponse,
 } from "./coastal-locations/coastal-location.contract.js";
+export {
+  placeImageSchema,
+  type PlaceImage,
+} from "./media/place-image.contract.js";
 export {
   coastalForecastSchema,
   type CoastalForecast,

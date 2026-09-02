@@ -22,10 +22,14 @@
     "migrate:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
     "studio": "prisma studio",
+    "images:download": "tsx scripts/download-place-images.ts",
     "typecheck": "npm run generate && tsc --noEmit",
     "validate": "prisma validate",
     "validate:beach-seed": "tsx scripts/validate-beach-seed.ts",
-    "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts"
+    "validate:beach-images": "tsx scripts/validate-beach-images.ts",
+    "validate:coastal-location-images": "tsx scripts/validate-coastal-location-images.ts",
+    "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts",
+    "validate:place-image-files": "tsx scripts/validate-place-image-files.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
@@ -37,6 +41,7 @@
     "@types/node": "^26.2.0",
     "@types/pg": "^8.23.1",
     "prisma": "^7.9.1",
+    "sharp": "^0.35.4",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }

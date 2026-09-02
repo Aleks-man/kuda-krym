@@ -1,0 +1,21 @@
+.credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  color: rgb(255 255 255 / 82%);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 34%);
+  text-underline-offset: 3px;
+}
+
+.credit a:hover {
+  color: white;
+  text-decoration-color: currentcolor;
+}

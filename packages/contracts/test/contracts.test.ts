@@ -55,6 +55,15 @@ describe("API contracts", () => {
       waterBody: "BLACK_SEA",
       weatherCoordinates: { latitude: 44.495, longitude: 34.166 },
       marineCoordinates: { latitude: 44.46, longitude: 34.17 },
+      coverImage: {
+        url: "/images/places/yalta-beach-2016.webp",
+        alt: "Yalta coast",
+        title: "Yalta beach",
+        author: "Example author",
+        license: "CC BY-SA 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Yalta.jpg",
+      },
     } as const;
     const list = coastalLocationListResponseSchema.parse({
       data: [location],
@@ -336,7 +345,7 @@ describe("API contracts", () => {
           coordinates: { latitude: 44.644844, longitude: 33.536119 },
           surface: "UNKNOWN",
           childSuitability: "UNKNOWN",
-          coverImageUrl: null,
+          coverImage: null,
         },
       ],
       meta: { total: 1 },
@@ -357,7 +366,7 @@ describe("API contracts", () => {
       coordinates: { latitude: 44.644844, longitude: 33.536119 },
       surface: "UNKNOWN",
       childSuitability: "UNKNOWN",
-      coverImageUrl: null,
+      coverImage: null,
       profile: {
         waterEntry: "UNKNOWN",
         childSuitability: "UNKNOWN",
