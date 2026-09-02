@@ -3,8 +3,8 @@ import type {
   SeedImagePlacement,
 } from "../media/licensed-image.types.js";
 
-export type SeedBeachImage = LicensedImageAsset &
+export type SeedCoastalLocationImage = LicensedImageAsset &
   SeedImagePlacement &
   Readonly<{
-  beachSlug: string;
+    coastalLocationSlug: string;
   }>;

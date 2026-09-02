@@ -26,6 +26,7 @@
     "validate": "prisma validate",
     "validate:beach-seed": "tsx scripts/validate-beach-seed.ts",
     "validate:beach-images": "tsx scripts/validate-beach-images.ts",
+    "validate:coastal-location-images": "tsx scripts/validate-coastal-location-images.ts",
     "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts"
   },
   "dependencies": {
