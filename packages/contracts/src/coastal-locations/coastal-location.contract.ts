@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { beachRegionSchema } from "../beaches/beach-list.contract.js";
 import { forecastCoordinatesSchema } from "../forecast/forecast-hour.contract.js";
+import { placeImageSchema } from "../media/place-image.contract.js";
 
 export const waterBodySchema = z.enum([
   "BLACK_SEA",
@@ -16,6 +17,7 @@ export const coastalLocationSchema = z.object({
   waterBody: waterBodySchema,
   weatherCoordinates: forecastCoordinatesSchema,
   marineCoordinates: forecastCoordinatesSchema,
+  coverImage: placeImageSchema.nullable(),
 });
 
 export const coastalLocationListResponseSchema = z.object({

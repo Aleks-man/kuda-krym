@@ -58,6 +58,10 @@ export {
   type CoastalLocationListResponse,
 } from "./coastal-locations/coastal-location.contract.js";
 export {
+  placeImageSchema,
+  type PlaceImage,
+} from "./media/place-image.contract.js";
+export {
   coastalForecastSchema,
   type CoastalForecast,
 } from "./coastal-locations/coastal-forecast.contract.js";

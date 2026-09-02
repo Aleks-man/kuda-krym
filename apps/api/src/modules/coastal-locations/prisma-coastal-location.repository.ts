@@ -12,6 +12,19 @@ const coastalLocationSelect = {
   weatherLongitude: true,
   marineLatitude: true,
   marineLongitude: true,
+  images: {
+    where: { isCover: true },
+    select: {
+      url: true,
+      alt: true,
+      title: true,
+      author: true,
+      license: true,
+      licenseUrl: true,
+      sourceUrl: true,
+    },
+    take: 1,
+  },
 } as const;
 
 type DecimalValue = Readonly<{ toNumber(): number }>;
@@ -26,6 +39,7 @@ type CoastalLocationRecord = Readonly<{
   weatherLongitude: DecimalValue;
   marineLatitude: DecimalValue;
   marineLongitude: DecimalValue;
+  images: ReadonlyArray<NonNullable<CoastalLocation["coverImage"]>>;
 }>;
 
 export class PrismaCoastalLocationRepository
@@ -72,5 +86,6 @@ function mapCoastalLocation(
       latitude: location.marineLatitude.toNumber(),
       longitude: location.marineLongitude.toNumber(),
     },
+    coverImage: location.images[0] ?? null,
   };
 }

@@ -12,6 +12,7 @@ const yalta = {
   waterBody: "BLACK_SEA",
   weatherCoordinates: { latitude: 44.495, longitude: 34.166 },
   marineCoordinates: { latitude: 44.46, longitude: 34.17 },
+  coverImage: null,
 } as const;
 
 describe("GET /api/coastal-locations/:slug/forecast", () => {
