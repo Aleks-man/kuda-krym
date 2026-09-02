@@ -1,4 +1,4 @@
-import { mkdir, rename, rm } from "node:fs/promises";
+import { mkdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 import type { PlaceImageAsset } from "./place-image-assets.js";
@@ -71,11 +71,14 @@ async function fetchImage(asset: PlaceImageAsset): Promise<Buffer> {
 
 async function sharpFileExists(filePath: string): Promise<boolean> {
   try {
-    await sharp(filePath).metadata();
-    return true;
+    const file = await stat(filePath);
+    if (!file.isFile()) return false;
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === "ENOENT") return false;
     throw error;
   }
+
+  await sharp(filePath).metadata();
+  return true;
 }
