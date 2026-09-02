@@ -1,5 +1,69 @@
 import type { LicensedImageAsset } from "./licensed-image.types.js";
 
+export const chernomorskoeBeachImage = {
+  localUrl: "/images/places/chernomorskoe-beach-2021.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%BE%D0%BC%2C_2021%2C_03.jpg?width=1280",
+  sourceUrl:
+    "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%BE%D0%BC%2C_2021%2C_03.jpg",
+  title: "Пляж в Черноморском, 2021, 03",
+  author: "Mitte27",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  sourceVerifiedAt: "2026-09-02",
+} as const satisfies LicensedImageAsset;
+
+export const olenevkaBeachImage = {
+  localUrl: "/images/places/olenevka-beach-2009.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/OlenevkaBeach.jpg?width=1280",
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:OlenevkaBeach.jpg",
+  title: "OlenevkaBeach",
+  author: "Александр Ильин",
+  license: "CC BY-SA 3.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+  sourceVerifiedAt: "2026-09-02",
+} as const satisfies LicensedImageAsset;
+
+export const evpatoriaBeachImage = {
+  localUrl: "/images/places/evpatoria-beach-2021.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/2021._%D0%95%D0%B2%D0%BF%D0%B0%D1%82%D0%BE%D1%80%D0%B8%D1%8F_DSC_4933.jpg?width=1280",
+  sourceUrl:
+    "https://commons.wikimedia.org/wiki/File:2021._%D0%95%D0%B2%D0%BF%D0%B0%D1%82%D0%BE%D1%80%D0%B8%D1%8F_DSC_4933.jpg",
+  title: "2021. Евпатория DSC 4933",
+  author: "Andrey Butko",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  sourceVerifiedAt: "2026-09-02",
+} as const satisfies LicensedImageAsset;
+
+export const novofedorovkaBeachImage = {
+  localUrl: "/images/places/novofedorovka-beach-2022.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%9D%D0%BE%D0%B2%D0%BE%D1%84%D1%91%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D0%BA%D0%B5%2C_%D0%B8%D1%8E%D0%BB%D1%8C_2022%2C_02.jpg?width=1280",
+  sourceUrl:
+    "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%9D%D0%BE%D0%B2%D0%BE%D1%84%D1%91%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D0%BA%D0%B5%2C_%D0%B8%D1%8E%D0%BB%D1%8C_2022%2C_02.jpg",
+  title: "Пляж в Новофёдоровке, июль 2022, 02",
+  author: "Mitte27",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  sourceVerifiedAt: "2026-09-02",
+} as const satisfies LicensedImageAsset;
+
+export const nikolaevkaBeachImage = {
+  localUrl: "/images/places/nikolaevka-beach-2005.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Mykolaivka_Beach_-_panoramio.jpg?width=1280",
+  sourceUrl:
+    "https://commons.wikimedia.org/wiki/File:Mykolaivka_Beach_-_panoramio.jpg",
+  title: "Mykolaivka Beach",
+  author: "Jyri Moisio",
+  license: "CC BY 3.0",
+  licenseUrl: "https://creativecommons.org/licenses/by/3.0/",
+  sourceVerifiedAt: "2026-09-02",
+} as const satisfies LicensedImageAsset;
+
 export const popovkaSunsetImage = {
   localUrl: "/images/places/popovka-sunset-2007.webp",
   downloadUrl:
