@@ -91,13 +91,13 @@ export const sudakCentralImage = {
 } as const satisfies LicensedImageAsset;
 
 export const uchkuevkaImage = {
-  localUrl: "/images/places/uchkuevka-june-2022.webp",
+  localUrl: "/images/places/uchkuevka-beach-2015.webp",
   downloadUrl:
-    "https://commons.wikimedia.org/wiki/Special:Redirect/file/%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%A3%D1%87%D0%BA%D1%83%D0%B5%D0%B2%D0%BA%D0%B5%2C_%D0%B8%D1%8E%D0%BD%D1%8C_2022%2C_03.jpg?width=1280",
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/%D0%9F%D0%BB%D1%8F%D0%B6_%D0%A3%D1%87%D0%BA%D1%83%D1%97%D0%B2%D0%BA%D0%B0_(%D0%A1%D0%B5%D0%B2%D0%B0%D1%81%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D1%8C).JPG?width=1280",
   sourceUrl:
-    "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%BB%D1%8F%D0%B6_%D0%B2_%D0%A3%D1%87%D0%BA%D1%83%D0%B5%D0%B2%D0%BA%D0%B5%2C_%D0%B8%D1%8E%D0%BD%D1%8C_2022%2C_03.jpg",
-  title: "Пляж в Учкуевке, июнь 2022, 03",
-  author: "Mitte27",
+    "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%BB%D1%8F%D0%B6_%D0%A3%D1%87%D0%BA%D1%83%D1%97%D0%B2%D0%BA%D0%B0_(%D0%A1%D0%B5%D0%B2%D0%B0%D1%81%D1%82%D0%BE%D0%BF%D0%BE%D0%BB%D1%8C).JPG",
+  title: "Пляж Учкуевка (Севастополь)",
+  author: "Юровский Александр",
   license: "CC BY-SA 4.0",
   licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
   sourceVerifiedAt: "2026-09-02",
