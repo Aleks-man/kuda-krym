@@ -12,7 +12,7 @@ export const kerchPeninsulaCoastalImages = [
   cover(
     "geroevskoe",
     geroevskoeMemorialImage,
-    "Монумент Парус на побережье Героевского",
+    "Побережье Героевского и монумент Парус со стороны моря",
   ),
   cover("kerch-strait", kerchStraitImage, "Керченский пролив ранним утром"),
   cover(
@@ -35,11 +35,5 @@ function cover(
   >,
   alt: string,
 ): SeedCoastalLocationImage {
-  return {
-    coastalLocationSlug,
-    ...asset,
-    alt,
-    isCover: true,
-    sortOrder: 0,
-  };
+  return { coastalLocationSlug, ...asset, alt, isCover: true, sortOrder: 0 };
 }

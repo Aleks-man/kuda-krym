@@ -13,11 +13,11 @@ import {
 
 export const southCoastCoastalImages = [
   cover("foros", forosCoastImage, "Мыс Сарыч и побережье возле Фороса"),
-  cover("simeiz", simeizCoastImage, "Набережная и побережье Симеиза"),
+  cover("simeiz", simeizCoastImage, "Пляж и причал Симеиза у скалы Дива"),
   cover("alupka", alupkaBeachImage, "Галечное побережье Алупки"),
   cover("yalta", yaltaBeachImage, "Пляж на побережье Ялты"),
-  cover("gurzuf", gurzufCoastImage, "Побережье Гурзуфа"),
-  cover("partenit", partenitImage, "Партенит у подножия гор"),
+  cover("gurzuf", gurzufCoastImage, "Пляж Гурзуфа, море и скалы Адалары"),
+  cover("partenit", partenitImage, "Галечный пляж Партенита у моря"),
   cover("alushta", alushtaCoastImage, "Побережье Алушты"),
   cover(
     "malorechenskoe",
@@ -35,11 +35,5 @@ function cover(
   >,
   alt: string,
 ): SeedCoastalLocationImage {
-  return {
-    coastalLocationSlug,
-    ...asset,
-    alt,
-    isCover: true,
-    sortOrder: 0,
-  };
+  return { coastalLocationSlug, ...asset, alt, isCover: true, sortOrder: 0 };
 }

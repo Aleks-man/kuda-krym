@@ -11,21 +11,17 @@ import {
 export const eastCrimeaCoastalImages = [
   cover("novy-svet", novySvetBayImage, "Бухта и побережье Нового Света"),
   cover("koktebel", koktebelBeachImage, "Пляж и побережье Коктебеля"),
-  cover(
-    "ordzhonikidze",
-    ordzhonikidzeCoastImage,
-    "Побережье Орджоникидзе",
-  ),
-  cover("feodosia", feodosiaBeachImage, "Пляж на побережье Феодосии"),
+  cover("ordzhonikidze", ordzhonikidzeCoastImage, "Побережье Орджоникидзе"),
+  cover("feodosia", feodosiaBeachImage, "Набережная, пляж и порт Феодосии"),
   cover(
     "beregovoe",
     beregovoeVillageImage,
-    "Троицкая церковь в селе Береговое",
+    "Золотой песчаный пляж у Берегового",
   ),
   cover(
     "primorsky",
     primorskyVillageImage,
-    "Вид на посёлок Приморский со стороны шоссе Феодосия — Керчь",
+    "Закат над Чёрным морем в Приморском",
   ),
 ] as const satisfies readonly SeedCoastalLocationImage[];
 
@@ -37,11 +33,5 @@ function cover(
   >,
   alt: string,
 ): SeedCoastalLocationImage {
-  return {
-    coastalLocationSlug,
-    ...asset,
-    alt,
-    isCover: true,
-    sortOrder: 0,
-  };
+  return { coastalLocationSlug, ...asset, alt, isCover: true, sortOrder: 0 };
 }

@@ -8,7 +8,6 @@ export const novySvetBayImage = image(
   "CC BY 4.0",
   "https://creativecommons.org/licenses/by/4.0/",
 );
-
 export const koktebelBeachImage = image(
   "koktebel-beach-2013",
   "Koktebel_-_beach.jpg",
@@ -17,7 +16,6 @@ export const koktebelBeachImage = image(
   "CC BY-SA 3.0",
   "https://creativecommons.org/licenses/by-sa/3.0/",
 );
-
 export const ordzhonikidzeCoastImage = image(
   "ordzhonikidze-coast-2015",
   "2015._%D0%9E%D1%80%D0%B4%D0%B6%D0%BE%D0%BD%D0%B8%D0%BA%D0%B8%D0%B4%D0%B7%D0%B5_019.jpg",
@@ -26,32 +24,32 @@ export const ordzhonikidzeCoastImage = image(
   "CC BY-SA 3.0",
   "https://creativecommons.org/licenses/by-sa/3.0/",
 );
-
 export const feodosiaBeachImage = image(
-  "feodosia-beach-2019",
-  "Black_Sea%2C_Feodosia_Beach%2C_Crimea.jpg",
-  "Black Sea, Feodosia Beach, Crimea",
-  "Lusyanya",
-  "CC BY 4.0",
-  "https://creativecommons.org/licenses/by/4.0/",
-);
-
-export const beregovoeVillageImage = image(
-  "beregovoe-village-2015",
-  "Church_BeregovoeFeo_1.jpg",
-  "Троицкая церковь в селе Береговое",
-  "FrostDre",
+  "feodosia-seafront-2010",
+  "%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F_%D0%A4%D0%B5%D0%BE%D0%B4%D0%BE%D1%81%D0%B8%D0%B8_-_panoramio.jpg",
+  "Набережная Феодосии",
+  "Yima",
   "CC BY-SA 3.0",
   "https://creativecommons.org/licenses/by-sa/3.0/",
+  "2026-09-03",
 );
-
+export const beregovoeVillageImage = image(
+  "beregovoe-golden-beach-2014",
+  "%D0%97%D0%BE%D0%BB%D0%BE%D1%82%D0%BE%D0%B9_%D0%BF%D0%BB%D1%8F%D0%B6._%D0%A4%D0%B5%D0%BE%D0%B4%D0%BE%D1%81%D0%B8%D1%8F_-_panoramio.jpg",
+  "Золотой пляж у Берегового",
+  "Виталий Тенякшев",
+  "CC BY-SA 3.0",
+  "https://creativecommons.org/licenses/by-sa/3.0/",
+  "2026-09-03",
+);
 export const primorskyVillageImage = image(
-  "primorsky-village-2008",
-  "%D0%9A%D1%80%D1%8B%D0%BC_%D0%9F%D1%80%D0%B8%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B8%D0%B9_%D0%9F%D1%8F%D1%82%D0%B8%D1%8D%D1%82%D0%B0%D0%B6%D0%BA%D0%B8.jpg",
-  "Вид на посёлок Приморский",
-  "Водник",
-  "Public domain",
-  null,
+  "primorsky-sea-sunset-2012",
+  "%D0%97%D0%B0%D0%BA%D0%B0%D1%82_%D0%B2_%D0%9F%D1%80%D0%B8%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%BE%D0%BC_-_panoramio.jpg",
+  "Закат над морем в Приморском",
+  "Sasha_M",
+  "CC BY 3.0",
+  "https://creativecommons.org/licenses/by/3.0/",
+  "2026-09-03",
 );
 
 function image(
@@ -61,6 +59,7 @@ function image(
   author: string,
   license: LicensedImageAsset["license"],
   licenseUrl: LicensedImageAsset["licenseUrl"],
+  sourceVerifiedAt = "2026-09-02",
 ): LicensedImageAsset {
   return {
     localUrl: `/images/places/${localName}.webp`,
@@ -70,6 +69,6 @@ function image(
     author,
     license,
     licenseUrl,
-    sourceVerifiedAt: "2026-09-02",
+    sourceVerifiedAt,
   };
 }

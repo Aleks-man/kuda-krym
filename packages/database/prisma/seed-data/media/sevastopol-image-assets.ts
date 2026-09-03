@@ -1,12 +1,13 @@
 import type { LicensedImageAsset } from "./licensed-image.types.js";
 
 export const kachaCoastImage = image(
-  "kacha-coast-2010",
-  "Kacha_Krym.JPG",
-  "Kacha Krym",
-  "Дар Ветер",
-  "CC BY-SA 3.0",
-  "https://creativecommons.org/licenses/by-sa/3.0/",
+  "kacha-beach",
+  "Пляж_в_Каче_-_panoramio.jpg",
+  "Пляж в Каче",
+  "Алексей Решетников",
+  "CC BY 3.0",
+  "https://creativecommons.org/licenses/by/3.0/",
+  "2026-09-03",
 );
 
 export const balaklavaBayImage = image(
@@ -34,6 +35,7 @@ function image(
   author: string,
   license: LicensedImageAsset["license"],
   licenseUrl: NonNullable<LicensedImageAsset["licenseUrl"]>,
+  sourceVerifiedAt = "2026-09-02",
 ): LicensedImageAsset {
   return {
     localUrl: `/images/places/${localName}.webp`,
@@ -43,6 +45,6 @@ function image(
     author,
     license,
     licenseUrl,
-    sourceVerifiedAt: "2026-09-02",
+    sourceVerifiedAt,
   };
 }
