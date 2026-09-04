@@ -14,7 +14,7 @@ import {
 export const southCoastCoastalImages = [
   cover("foros", forosCoastImage, "Мыс Сарыч и побережье возле Фороса"),
   cover("simeiz", simeizCoastImage, "Пляж и причал Симеиза у скалы Дива"),
-  cover("alupka", alupkaBeachImage, "Галечное побережье Алупки"),
+  cover("alupka", alupkaBeachImage, "Пляж и Чёрное море в Алупке"),
   cover("yalta", yaltaBeachImage, "Пляж на побережье Ялты"),
   cover("gurzuf", gurzufCoastImage, "Пляж Гурзуфа, море и скалы Адалары"),
   cover("partenit", partenitImage, "Галечный пляж Партенита у моря"),

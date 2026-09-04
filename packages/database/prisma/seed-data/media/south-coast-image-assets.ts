@@ -18,12 +18,13 @@ export const simeizCoastImage = image(
   "2026-09-03",
 );
 export const alupkaBeachImage = image(
-  "alupka-beach-2013",
-  "Alupka_-_beach.jpg",
-  "Alupka - beach",
+  "alupka-bay-panorama-2013",
+  "Alupka2.jpg",
+  "Панорама пляжа и Чёрного моря в Алупке",
   "Tiia Monto",
   "CC BY-SA 3.0",
   "https://creativecommons.org/licenses/by-sa/3.0/",
+  "2026-09-04",
 );
 export const yaltaBeachImage = image(
   "yalta-beach-2016",

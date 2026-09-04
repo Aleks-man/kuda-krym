@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { RecommendationPreferences } from "@/features/recommendations/ui/recommendation-preferences/recommendation-preferences";
@@ -40,17 +41,22 @@ export default function HomePage() {
           <div className={styles.previewTop}>
             <div>
               <p className={styles.previewLabel}>Пример результата</p>
-              <h2>Николаевка</h2>
+              <h2>Заозёрное</h2>
             </div>
             <div className={styles.score}>
               <strong>84</strong>
               <span>из 100</span>
             </div>
           </div>
-          <div className={styles.seaScene} aria-hidden="true">
-            <span className={styles.sun} />
-            <span className={styles.waveOne} />
-            <span className={styles.waveTwo} />
+          <div className={styles.seaScene}>
+            <Image
+              src="/images/places/zaozernoe-sunset-2010.webp"
+              alt="Закат над Чёрным морем у Заозёрного"
+              fill
+              priority
+              sizes="(max-width: 900px) 620px, 460px"
+              className={styles.seaImage}
+            />
           </div>
           <div className={styles.conditions}>
             <div>
