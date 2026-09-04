@@ -18,7 +18,7 @@ export function CoastalLocationCard({ location }: CoastalLocationCardProps) {
           src={location.coverImage.url}
           alt={location.coverImage.alt}
           fill
-          sizes="(max-width: 680px) 100vw, (max-width: 1100px) 50vw, 33vw"
+          sizes="(max-width: 680px) calc(100vw - 40px), (max-width: 920px) calc(50vw - 32px), 377px"
         />
       ) : (
         <span className={styles.fallback} aria-hidden="true" />

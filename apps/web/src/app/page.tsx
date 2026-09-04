@@ -54,7 +54,7 @@ export default function HomePage() {
               alt="Закат над Чёрным морем у Заозёрного"
               fill
               priority
-              sizes="(max-width: 900px) 620px, 460px"
+              sizes="(max-width: 660px) calc(100vw - 76px), (max-width: 900px) 568px, 460px"
               className={styles.seaImage}
             />
           </div>
