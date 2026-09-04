@@ -10,7 +10,6 @@ import { JsonLd } from "@/shared/seo/json-ld";
 import { createWebsiteStructuredData } from "@/shared/seo/structured-data";
 import { SkipLink } from "@/shared/ui/skip-link/skip-link";
 
-import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
