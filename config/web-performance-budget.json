@@ -1,0 +1,10 @@
+{
+  "javascript": {
+    "maximumAssetBytes": 340000,
+    "maximumTotalBytes": 1200000
+  },
+  "stylesheets": {
+    "maximumAssetBytes": 25000,
+    "maximumTotalBytes": 80000
+  }
+}

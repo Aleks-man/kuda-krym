@@ -13,7 +13,8 @@
   "scripts": {
     "audit:security": "node scripts/audit-dependencies.mjs",
     "build": "npm run build --workspace @kuda-krym/contracts && npm run build --workspace @kuda-krym/database && npm run build --workspace @kuda-krym/api && npm run build --workspace @kuda-krym/web",
-    "check": "npm run validate:data && npm run typecheck && npm run lint && npm test && npm run build",
+    "check": "npm run validate:data && npm run typecheck && npm run lint && npm test && npm run build && npm run check:performance",
+    "check:performance": "node scripts/check-web-performance-budget.mjs",
     "predev": "npm run build --workspace @kuda-krym/contracts",
     "dev": "node scripts/run-development.mjs",
     "dev:web": "npm run dev --workspace @kuda-krym/web",
