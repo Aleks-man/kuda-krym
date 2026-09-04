@@ -39,6 +39,15 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgb(8 127 140 / 45%);
+  outline-offset: 3px;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
 ::selection {
   background: #b9e5df;
   color: var(--foreground);
