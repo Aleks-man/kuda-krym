@@ -1,7 +1,12 @@
 import { z } from "zod";
 
+export const placeImageUrlSchema = z
+  .string()
+  .startsWith("/images/places/")
+  .endsWith(".webp");
+
 export const placeImageSchema = z.object({
-  url: z.string().startsWith("/images/places/").endsWith(".webp"),
+  url: placeImageUrlSchema,
   alt: z.string().min(1),
   title: z.string().min(1).nullable(),
   author: z.string().min(1),

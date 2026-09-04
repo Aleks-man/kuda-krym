@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { placeImageUrlSchema } from "../media/place-image.contract.js";
 import {
   beachListItemSchema,
   childSuitabilitySchema,
@@ -21,7 +22,7 @@ export const beachDetailSchema = beachListItemSchema.extend({
   }),
   images: z.array(
     z.object({
-      url: z.url(),
+      url: placeImageUrlSchema,
       alt: z.string().min(1),
       author: z.string().min(1),
       license: z.string().min(1),

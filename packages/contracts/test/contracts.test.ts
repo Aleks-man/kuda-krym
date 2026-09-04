@@ -378,7 +378,15 @@ describe("API contracts", () => {
         hasShower: "UNKNOWN",
         hasChangingRoom: "UNKNOWN",
       },
-      images: [],
+      images: [
+        {
+          url: "/images/places/uchkuevka.webp",
+          alt: "Beach at Uchkuyevka",
+          author: "Example photographer",
+          license: "CC BY-SA 4.0",
+          sourceUrl: "https://commons.wikimedia.org/wiki/File:Uchkuyevka.jpg",
+        },
+      ],
       sources: [
         {
           field: "COORDINATES",
@@ -391,6 +399,7 @@ describe("API contracts", () => {
     });
 
     expect(result.profile.parking).toBe("UNKNOWN");
+    expect(result.images[0]?.url).toBe("/images/places/uchkuevka.webp");
   });
 });
 
