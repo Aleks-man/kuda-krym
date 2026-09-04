@@ -29,6 +29,7 @@ type TestAppData = Readonly<{
   beaches?: BeachListItem[];
   details?: BeachDetail[];
   coastalLocations?: CoastalLocation[];
+  coastalLocationBeaches?: Readonly<Record<string, readonly string[]>>;
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
@@ -92,6 +93,7 @@ export function createTestApp({
   beaches = [],
   details = [],
   coastalLocations = [],
+  coastalLocationBeaches = {},
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
@@ -134,6 +136,11 @@ export function createTestApp({
 
         return matchesSearch && matchesRegion && matchesLocality;
       }),
+    findPublishedByCoastalLocationSlug: async (slug) => {
+      const beachSlugs = coastalLocationBeaches[slug] ?? [];
+
+      return beaches.filter((beach) => beachSlugs.includes(beach.slug));
+    },
     findPublishedFilterOptions: async () => ({
       regions: [...new Set(beaches.map(({ region }) => region))],
       localities: [

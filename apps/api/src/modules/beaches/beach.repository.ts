@@ -7,6 +7,7 @@ import type {
 
 export interface BeachRepository {
   findPublished(query?: BeachCatalogQuery): Promise<BeachListItem[]>;
+  findPublishedByCoastalLocationSlug(slug: string): Promise<BeachListItem[]>;
   findPublishedFilterOptions(): Promise<BeachCatalogFilterOptions["data"]>;
   findPublishedBySlug(slug: string): Promise<BeachDetail | null>;
 }

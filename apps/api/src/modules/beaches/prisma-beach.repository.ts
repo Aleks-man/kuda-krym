@@ -7,6 +7,7 @@ import type {
 import {
   PublicationStatus,
   VerificationStatus,
+  type Prisma,
   type PrismaClient,
 } from "@kuda-krym/database";
 
@@ -30,8 +31,28 @@ export class PrismaBeachRepository implements BeachRepository {
   public async findPublished(
     query: BeachCatalogQuery = {},
   ): Promise<BeachListItem[]> {
+    return this.findPublishedWhere(createPublishedBeachWhere(query));
+  }
+
+  public async findPublishedByCoastalLocationSlug(
+    slug: string,
+  ): Promise<BeachListItem[]> {
+    return this.findPublishedWhere({
+      ...createPublishedBeachWhere({}),
+      coastalLocation: {
+        is: {
+          slug,
+          publicationStatus: PublicationStatus.PUBLISHED,
+        },
+      },
+    });
+  }
+
+  private async findPublishedWhere(
+    where: Prisma.BeachWhereInput,
+  ): Promise<BeachListItem[]> {
     const beaches = await this.prisma.beach.findMany({
-      where: createPublishedBeachWhere(query),
+      where,
       select: {
         id: true,
         slug: true,
