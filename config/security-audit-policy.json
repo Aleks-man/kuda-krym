@@ -1,0 +1,9 @@
+{
+  "allowedAdvisories": [1145093, 1153173, 1158532],
+  "allowedPackages": [
+    "@prisma/config",
+    "deepmerge-ts",
+    "mysql2",
+    "prisma"
+  ]
+}
