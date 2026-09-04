@@ -19,6 +19,7 @@
     "dev:api": "npm run dev --workspace @kuda-krym/api",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "pretest:e2e": "node tests/e2e/support/clean-web-build.mjs",
     "test:e2e": "npm run build && playwright test",
     "test:e2e:install": "playwright install chromium",
     "test:e2e:report": "playwright show-report",
