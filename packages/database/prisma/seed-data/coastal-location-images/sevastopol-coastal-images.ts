@@ -6,7 +6,7 @@ import {
 } from "../media/sevastopol-image-assets.js";
 
 export const sevastopolCoastalImages = [
-  cover("kacha", kachaCoastImage, "Посёлок и побережье Качи"),
+  cover("kacha", kachaCoastImage, "Пляж Качи у обрывистого берега"),
   cover(
     "sevastopol-west",
     sevastopolBlueBayImage,

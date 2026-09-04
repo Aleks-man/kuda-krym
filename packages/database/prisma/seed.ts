@@ -8,6 +8,8 @@ import {
 } from "../src/generated/prisma/client.js";
 import { createPrismaClient } from "../src/client.js";
 import { seedBeaches } from "./seed-data/beaches.js";
+import { seedPublishedBeachImages } from "./seed-beach-images.js";
+import { seedPublishedCoastalLocationImages } from "./seed-coastal-location-images.js";
 import { seedPublishedCoastalLocations } from "./seed-coastal-locations.js";
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -23,6 +25,7 @@ function getOsmUrl(osmType: string, osmId: bigint): string {
 
 async function seed() {
   await seedPublishedCoastalLocations(prisma);
+  await seedPublishedCoastalLocationImages(prisma);
 
   for (const item of seedBeaches) {
     await prisma.$transaction(async (transaction) => {
@@ -118,6 +121,8 @@ async function seed() {
       }
     });
   }
+
+  await seedPublishedBeachImages(prisma);
 
   console.log(`Seeded ${seedBeaches.length} published beaches.`);
 }

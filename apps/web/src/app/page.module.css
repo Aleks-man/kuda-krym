@@ -214,35 +214,19 @@
   overflow: hidden;
   margin: 26px 0 20px;
   border-radius: 20px;
-  background: linear-gradient(180deg, #cdeceb 0%, #a9dcdc 54%, #5caeb7 55%, #267687 100%);
+  background: #4c7e8d;
 }
 
-.sun {
+.seaScene::after {
   position: absolute;
-  top: 28px;
-  right: 44px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #fff2bd;
-  box-shadow: 0 0 40px rgb(255 235 160 / 80%);
+  inset: 45% 0 0;
+  background: linear-gradient(180deg, transparent, rgb(8 30 35 / 58%));
+  content: "";
+  pointer-events: none;
 }
 
-.waveOne,
-.waveTwo {
-  position: absolute;
-  right: -10%;
-  bottom: -45px;
-  width: 120%;
-  height: 110px;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 18%);
-}
-
-.waveTwo {
-  right: 15%;
-  bottom: -72px;
-  background: rgb(15 88 105 / 32%);
+.seaImage {
+  object-fit: cover;
 }
 
 .conditions {
