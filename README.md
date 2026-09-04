@@ -285,6 +285,10 @@ lint, запускает тесты и production-сборку. Проверка
 выполняет тот же набор при каждом push, для pull request в `main` и при ручном
 запуске workflow `CI`.
 
+После сборки также проверяется бюджет JS- и CSS-чанков. Настройки и принятые
+оптимизации описаны в
+[`docs/development/web-performance.md`](docs/development/web-performance.md).
+
 Браузерные smoke-тесты работают с отдельной PostgreSQL-базой, имя которой должно
 заканчиваться на `_e2e`. После создания базы `kuda_krym_e2e` установите Chromium и
 запустите сценарии:
