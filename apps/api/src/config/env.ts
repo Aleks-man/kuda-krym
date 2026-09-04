@@ -7,6 +7,11 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65_535).default(4000),
   WEB_ORIGIN: z.url().default("http://localhost:3000"),
   DATABASE_URL: z.url().optional(),
+  WEATHER_BASE_URL: z.url().default("https://api.open-meteo.com/v1/forecast"),
+  MARINE_BASE_URL: z.url().default("https://marine-api.open-meteo.com/v1/marine"),
+  WEATHER_MODEL_ECMWF_BASE_URL: z.url().optional(),
+  WEATHER_MODEL_DWD_BASE_URL: z.url().optional(),
+  WEATHER_MODEL_GFS_BASE_URL: z.url().optional(),
   OSRM_BASE_URL: z.url().default("https://router.project-osrm.org/"),
   RATE_LIMIT_EXPENSIVE_MAX_REQUESTS: z.coerce
     .number()

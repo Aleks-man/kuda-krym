@@ -11,11 +11,16 @@ the E2E setup applies migrations and replaces seed data.
 
 - filtering the published beach catalog by region;
 - loading coastal forecast locations grouped by region;
-- submitting recommendation preferences and rendering a validated result.
+- opening a coastal location from the catalog;
+- rendering a two-day coastal forecast;
+- rendering verified media and a two-day forecast on a beach page;
+- submitting recommendation preferences and rendering a validated result;
+- comparing selected beaches and opening their detail pages.
 
 External map tiles are blocked during catalog scenarios. The recommendation
-scenario intercepts its API response so the smoke suite does not depend on
-Open-Meteo or OSRM availability.
+scenario intercepts its API response. Weather and marine scenarios use a local
+upstream fixture server, so the smoke suite does not depend on Open-Meteo or
+OSRM availability.
 
 ## Local run
 

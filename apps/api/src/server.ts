@@ -65,7 +65,7 @@ const rateLimitStores = redisConnected
 const weatherProvider = new CachedWeatherForecastProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
-  provider: new OpenMeteoWeatherClient(),
+  provider: new OpenMeteoWeatherClient({ baseUrl: env.WEATHER_BASE_URL }),
   onCacheError: (error) => {
     logger.warn("cache.weather.failed", { error });
   },
@@ -73,7 +73,7 @@ const weatherProvider = new CachedWeatherForecastProvider({
 const marineProvider = new CachedMarineForecastProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
-  provider: new OpenMeteoMarineClient(),
+  provider: new OpenMeteoMarineClient({ baseUrl: env.MARINE_BASE_URL }),
   onCacheError: (error) => {
     logger.warn("cache.marine.failed", { error });
   },
@@ -83,7 +83,19 @@ const weatherModelComparisonService = new WeatherModelComparisonService({
     new CachedModelWeatherForecastProvider({
       cache: redisCache,
       coalescer: requestCoalescer,
-      provider: new OpenMeteoModelWeatherClient(),
+      provider: new OpenMeteoModelWeatherClient({
+        baseUrls: {
+          ...(env.WEATHER_MODEL_ECMWF_BASE_URL
+            ? { ECMWF_IFS: env.WEATHER_MODEL_ECMWF_BASE_URL }
+            : {}),
+          ...(env.WEATHER_MODEL_DWD_BASE_URL
+            ? { DWD_ICON: env.WEATHER_MODEL_DWD_BASE_URL }
+            : {}),
+          ...(env.WEATHER_MODEL_GFS_BASE_URL
+            ? { NOAA_GFS: env.WEATHER_MODEL_GFS_BASE_URL }
+            : {}),
+        },
+      }),
       onCacheError: (error) => {
         logger.warn("cache.weather_models.failed", { error });
       },
