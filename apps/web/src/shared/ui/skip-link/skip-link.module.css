@@ -1,0 +1,25 @@
+.link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--foreground);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-150%);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+.link:focus-visible {
+  opacity: 1;
+  outline-color: white;
+  pointer-events: auto;
+  transform: translateY(0);
+}

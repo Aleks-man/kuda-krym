@@ -25,10 +25,14 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
     .join(",")}`;
 
   return (
-    <section className={styles.results} aria-live="polite">
+    <section
+      aria-labelledby="recommendation-results-title"
+      aria-live="polite"
+      className={styles.results}
+    >
       <header>
         <p>Результат подбора</p>
-        <h3>Лучшие варианты на выбранное время</h3>
+        <h3 id="recommendation-results-title">Лучшие варианты на выбранное время</h3>
         <span>Сравнили {result.meta.candidateCount} пляжей по погоде и морю.</span>
       </header>
       <div className={styles.grid}>

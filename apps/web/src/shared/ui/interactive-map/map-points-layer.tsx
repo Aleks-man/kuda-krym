@@ -10,6 +10,8 @@ import {
   useMapEvents,
 } from "react-leaflet";
 
+import { prefersReducedMotion } from "@/shared/browser/prefers-reduced-motion";
+
 import type { MapPoint } from "./interactive-map.types";
 import { clusterMapPoints } from "./map-point-clusters";
 import styles from "./interactive-map.module.css";
@@ -47,7 +49,16 @@ export function MapPointsLayer({
       <CircleMarker
         center={cluster.position}
         eventHandlers={{
-          click: () => map.flyTo(cluster.position, Math.min(zoom + 2, 16)),
+          click: () => {
+            const nextZoom = Math.min(zoom + 2, 16);
+
+            if (prefersReducedMotion()) {
+              map.setView(cluster.position, nextZoom, { animate: false });
+              return;
+            }
+
+            map.flyTo(cluster.position, nextZoom);
+          },
         }}
         key={cluster.id}
         pathOptions={{

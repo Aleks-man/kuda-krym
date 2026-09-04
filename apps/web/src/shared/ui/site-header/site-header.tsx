@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SiteNavigation } from "./site-navigation";
 import styles from "./site-header.module.css";
 
 export function SiteHeader() {
@@ -12,14 +13,7 @@ export function SiteHeader() {
           </span>
           <span>Куда.Крым</span>
         </Link>
-        <nav className={styles.navigation} aria-label="Основная навигация">
-          <Link className={styles.navLink} href="/coast">
-            Побережье
-          </Link>
-          <Link className={styles.navLink} href="/beaches">
-            Пляжи
-          </Link>
-        </nav>
+        <SiteNavigation />
       </div>
     </header>
   );

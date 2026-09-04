@@ -39,17 +39,21 @@ export function RecommendationPreferences() {
   }
 
   return (
-    <section className={styles.section} id="preferences">
+    <section
+      aria-labelledby="preferences-title"
+      className={styles.section}
+      id="preferences"
+    >
       <div className={styles.intro}>
         <p>Персональный подбор</p>
-        <h2>Расскажите, какой день у моря вам нужен</h2>
+        <h2 id="preferences-title">Расскажите, какой день у моря вам нужен</h2>
         <span>
           Эти параметры станут входными данными для понятной рекомендации, а
           не просто фильтрами каталога.
         </span>
       </div>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form aria-busy={isLoading} className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label className={styles.selectField}>
             <span>Откуда выезжаем</span>
@@ -75,19 +79,19 @@ export function RecommendationPreferences() {
         </div>
 
         <fieldset className={styles.fieldset}>
-            <legend>Когда</legend>
-            <div className={styles.twoColumns}>
-              {dateOptions.map((option, index) => (
-                <PreferenceChoice
-                  defaultChecked={index === 0}
-                  key={option.value}
-                  label={option.label}
-                  name="date"
-                  value={option.value}
-                />
-              ))}
-            </div>
-          </fieldset>
+          <legend>Когда</legend>
+          <div className={styles.twoColumns}>
+            {dateOptions.map((option, index) => (
+              <PreferenceChoice
+                defaultChecked={index === 0}
+                key={option.value}
+                label={option.label}
+                name="date"
+                value={option.value}
+              />
+            ))}
+          </div>
+        </fieldset>
 
         <fieldset className={styles.fieldset}>
           <legend>В какое время</legend>
@@ -154,15 +158,23 @@ export function RecommendationPreferences() {
         </fieldset>
 
         <div className={styles.footer}>
-          <button disabled={isLoading} type="submit">
+          <button
+            aria-describedby={error ? "recommendation-error" : "recommendation-help"}
+            disabled={isLoading}
+            type="submit"
+          >
             {isLoading ? "Сравниваем условия…" : "Подобрать пляж"}
           </button>
-          <p>
+          <p id="recommendation-help">
             Учтём прогноз моря и погоды, ваши приоритеты и покажем до трёх
             лучших вариантов.
           </p>
         </div>
-        {error ? <div className={styles.error} role="alert">{error}</div> : null}
+        {error ? (
+          <div className={styles.error} id="recommendation-error" role="alert">
+            {error}
+          </div>
+        ) : null}
       </form>
       {result ? <RecommendationResults result={result} /> : null}
     </section>

@@ -66,6 +66,11 @@
   color: var(--accent-strong);
 }
 
+.navLink[aria-current="page"] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
 @media (max-width: 520px) {
   .inner {
     width: min(100% - 20px, 1180px);
