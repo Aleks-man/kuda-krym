@@ -183,6 +183,8 @@ export class PrismaBeachRepository implements BeachRepository {
         },
         coastalLocation: {
           select: {
+            slug: true,
+            name: true,
             images: {
               where: { isCover: true },
               select: coverImageSelect,
@@ -222,6 +224,12 @@ export class PrismaBeachRepository implements BeachRepository {
       name: beach.name,
       officialName: beach.officialName,
       description: beach.description,
+      coastalLocation: beach.coastalLocation
+        ? {
+            slug: beach.coastalLocation.slug,
+            name: beach.coastalLocation.name,
+          }
+        : null,
       region: beach.region,
       locality: beach.locality,
       coordinates: {

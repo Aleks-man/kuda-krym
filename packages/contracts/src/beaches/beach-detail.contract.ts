@@ -9,6 +9,12 @@ import {
 export const beachDetailSchema = beachListItemSchema.extend({
   officialName: z.string().min(1).nullable(),
   description: z.string().min(1).nullable(),
+  coastalLocation: z
+    .object({
+      slug: z.string().min(1),
+      name: z.string().min(1),
+    })
+    .nullable(),
   profile: z.object({
     waterEntry: z.enum(["UNKNOWN", "GENTLE", "MODERATE", "STEEP"]),
     childSuitability: childSuitabilitySchema,
