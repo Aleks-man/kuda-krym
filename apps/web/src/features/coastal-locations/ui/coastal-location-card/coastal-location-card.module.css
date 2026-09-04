@@ -1,6 +1,8 @@
 .card {
   position: relative;
   display: block;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 230px;
   min-height: 230px;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 72%);

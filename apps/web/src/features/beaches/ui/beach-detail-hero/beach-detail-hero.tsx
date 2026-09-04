@@ -35,7 +35,7 @@ export function BeachDetailHero({ beach }: BeachDetailHeroProps) {
               alt={beach.coverImage.alt}
               fill
               priority
-              sizes="(max-width: 820px) 100vw, 48vw"
+              sizes="(max-width: 820px) calc(100vw - 40px), 560px"
             />
             <span className={styles.shade} aria-hidden="true" />
             <figcaption className={styles.caption}>

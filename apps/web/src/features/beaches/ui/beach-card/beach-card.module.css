@@ -1,4 +1,6 @@
 .card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 22px;

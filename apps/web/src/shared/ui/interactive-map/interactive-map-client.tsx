@@ -11,6 +11,8 @@ import { MapBounds } from "./map-bounds";
 import { MapPointsLayer } from "./map-points-layer";
 import styles from "./interactive-map.module.css";
 
+import "leaflet/dist/leaflet.css";
+
 const openStreetMapTiles = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 export function InteractiveMapClient({
