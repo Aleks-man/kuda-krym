@@ -27,6 +27,7 @@
     "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:beach-images --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database && npm run validate:coastal-location-images --workspace @kuda-krym/database && npm run validate:place-image-files --workspace @kuda-krym/database"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "1.62.1",
     "concurrently": "^9.2.1",
     "next": "^16.3.1"
