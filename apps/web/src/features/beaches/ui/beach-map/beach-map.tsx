@@ -28,7 +28,7 @@ export function BeachMap({ beaches }: BeachMapProps) {
     <section className={styles.section} aria-labelledby="beaches-map-title">
       <header>
         <p>На карте</p>
-        <h2 id="beaches-map-title">Выберите часть побережья</h2>
+        <h2 id="beaches-map-title">Конкретные пляжи на карте</h2>
         <span>
           Нажмите на группу, чтобы приблизить карту, или на точку, чтобы открыть
           пляж.

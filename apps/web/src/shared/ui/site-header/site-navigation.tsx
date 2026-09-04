@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import styles from "./site-header.module.css";
 
 const navigationItems = [
-  { href: "/coast", label: "Побережье" },
+  { href: "/coast", label: "Прогноз" },
   { href: "/beaches", label: "Пляжи" },
 ] as const;
 

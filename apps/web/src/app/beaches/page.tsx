@@ -14,7 +14,7 @@ import styles from "./page.module.css";
 
 export const metadata = createPageMetadata({
   title: "Пляжи Крыма",
-  description: "Каталог пляжей Крыма с проверенными характеристиками.",
+  description: "Каталог конкретных пляжей Крыма с точками на карте.",
   pathname: "/beaches",
 });
 
@@ -35,11 +35,11 @@ export default async function BeachesPage({ searchParams }: BeachesPageProps) {
   return (
     <main className={styles.main}>
       <header className={styles.intro}>
-        <p className={styles.eyebrow}>Каталог</p>
+        <p className={styles.eyebrow}>Конкретные места</p>
         <h1>Пляжи Крыма</h1>
         <p className={styles.description}>
-          Проверенные места для поездки — с понятными характеристиками и без
-          догадок о важных условиях.
+          Выбирайте конкретный пляж по расположению и подтверждённым сведениям.
+          Общий прогноз погоды и моря для районов находится в разделе «Прогноз».
         </p>
         {(meta.total > 0 || hasActiveFilters) && (
           <p className={styles.count} aria-live="polite">
