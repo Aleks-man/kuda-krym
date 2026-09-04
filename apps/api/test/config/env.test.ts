@@ -22,6 +22,20 @@ describe("API environment", () => {
     expect(() => parseEnv({ REDIS_URL: "not-a-url" })).toThrow();
   });
 
+  it("accepts test forecast provider addresses", () => {
+    const env = parseEnv({
+      WEATHER_BASE_URL: "http://127.0.0.1:4200/v1/forecast",
+      MARINE_BASE_URL: "http://127.0.0.1:4200/v1/marine",
+      WEATHER_MODEL_ECMWF_BASE_URL: "http://127.0.0.1:4200/v1/ecmwf",
+      WEATHER_MODEL_DWD_BASE_URL: "http://127.0.0.1:4200/v1/dwd-icon",
+      WEATHER_MODEL_GFS_BASE_URL: "http://127.0.0.1:4200/v1/gfs",
+    });
+
+    expect(env.WEATHER_BASE_URL).toContain("/v1/forecast");
+    expect(env.MARINE_BASE_URL).toContain("/v1/marine");
+    expect(env.WEATHER_MODEL_ECMWF_BASE_URL).toContain("/v1/ecmwf");
+  });
+
   it("uses conservative rate limit defaults", () => {
     const env = parseEnv({ NODE_ENV: "test" });
 
