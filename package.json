@@ -14,7 +14,7 @@
     "build": "npm run build --workspace @kuda-krym/contracts && npm run build --workspace @kuda-krym/database && npm run build --workspace @kuda-krym/api && npm run build --workspace @kuda-krym/web",
     "check": "npm run validate:data && npm run typecheck && npm run lint && npm test && npm run build",
     "predev": "npm run build --workspace @kuda-krym/contracts",
-    "dev": "concurrently --names contracts,web,api --prefix-colors yellow,cyan,green \"npm run dev --workspace @kuda-krym/contracts\" \"npm run dev --workspace @kuda-krym/web\" \"npm run dev --workspace @kuda-krym/api\"",
+    "dev": "node scripts/run-development.mjs",
     "dev:web": "npm run dev --workspace @kuda-krym/web",
     "dev:api": "npm run dev --workspace @kuda-krym/api",
     "lint": "npm run lint --workspaces --if-present",
@@ -29,7 +29,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "1.62.1",
-    "concurrently": "^9.2.1",
     "next": "^16.3.1"
   }
 }
