@@ -30,7 +30,13 @@ export function BeachCatalogFilters({
         </p>
       </div>
 
-      <form action="/beaches" className={styles.form} method="get">
+      <form
+        action="/beaches"
+        aria-label="Поиск пляжей"
+        className={styles.form}
+        method="get"
+        role="search"
+      >
         <label className={`${styles.field} ${styles.search}`}>
           <span>Название или населённый пункт</span>
           <input
