@@ -1,4 +1,5 @@
 import {
+  coastalLocationBeachesResponseSchema,
   coastalLocationListResponseSchema,
   coastalLocationSchema,
 } from "@kuda-krym/contracts";
@@ -25,6 +26,18 @@ const yalta = {
   },
 } as const;
 
+const primorskyBeach = {
+  id: "477a1c52-80df-4755-8a80-f32c895d19e3",
+  slug: "yalta-primorsky",
+  name: "Приморский пляж в Ялте",
+  region: "SOUTH_COAST",
+  locality: "Ялта",
+  coordinates: { latitude: 44.49, longitude: 34.17 },
+  surface: "UNKNOWN",
+  childSuitability: "UNKNOWN",
+  coverImage: null,
+} as const;
+
 describe("coastal locations API", () => {
   it("returns published coastal locations", async () => {
     const response = await request(
@@ -45,6 +58,32 @@ describe("coastal locations API", () => {
 
     expect(response.status).toBe(200);
     expect(coastalLocationSchema.parse(response.body).slug).toBe("yalta");
+  });
+
+  it("returns beaches linked to a coastal location", async () => {
+    const response = await request(
+      createTestApp({
+        beaches: [primorskyBeach],
+        coastalLocations: [yalta],
+        coastalLocationBeaches: { yalta: [primorskyBeach.slug] },
+      }),
+    ).get("/api/coastal-locations/yalta/beaches");
+
+    expect(response.status).toBe(200);
+    expect(coastalLocationBeachesResponseSchema.parse(response.body)).toEqual({
+      location: yalta,
+      data: [primorskyBeach],
+      meta: { total: 1 },
+    });
+  });
+
+  it("returns 404 when requesting beaches for an unknown location", async () => {
+    const response = await request(createTestApp()).get(
+      "/api/coastal-locations/unknown/beaches",
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error.code).toBe("COASTAL_LOCATION_NOT_FOUND");
   });
 
   it("returns 404 for an unavailable coastal location", async () => {

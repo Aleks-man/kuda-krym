@@ -11,6 +11,7 @@ import type { BeachRepository } from "../../src/modules/beaches/beach.repository
 import { BeachService } from "../../src/modules/beaches/beach.service.js";
 import { CoastalForecastService } from "../../src/modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "../../src/modules/coastal-locations/coastal-location.service.js";
+import { CoastalLocationBeachesService } from "../../src/modules/coastal-locations/coastal-location-beaches.service.js";
 import { BeachForecastService } from "../../src/modules/forecast/beach-forecast.service.js";
 import type { ForecastBeach } from "../../src/modules/forecast/forecast-beach.repository.js";
 import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js";
@@ -190,6 +191,10 @@ export function createTestApp({
       beachService: new BeachService(beachRepository),
       coastalLocationService: new CoastalLocationService({
         ...coastalLocationRepository,
+      }),
+      coastalLocationBeachesService: new CoastalLocationBeachesService({
+        beachRepository,
+        coastalLocationRepository,
       }),
       coastalForecastService,
       beachForecastService,
