@@ -11,6 +11,7 @@
     "node": ">=20.19.0"
   },
   "scripts": {
+    "audit:security": "node scripts/audit-dependencies.mjs",
     "build": "npm run build --workspace @kuda-krym/contracts && npm run build --workspace @kuda-krym/database && npm run build --workspace @kuda-krym/api && npm run build --workspace @kuda-krym/web",
     "check": "npm run validate:data && npm run typecheck && npm run lint && npm test && npm run build",
     "predev": "npm run build --workspace @kuda-krym/contracts",
