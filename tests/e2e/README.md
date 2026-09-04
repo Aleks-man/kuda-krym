@@ -15,7 +15,9 @@ the E2E setup applies migrations and replaces seed data.
 - rendering a two-day coastal forecast;
 - rendering verified media and a two-day forecast on a beach page;
 - submitting recommendation preferences and rendering a validated result;
-- comparing selected beaches and opening their detail pages.
+- comparing selected beaches and opening their detail pages;
+- detecting WCAG A/AA violations on key public pages;
+- skipping repeated navigation with the keyboard and identifying the current section.
 
 External map tiles are blocked during catalog scenarios. The recommendation
 scenario intercepts its API response. Weather and marine scenarios use a local
