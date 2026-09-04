@@ -1,0 +1,55 @@
+.section {
+  display: grid;
+  gap: 24px;
+  margin-top: clamp(64px, 9vw, 108px);
+}
+
+.heading {
+  display: flex;
+  gap: 24px;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.heading div {
+  display: grid;
+  gap: 7px;
+}
+
+.heading p,
+.heading h2,
+.description {
+  margin: 0;
+}
+
+.heading p {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.heading h2 {
+  font-size: clamp(30px, 5vw, 46px);
+  letter-spacing: -0.045em;
+}
+
+.heading a {
+  flex: none;
+  color: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.description {
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+@media (max-width: 620px) {
+  .heading {
+    display: grid;
+  }
+}
