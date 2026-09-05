@@ -10,7 +10,7 @@ test("shows the published coastal forecast locations by region", async ({
   await page.goto("/coast");
 
   await expect(
-    page.getByRole("heading", { level: 1, name: "Всё побережье Крыма" }),
+    page.getByRole("heading", { level: 1, name: "Погода у моря в Крыму" }),
   ).toBeVisible();
   await expect(page.getByText("Зон прогноза: 36")).toBeVisible();
 

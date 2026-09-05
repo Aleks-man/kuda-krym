@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { getCoastalLocation } from "@/features/coastal-locations/api/get-coastal-location";
+import { CoastalLocationBeaches } from "@/features/coastal-locations/ui/coastal-location-beaches/coastal-location-beaches";
 import { CoastalLocationForecast } from "@/features/coastal-locations/ui/coastal-location-forecast/coastal-location-forecast";
 import { CoastalLocationHero } from "@/features/coastal-locations/ui/coastal-location-hero/coastal-location-hero";
 import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
@@ -62,6 +63,9 @@ export default async function CoastLocationPage({
         <CoastalLocationHero location={location} />
         <Suspense fallback={<BeachForecastSkeleton />}>
           <CoastalLocationForecast slug={location.slug} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <CoastalLocationBeaches slug={location.slug} />
         </Suspense>
       </main>
     </>

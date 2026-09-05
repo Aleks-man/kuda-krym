@@ -21,6 +21,6 @@ test("skips repeated navigation and identifies the current section", async ({
     "page",
   );
   await expect(
-    page.getByRole("link", { name: "Побережье", exact: true }),
+    page.getByRole("link", { name: "Прогноз", exact: true }),
   ).not.toHaveAttribute("aria-current", "page");
 });

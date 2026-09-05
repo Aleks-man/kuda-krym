@@ -11,6 +11,7 @@ import { PrismaBeachRepository } from "./modules/beaches/prisma-beach.repository
 import { BeachService } from "./modules/beaches/beach.service.js";
 import { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
+import { CoastalLocationBeachesService } from "./modules/coastal-locations/coastal-location-beaches.service.js";
 import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/prisma-coastal-location.repository.js";
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
@@ -47,6 +48,10 @@ const beachRepository = new PrismaBeachRepository(prisma);
 const beachService = new BeachService(beachRepository);
 const coastalLocationRepository = new PrismaCoastalLocationRepository(prisma);
 const coastalLocationService = new CoastalLocationService(coastalLocationRepository);
+const coastalLocationBeachesService = new CoastalLocationBeachesService({
+  beachRepository,
+  coastalLocationRepository,
+});
 const redisClient = createRedisCacheClient(env.REDIS_URL, (error) => {
   logger.error("redis.client.error", { error });
 });
@@ -148,6 +153,7 @@ const app = createApp({
     healthService,
     beachService,
     coastalLocationService,
+    coastalLocationBeachesService,
     coastalForecastService,
     beachForecastService,
     recommendationService,

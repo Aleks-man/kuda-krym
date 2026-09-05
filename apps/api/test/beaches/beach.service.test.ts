@@ -28,6 +28,7 @@ describe("BeachService", () => {
 function createRepository(): BeachRepository {
   return {
     findPublished: vi.fn().mockResolvedValue([]),
+    findPublishedByCoastalLocationSlug: vi.fn().mockResolvedValue([]),
     findPublishedFilterOptions: vi.fn().mockResolvedValue({
       regions: ["SOUTH_COAST"],
       localities: ["Ялта"],

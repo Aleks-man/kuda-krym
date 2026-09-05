@@ -11,6 +11,7 @@ import type { BeachRepository } from "../../src/modules/beaches/beach.repository
 import { BeachService } from "../../src/modules/beaches/beach.service.js";
 import { CoastalForecastService } from "../../src/modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "../../src/modules/coastal-locations/coastal-location.service.js";
+import { CoastalLocationBeachesService } from "../../src/modules/coastal-locations/coastal-location-beaches.service.js";
 import { BeachForecastService } from "../../src/modules/forecast/beach-forecast.service.js";
 import type { ForecastBeach } from "../../src/modules/forecast/forecast-beach.repository.js";
 import type { MarineForecast } from "../../src/modules/marine/marine-forecast.js";
@@ -29,6 +30,7 @@ type TestAppData = Readonly<{
   beaches?: BeachListItem[];
   details?: BeachDetail[];
   coastalLocations?: CoastalLocation[];
+  coastalLocationBeaches?: Readonly<Record<string, readonly string[]>>;
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
@@ -92,6 +94,7 @@ export function createTestApp({
   beaches = [],
   details = [],
   coastalLocations = [],
+  coastalLocationBeaches = {},
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
@@ -134,6 +137,11 @@ export function createTestApp({
 
         return matchesSearch && matchesRegion && matchesLocality;
       }),
+    findPublishedByCoastalLocationSlug: async (slug) => {
+      const beachSlugs = coastalLocationBeaches[slug] ?? [];
+
+      return beaches.filter((beach) => beachSlugs.includes(beach.slug));
+    },
     findPublishedFilterOptions: async () => ({
       regions: [...new Set(beaches.map(({ region }) => region))],
       localities: [
@@ -183,6 +191,10 @@ export function createTestApp({
       beachService: new BeachService(beachRepository),
       coastalLocationService: new CoastalLocationService({
         ...coastalLocationRepository,
+      }),
+      coastalLocationBeachesService: new CoastalLocationBeachesService({
+        beachRepository,
+        coastalLocationRepository,
       }),
       coastalForecastService,
       beachForecastService,

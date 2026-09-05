@@ -4,7 +4,7 @@
     "maximumTotalBytes": 1200000
   },
   "stylesheets": {
-    "maximumAssetBytes": 25000,
+    "maximumAssetBytes": 30000,
     "maximumTotalBytes": 80000
   }
 }

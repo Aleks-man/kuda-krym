@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { getBeach } from "@/features/beaches/api/get-beach";
+import { BeachCoastalLink } from "@/features/beaches/ui/beach-coastal-link/beach-coastal-link";
 import { BeachDetailHero } from "@/features/beaches/ui/beach-detail-hero/beach-detail-hero";
 import { BeachFacts } from "@/features/beaches/ui/beach-facts/beach-facts";
 import { BeachSources } from "@/features/beaches/ui/beach-sources/beach-sources";
@@ -60,6 +61,7 @@ export default async function BeachPage({ params }: BeachPageProps) {
       />
       <main className={styles.main}>
         <BeachDetailHero beach={beach} />
+        <BeachCoastalLink coastalLocation={beach.coastalLocation} />
         <Suspense fallback={<BeachForecastSkeleton />}>
           <BeachForecast beachId={beach.id} />
         </Suspense>

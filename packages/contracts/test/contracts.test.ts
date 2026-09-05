@@ -361,6 +361,10 @@ describe("API contracts", () => {
       name: "Пляж Учкуевка",
       officialName: "Учкуевка",
       description: null,
+      coastalLocation: {
+        slug: "sevastopol-north",
+        name: "Северный Севастополь",
+      },
       region: "SEVASTOPOL",
       locality: "Севастополь",
       coordinates: { latitude: 44.644844, longitude: 33.536119 },

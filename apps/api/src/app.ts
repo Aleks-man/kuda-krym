@@ -8,6 +8,7 @@ import type { BeachService } from "./modules/beaches/beach.service.js";
 import { createCoastalForecastRouter } from "./modules/coastal-forecast/coastal-forecast.router.js";
 import type { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
 import { createCoastalLocationRouter } from "./modules/coastal-locations/coastal-location.router.js";
+import type { CoastalLocationBeachesService } from "./modules/coastal-locations/coastal-location-beaches.service.js";
 import type { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { createBeachForecastRouter } from "./modules/forecast/beach-forecast.router.js";
 import type { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
@@ -38,6 +39,10 @@ export type AppDependencies = Readonly<{
   coastalLocationService: Pick<
     CoastalLocationService,
     "listPublished" | "getPublishedBySlug"
+  >;
+  coastalLocationBeachesService: Pick<
+    CoastalLocationBeachesService,
+    "listPublished"
   >;
   coastalForecastService: Pick<CoastalForecastService, "getForecast">;
   beachForecastService: BeachForecastService;
@@ -93,7 +98,10 @@ export function createApp({
   );
   app.use(
     "/api/coastal-locations",
-    createCoastalLocationRouter(dependencies.coastalLocationService),
+    createCoastalLocationRouter({
+      beachesService: dependencies.coastalLocationBeachesService,
+      locationService: dependencies.coastalLocationService,
+    }),
   );
   app.use(
     "/api/forecast",
