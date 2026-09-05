@@ -330,3 +330,20 @@ GitHub Actions выполняет аудит при каждом запуске 
 
 Локальные `.env`-файлы не должны попадать в Git — для документации настроек
 используются только файлы `.env.example`.
+
+## Подготовка к публикации
+
+Перед первым публичным запуском проверьте production-переменные. Для новой пустой
+базы одной командой примените миграции и добавьте начальный каталог:
+
+```powershell
+npm run check:release-config
+npm run database:bootstrap
+```
+
+При обычных обновлениях выполняйте `npm run database:migrate`; повторно запускать
+`database:bootstrap` не нужно. После публикации доступность web, API, PostgreSQL,
+`robots.txt` и `sitemap.xml` проверяется командой `npm run check:deployment`.
+
+Полный порядок первого запуска, обновления и безопасного отката описан в
+[`docs/deployment/release-checklist.md`](docs/deployment/release-checklist.md).
