@@ -44,6 +44,20 @@ services:
         condition: service_healthy
     restart: "no"
 
+  seed:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: migrator
+    command: npm run seed --workspace @kuda-krym/database
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    profiles: [tools]
+    restart: "no"
+
   api:
     build:
       context: .

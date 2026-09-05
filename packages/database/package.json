@@ -16,7 +16,8 @@
   ],
   "scripts": {
     "build": "npm run generate && tsc -p tsconfig.build.json",
-    "deploy": "prisma migrate deploy && prisma db seed",
+    "bootstrap": "prisma migrate deploy && prisma db seed",
+    "deploy": "prisma migrate deploy",
     "generate": "prisma generate",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",

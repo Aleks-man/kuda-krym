@@ -17,6 +17,8 @@
     "check:performance": "node scripts/check-web-performance-budget.mjs",
     "check:deployment": "node scripts/release/check-deployment.mjs",
     "check:release-config": "node scripts/release/validate-production-env.mjs",
+    "database:bootstrap": "npm run bootstrap --workspace @kuda-krym/database",
+    "database:migrate": "npm run migrate:deploy --workspace @kuda-krym/database",
     "predev": "npm run build --workspace @kuda-krym/contracts",
     "dev": "node scripts/run-development.mjs",
     "dev:web": "npm run dev --workspace @kuda-krym/web",
