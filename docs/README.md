@@ -17,3 +17,9 @@
 
 - [Локальная база данных](./development/database.md) — создание PostgreSQL-базы
   и применение Prisma-миграций.
+
+## Публикация
+
+- [Проверка релиза](./deployment/release-checklist.md) — порядок проверки
+  production-переменных, миграций, первого seed, smoke-тестов и безопасного
+  отката.
