@@ -87,7 +87,7 @@ describe("GET /api/forecast/:beachId", () => {
       },
     });
 
-    const response = await request(app).get(`/api/forecast/${beachId}?days=1`);
+    const response = await request(app).get(`/api/forecast/${beachId}?days=3`);
     const body = beachForecastSchema.parse(response.body);
 
     expect(response.status).toBe(200);

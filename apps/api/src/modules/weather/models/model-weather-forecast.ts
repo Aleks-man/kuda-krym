@@ -1,5 +1,6 @@
 import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
 
+import type { ForecastDays } from "../../../shared/forecast/forecast-days.js";
 import type { ForecastLocation } from "../weather-forecast.js";
 
 export type WeatherModel = "ECMWF_IFS" | "DWD_ICON" | "NOAA_GFS";
@@ -7,7 +8,7 @@ export type WeatherModel = "ECMWF_IFS" | "DWD_ICON" | "NOAA_GFS";
 export type ModelWeatherForecastRequest = Readonly<{
   model: WeatherModel;
   location: ForecastLocation;
-  days: 1 | 2;
+  days: ForecastDays;
 }>;
 
 export type HourlyModelWeather = Readonly<{

@@ -12,8 +12,8 @@ the E2E setup applies migrations and replaces seed data.
 - filtering the published beach catalog by region;
 - loading coastal forecast locations grouped by region;
 - opening a coastal location from the catalog;
-- rendering a two-day coastal forecast;
-- rendering verified media and a two-day forecast on a beach page;
+- rendering a three-day coastal forecast;
+- rendering verified media and a three-day forecast on a beach page;
 - submitting recommendation preferences and rendering a validated result;
 - comparing selected beaches and opening their detail pages;
 - detecting WCAG A/AA violations on key public pages;

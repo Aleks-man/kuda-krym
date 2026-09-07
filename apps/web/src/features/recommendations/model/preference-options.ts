@@ -5,11 +5,22 @@ export const originOptions = [
   { value: "evpatoria", label: "Евпатория" },
   { value: "feodosia", label: "Феодосия" },
   { value: "kerch", label: "Керчь" },
+  { value: "alushta", label: "Алушта" },
+  { value: "sudak", label: "Судак" },
+  { value: "saki", label: "Саки" },
+  { value: "bakhchisaray", label: "Бахчисарай" },
+  { value: "dzhankoy", label: "Джанкой" },
+  { value: "belogorsk", label: "Белогорск" },
+  { value: "krasnoperekopsk", label: "Красноперекопск" },
+  { value: "armyansk", label: "Армянск" },
+  { value: "chernomorskoe", label: "Черноморское" },
+  { value: "shchelkino", label: "Щёлкино" },
 ] as const;
 
 export const dateOptions = [
   { value: "today", label: "Сегодня" },
   { value: "tomorrow", label: "Завтра" },
+  { value: "dayAfterTomorrow", label: "Послезавтра" },
 ] as const;
 
 export const travelTimeOptions = [
@@ -20,21 +31,10 @@ export const travelTimeOptions = [
 ] as const;
 
 export const timeOptions = [
-  { value: "morning", label: "Утро", detail: "09:00–13:00" },
-  { value: "day", label: "День", detail: "12:00–17:00" },
-  { value: "evening", label: "Вечер", detail: "15:00–19:00" },
-] as const;
-
-export const companyOptions = [
-  { value: "alone", label: "Один или вдвоём" },
-  { value: "children", label: "С детьми" },
-  { value: "friends", label: "Компанией" },
-] as const;
-
-export const surfaceOptions = [
-  { value: "any", label: "Неважно" },
-  { value: "sand", label: "Песок" },
-  { value: "pebble", label: "Галька" },
+  { value: "morning", label: "Утро", detail: "08:00–13:00", endHour: 13 },
+  { value: "day", label: "День", detail: "12:00–17:00", endHour: 17 },
+  { value: "evening", label: "Вечер", detail: "15:00–20:00", endHour: 20 },
+  { value: "all_day", label: "Весь день", detail: "08:00–20:00", endHour: 20 },
 ] as const;
 
 export const priorityOptions = [

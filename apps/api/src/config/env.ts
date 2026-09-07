@@ -13,6 +13,7 @@ const envSchema = z.object({
   WEATHER_MODEL_DWD_BASE_URL: z.url().optional(),
   WEATHER_MODEL_GFS_BASE_URL: z.url().optional(),
   OSRM_BASE_URL: z.url().default("https://router.project-osrm.org/"),
+  PHOTON_BASE_URL: z.url().default("https://photon.komoot.io/"),
   RATE_LIMIT_EXPENSIVE_MAX_REQUESTS: z.coerce
     .number()
     .int()

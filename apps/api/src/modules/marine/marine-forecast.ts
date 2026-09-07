@@ -1,8 +1,10 @@
 import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
 
+import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
+
 export type MarineForecastRequest = Readonly<{
   location: Readonly<{ latitude: number; longitude: number }>;
-  days: 1 | 2;
+  days: ForecastDays;
 }>;
 
 export type HourlyMarineConditions = Readonly<{

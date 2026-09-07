@@ -3,6 +3,7 @@ import { Router } from "express";
 import { z } from "zod";
 
 import { HttpError } from "../../../../shared/http/http-error.js";
+import { forecastDaysSchema } from "../../../../shared/forecast/forecast-days.js";
 import type { WeatherModelComparisonService } from "./weather-model-comparison.service.js";
 
 const querySchema = z.object({
@@ -10,8 +11,8 @@ const querySchema = z.object({
   longitude: z.coerce.number().min(-180).max(180),
   days: z.coerce
     .number()
-    .pipe(z.union([z.literal(1), z.literal(2)]))
-    .default(2),
+    .pipe(forecastDaysSchema)
+    .default(3),
 });
 
 export function createWeatherModelComparisonRouter(

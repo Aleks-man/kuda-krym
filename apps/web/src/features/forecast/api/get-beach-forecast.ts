@@ -10,7 +10,7 @@ export async function getBeachForecast(
 ): Promise<BeachForecast | null> {
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(
-    new URL(`/api/forecast/${encodeURIComponent(beachId)}?days=2`, apiUrl),
+    new URL(`/api/forecast/${encodeURIComponent(beachId)}?days=3`, apiUrl),
     { next: { revalidate: 600 } },
   );
 

@@ -10,23 +10,13 @@ export type BeachCatalogSearchParams = Readonly<
 export function parseBeachCatalogSearchParams(
   searchParams: BeachCatalogSearchParams,
 ): BeachCatalogQuery {
-  const q = beachCatalogQuerySchema.safeParse({
-    q: getSingleValue(searchParams.q),
-  });
   const region = beachCatalogQuerySchema.safeParse({
     region: getSingleValue(searchParams.region),
   });
-  const locality = beachCatalogQuerySchema.safeParse({
-    locality: getSingleValue(searchParams.locality),
-  });
 
   return {
-    ...(q.success && q.data.q ? { q: q.data.q } : {}),
     ...(region.success && region.data.region
       ? { region: region.data.region }
-      : {}),
-    ...(locality.success && locality.data.locality
-      ? { locality: locality.data.locality }
       : {}),
   };
 }

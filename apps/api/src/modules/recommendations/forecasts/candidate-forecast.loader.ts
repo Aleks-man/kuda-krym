@@ -1,6 +1,7 @@
 import type { MarineForecastProvider } from "../../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../../weather/weather-forecast.js";
 import { mapWithConcurrency } from "../../../shared/async/map-with-concurrency.js";
+import type { ForecastDays } from "../../../shared/forecast/forecast-days.js";
 import type { RecommendationCandidate } from "../candidates/recommendation-candidate.js";
 import type {
   CandidateForecast,
@@ -29,7 +30,7 @@ export class CandidateForecastLoader {
 
   public async load(
     candidates: readonly RecommendationCandidate[],
-    forecastDays: 1 | 2,
+    forecastDays: ForecastDays,
   ): Promise<CandidateForecastBatch> {
     const results = await mapWithConcurrency(
       candidates,
@@ -52,7 +53,7 @@ export class CandidateForecastLoader {
 
   private async loadCandidate(
     candidate: RecommendationCandidate,
-    forecastDays: 1 | 2,
+    forecastDays: ForecastDays,
   ): Promise<CandidateForecastResult> {
     const request = {
       location: {

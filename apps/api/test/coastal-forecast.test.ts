@@ -52,7 +52,7 @@ describe("GET /api/coastal-locations/:slug/forecast", () => {
           ],
         },
       }),
-    ).get("/api/coastal-locations/yalta/forecast?days=1");
+    ).get("/api/coastal-locations/yalta/forecast?days=3");
 
     const body = coastalForecastSchema.parse(response.body);
     expect(response.status).toBe(200);

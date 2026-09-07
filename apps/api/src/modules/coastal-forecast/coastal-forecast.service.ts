@@ -1,5 +1,7 @@
 import type { CoastalForecast } from "@kuda-krym/contracts";
 
+import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
+
 import type { CoastalLocationRepository } from "../coastal-locations/coastal-location.repository.js";
 import { mapForecastHours } from "../forecast/forecast-hour.mapper.js";
 import type { MarineForecastProvider } from "../marine/marine-forecast.js";
@@ -27,7 +29,7 @@ export class CoastalForecastService {
 
   public async getForecast(
     slug: string,
-    days: 1 | 2,
+    days: ForecastDays,
   ): Promise<CoastalForecast | null> {
     const location =
       await this.dependencies.locationRepository.findPublishedBySlug(slug);

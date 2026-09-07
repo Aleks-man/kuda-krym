@@ -5,23 +5,23 @@ import {
   formatForecastTime,
   formatMeasurement,
 } from "../../model/forecast-view";
-import styles from "./two-day-forecast.module.css";
+import styles from "./forecast-timeline.module.css";
 
-type TwoDayForecastProps = Readonly<{
+type ForecastTimelineProps = Readonly<{
   hours: ForecastHour[];
 }>;
 
-export function TwoDayForecast({ hours }: TwoDayForecastProps) {
+export function ForecastTimeline({ hours }: ForecastTimelineProps) {
   const days = selectForecastDays(hours);
 
   if (days.length === 0) return null;
 
   return (
-    <section className={styles.section} aria-labelledby="two-day-title">
+    <section className={styles.section} aria-labelledby="forecast-timeline-title">
       <div className={styles.heading}>
         <div>
           <p className={styles.eyebrow}>Почасовой прогноз</p>
-          <h3 id="two-day-title">Ближайшие два дня</h3>
+          <h3 id="forecast-timeline-title">Ближайшие три дня</h3>
         </div>
         <p>Время местное</p>
       </div>

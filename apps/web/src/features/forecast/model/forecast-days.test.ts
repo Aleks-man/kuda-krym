@@ -29,7 +29,7 @@ describe("selectForecastDays", () => {
     });
   });
 
-  it("returns no more than two days and eight evenly spaced hours per day", () => {
+  it("returns no more than three days and eight evenly spaced hours per day", () => {
     const firstDay = Array.from(
       { length: 24 },
       (_, hour) => `2026-08-28T${hour.toString().padStart(2, "0")}:00`,
@@ -39,7 +39,7 @@ describe("selectForecastDays", () => {
       new Date("2026-08-28T00:00:00Z"),
     );
 
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3);
     expect(result[0]?.hours).toHaveLength(8);
     expect(result[0]?.hours[0]?.time).toBe("2026-08-28T00:00");
     expect(result[0]?.hours.at(-1)?.time).toBe("2026-08-28T20:00");

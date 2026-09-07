@@ -225,14 +225,54 @@ describe("API contracts", () => {
       origin: "simferopol",
       date: "2026-08-20",
       time: "day",
-      company: "children",
-      surface: "sand",
       priority: "calm_sea",
       maxTravelMinutes: 120,
     });
 
     expect(result.priority).toBe("calm_sea");
     expect(result.maxTravelMinutes).toBe(120);
+  });
+
+  it("accepts an all-day recommendation window", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: "yalta",
+      date: "2026-08-20",
+      time: "all_day",
+      priority: "comfort",
+      maxTravelMinutes: 90,
+    });
+
+    expect(result.time).toBe("all_day");
+  });
+
+  it("accepts an expanded departure location", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: "dzhankoy",
+      date: "2026-08-20",
+      time: "day",
+      priority: "comfort",
+      maxTravelMinutes: 180,
+    });
+
+    expect(result.origin).toBe("dzhankoy");
+  });
+
+  it("accepts a searched departure location", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: {
+        id: "osm:N:100",
+        name: "Николаевка",
+        context: "Симферопольский район · Крым",
+        latitude: 44.966,
+        longitude: 33.614,
+      },
+      date: "2026-08-20",
+      time: "day",
+      priority: "comfort",
+      maxTravelMinutes: 120,
+    });
+
+    expect(result.origin).toMatchObject({ name: "Николаевка" });
   });
 
   it("accepts a combined beach forecast", () => {

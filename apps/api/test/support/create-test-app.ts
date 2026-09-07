@@ -2,6 +2,7 @@ import type {
   BeachDetail,
   BeachListItem,
   CoastalLocation,
+  DepartureLocation,
   WeatherModelComparisonResponse,
 } from "@kuda-krym/contracts";
 
@@ -31,6 +32,8 @@ type TestAppData = Readonly<{
   details?: BeachDetail[];
   coastalLocations?: CoastalLocation[];
   coastalLocationBeaches?: Readonly<Record<string, readonly string[]>>;
+  departureLocations?: DepartureLocation[];
+  departureLocationError?: Error | null;
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
@@ -71,8 +74,6 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
       startsAt: "2026-08-20T09:00:00.000Z",
       endsAt: "2026-08-20T14:00:00.000Z",
     },
-    company: "ALONE",
-    preferredSurface: "ANY",
     priority: "CALM_SEA",
     maxTravelMinutes: 120,
   },
@@ -95,6 +96,8 @@ export function createTestApp({
   details = [],
   coastalLocations = [],
   coastalLocationBeaches = {},
+  departureLocations = [],
+  departureLocationError = null,
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
@@ -118,24 +121,10 @@ export function createTestApp({
   const beachRepository: BeachRepository = {
     findPublished: async (query = {}) =>
       beaches.filter((beach) => {
-        const search = query.q?.toLocaleLowerCase("ru-RU");
-        const matchesSearch = search
-          ? [beach.name, beach.locality]
-              .filter((value): value is string => value !== null)
-              .some((value) =>
-                value.toLocaleLowerCase("ru-RU").includes(search),
-              )
-          : true;
         const matchesRegion = query.region
           ? beach.region === query.region
           : true;
-        const matchesLocality = query.locality
-          ? beach.locality?.localeCompare(query.locality, "ru-RU", {
-              sensitivity: "accent",
-            }) === 0
-          : true;
-
-        return matchesSearch && matchesRegion && matchesLocality;
+        return matchesRegion;
       }),
     findPublishedByCoastalLocationSlug: async (slug) => {
       const beachSlugs = coastalLocationBeaches[slug] ?? [];
@@ -144,13 +133,6 @@ export function createTestApp({
     },
     findPublishedFilterOptions: async () => ({
       regions: [...new Set(beaches.map(({ region }) => region))],
-      localities: [
-        ...new Set(
-          beaches.flatMap(({ locality }) =>
-            locality === null ? [] : [locality],
-          ),
-        ),
-      ],
     }),
     findPublishedBySlug: async (slug) =>
       details.find((beach) => beach.slug === slug) ?? null,
@@ -197,6 +179,12 @@ export function createTestApp({
         coastalLocationRepository,
       }),
       coastalForecastService,
+      departureLocationProvider: {
+        search: async () => {
+          if (departureLocationError) throw departureLocationError;
+          return departureLocations;
+        },
+      },
       beachForecastService,
       recommendationService: {
         calculate: async () => {

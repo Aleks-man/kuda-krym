@@ -5,6 +5,7 @@ import type {
 import Link from "next/link";
 
 import { getBeachRegionLabel } from "../../model/beach-labels";
+import { AutoSubmitSelect } from "./auto-submit-select";
 import styles from "./beach-catalog-filters.module.css";
 
 type BeachCatalogFiltersProps = Readonly<{
@@ -22,64 +23,40 @@ export function BeachCatalogFilters({
     <section className={styles.panel} aria-labelledby="catalog-filter-title">
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>Поиск места</p>
-          <h2 id="catalog-filter-title">Найдите пляж на побережье</h2>
+          <p className={styles.eyebrow}>Фильтры каталога</p>
+          <h2 id="catalog-filter-title">Выберите часть побережья</h2>
         </div>
         <p className={styles.note}>
-          Фильтры используют только проверенные названия и расположение.
+          Показываем только опубликованные пляжи выбранного региона.
         </p>
       </div>
 
       <form
         action="/beaches"
-        aria-label="Поиск пляжей"
+        aria-label="Фильтры пляжей"
         className={styles.form}
         method="get"
         role="search"
       >
-        <label className={`${styles.field} ${styles.search}`}>
-          <span>Название или населённый пункт</span>
-          <input
-            defaultValue={query.q ?? ""}
-            maxLength={100}
-            name="q"
-            placeholder="Например, Ялта или Золотой пляж"
-            type="search"
-          />
-        </label>
-
         <label className={styles.field}>
           <span>Регион</span>
-          <select defaultValue={query.region ?? ""} name="region">
+          <AutoSubmitSelect defaultValue={query.region ?? ""} name="region">
             <option value="">Весь Крым</option>
             {options.regions.map((region) => (
               <option key={region} value={region}>
                 {getBeachRegionLabel(region)}
               </option>
             ))}
-          </select>
+          </AutoSubmitSelect>
         </label>
 
-        <label className={styles.field}>
-          <span>Населённый пункт</span>
-          <select defaultValue={query.locality ?? ""} name="locality">
-            <option value="">Все места</option>
-            {options.localities.map((locality) => (
-              <option key={locality} value={locality}>
-                {locality}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div className={styles.actions}>
-          <button type="submit">Показать</button>
-          {hasActiveFilters ? (
+        {hasActiveFilters ? (
+          <div className={styles.actions}>
             <Link className={styles.reset} href="/beaches">
               Сбросить
             </Link>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </form>
     </section>
   );

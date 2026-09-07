@@ -12,7 +12,7 @@ export type ForecastDay = Readonly<{
 export function selectForecastDays(
   hourly: ForecastHour[],
   now = new Date(),
-  dayLimit = 2,
+  dayLimit = 3,
   hourLimit = 8,
 ): ForecastDay[] {
   const upcoming = hourly.filter((hour) => asUtcDate(hour.time) >= now);

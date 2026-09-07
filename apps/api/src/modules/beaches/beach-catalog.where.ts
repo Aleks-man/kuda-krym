@@ -8,17 +8,5 @@ export function createPublishedBeachWhere(
     publicationStatus: PublicationStatus.PUBLISHED,
     profile: { isNot: null },
     ...(query.region ? { region: query.region } : {}),
-    ...(query.locality
-      ? { locality: { equals: query.locality, mode: "insensitive" } }
-      : {}),
-    ...(query.q
-      ? {
-          OR: [
-            { name: { contains: query.q, mode: "insensitive" } },
-            { officialName: { contains: query.q, mode: "insensitive" } },
-            { locality: { contains: query.q, mode: "insensitive" } },
-          ],
-        }
-      : {}),
   };
 }

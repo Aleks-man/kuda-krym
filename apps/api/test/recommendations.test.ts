@@ -9,8 +9,6 @@ const validRequest = {
   origin: "simferopol",
   date: "2026-08-20",
   time: "day",
-  company: "children",
-  surface: "sand",
   priority: "calm_sea",
   maxTravelMinutes: 120,
 };
@@ -57,7 +55,7 @@ describe("POST /api/recommendations", () => {
   });
 
   it("rejects missing and additional fields", async () => {
-    const { surface: _surface, ...incompleteRequest } = validRequest;
+    const { priority: _priority, ...incompleteRequest } = validRequest;
     const response = await request(createTestApp())
       .post("/api/recommendations")
       .send({ ...incompleteRequest, debug: true });

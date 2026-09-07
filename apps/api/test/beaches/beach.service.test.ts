@@ -6,7 +6,7 @@ describe("BeachService", () => {
   it("passes catalog filters to the repository", async () => {
     const repository = createRepository();
     const service = new BeachService(repository);
-    const query = { q: "ялта", region: "SOUTH_COAST" } as const;
+    const query = { region: "SOUTH_COAST" } as const;
 
     await expect(service.listPublished(query)).resolves.toEqual({
       data: [],
@@ -20,7 +20,7 @@ describe("BeachService", () => {
     const service = new BeachService(repository);
 
     await expect(service.getFilterOptions()).resolves.toEqual({
-      data: { regions: ["SOUTH_COAST"], localities: ["Ялта"] },
+      data: { regions: ["SOUTH_COAST"] },
     });
   });
 });
@@ -31,7 +31,6 @@ function createRepository(): BeachRepository {
     findPublishedByCoastalLocationSlug: vi.fn().mockResolvedValue([]),
     findPublishedFilterOptions: vi.fn().mockResolvedValue({
       regions: ["SOUTH_COAST"],
-      localities: ["Ялта"],
     }),
     findPublishedBySlug: vi.fn().mockResolvedValue(null),
   };

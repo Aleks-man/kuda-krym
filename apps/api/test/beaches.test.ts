@@ -34,7 +34,7 @@ describe("GET /api/beaches", () => {
     expect(body.data[0]?.slug).toBe("uchkuevka");
   });
 
-  it("filters beaches by search, region and locality", async () => {
+  it("filters beaches by region", async () => {
     const app = createTestApp({
       beaches: [
         createBeach({
@@ -53,9 +53,7 @@ describe("GET /api/beaches", () => {
     });
 
     const response = await request(app).get("/api/beaches").query({
-      q: "ялт",
       region: "SOUTH_COAST",
-      locality: "ялта",
     });
     const body = beachListResponseSchema.parse(response.body);
 
@@ -67,7 +65,7 @@ describe("GET /api/beaches", () => {
   it("rejects unsupported catalog parameters", async () => {
     const response = await request(createTestApp())
       .get("/api/beaches")
-      .query({ surface: "SAND" });
+      .query({ q: "Ялта" });
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe("INVALID_BEACH_CATALOG_QUERY");
@@ -96,7 +94,6 @@ describe("GET /api/beaches", () => {
 
     expect(response.status).toBe(200);
     expect(body.data.regions).toEqual(["SOUTH_COAST", "SEVASTOPOL"]);
-    expect(body.data.localities).toEqual(["Ялта", "Севастополь"]);
   });
 
   it("returns a published beach by slug", async () => {

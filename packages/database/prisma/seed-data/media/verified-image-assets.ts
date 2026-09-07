@@ -38,6 +38,19 @@ export const evpatoriaBeachImage = {
   sourceVerifiedAt: "2026-09-02",
 } as const satisfies LicensedImageAsset;
 
+export const evpatoriaGoldenBeachImage = {
+  localUrl: "/images/places/evpatoria-golden-beach-2014.webp",
+  downloadUrl:
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jevpatorija%20kuldne%20supelrand%20Musta%20mere%20%C3%A4%C3%A4res..jpg?width=1280",
+  sourceUrl:
+    "https://commons.wikimedia.org/wiki/File:Jevpatorija_kuldne_supelrand_Musta_mere_%C3%A4%C3%A4res..jpg",
+  title: "Jevpatorija kuldne supelrand Musta mere ääres",
+  author: "Aleksander Kaasik",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  sourceVerifiedAt: "2026-09-07",
+} as const satisfies LicensedImageAsset;
+
 export const novofedorovkaBeachImage = {
   localUrl: "/images/places/novofedorovka-beach-2022.webp",
   downloadUrl:

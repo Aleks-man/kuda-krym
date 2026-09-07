@@ -5,7 +5,10 @@ import {
 import { Router } from "express";
 
 import { HttpError } from "../../shared/http/http-error.js";
-import { UnsupportedRecommendationDateError } from "./context/recommendation-context.error.js";
+import {
+  UnsupportedRecommendationDateError,
+  UnsupportedRecommendationOriginError,
+} from "./context/recommendation-context.error.js";
 import { mapRecommendationResponse } from "./recommendation-response.mapper.js";
 import type { RecommendationService } from "./recommendation.service.js";
 
@@ -35,12 +38,21 @@ export function createRecommendationRouter(
           ),
         );
     } catch (error) {
+      if (error instanceof UnsupportedRecommendationOriginError) {
+        throw new HttpError({
+          status: 400,
+          code: "UNSUPPORTED_RECOMMENDATION_ORIGIN",
+          message: "Выберите населённый пункт в пределах Крыма",
+          cause: error,
+        });
+      }
+
       if (!(error instanceof UnsupportedRecommendationDateError)) throw error;
 
       throw new HttpError({
         status: 400,
         code: "UNSUPPORTED_RECOMMENDATION_DATE",
-        message: "Подбор доступен только на сегодня или завтра",
+        message: "Подбор доступен только на ближайшие три дня",
         cause: error,
       });
     }

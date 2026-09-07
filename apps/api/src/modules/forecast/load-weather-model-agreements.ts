@@ -1,5 +1,7 @@
 import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
 
+import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
+
 import type { ForecastLocation } from "../weather/weather-forecast.js";
 import type { WeatherModelComparisonService } from "../weather/models/comparison/weather-model-comparison.service.js";
 
@@ -16,7 +18,7 @@ export type WeatherModelAgreementLoad = Readonly<{
 export async function loadWeatherModelAgreements(
   service: Pick<WeatherModelComparisonService, "compare">,
   location: ForecastLocation,
-  days: 1 | 2,
+  days: ForecastDays,
 ): Promise<WeatherModelAgreementLoad> {
   try {
     const comparison = await service.compare(location, days);

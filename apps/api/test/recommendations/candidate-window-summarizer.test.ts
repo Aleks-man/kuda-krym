@@ -18,8 +18,6 @@ const context: RecommendationContext = {
     startsAt: "2026-08-24T09:00:00.000Z",
     endsAt: "2026-08-24T11:00:00.000Z",
   },
-  company: "ALONE",
-  preferredSurface: "ANY",
   maxTravelMinutes: 120,
   priority: "CALM_SEA",
 };

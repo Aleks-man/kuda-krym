@@ -16,7 +16,6 @@ test("filters the published beach catalog by region", async ({ page }) => {
   await page.getByRole("combobox", { name: "Регион" }).selectOption(
     "WEST_CRIMEA",
   );
-  await page.getByRole("button", { name: "Показать" }).click();
 
   await expect
     .poll(() => new URL(page.url()).searchParams.get("region"))

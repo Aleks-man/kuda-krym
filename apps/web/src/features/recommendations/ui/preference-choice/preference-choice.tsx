@@ -7,6 +7,9 @@ type PreferenceChoiceProps = Readonly<{
   detail?: string;
   icon?: string;
   defaultChecked?: boolean;
+  checked?: boolean;
+  disabled?: boolean;
+  onChange?: () => void;
 }>;
 
 export function PreferenceChoice({
@@ -16,12 +19,18 @@ export function PreferenceChoice({
   detail,
   icon,
   defaultChecked,
+  checked,
+  disabled = false,
+  onChange,
 }: PreferenceChoiceProps) {
   return (
-    <label className={styles.choice}>
+    <label className={`${styles.choice} ${disabled ? styles.disabled : ""}`}>
       <input
+        checked={checked}
         defaultChecked={defaultChecked}
+        disabled={disabled}
         name={name}
+        onChange={onChange}
         type="radio"
         value={value}
       />

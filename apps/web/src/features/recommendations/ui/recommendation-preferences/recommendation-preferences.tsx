@@ -1,15 +1,23 @@
 "use client";
 
 import type { RecommendationResponse } from "@kuda-krym/contracts";
-import { useState, type FormEvent } from "react";
+import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { submitRecommendations } from "../../api/submit-recommendations";
+import { DepartureLocationField } from "@/features/departure-locations/ui/departure-location-field/departure-location-field";
 import { createRecommendationRequest } from "../../model/recommendation-form";
 import {
-  companyOptions,
+  formatRecommendationDate,
+  type RelativeRecommendationDate,
+} from "../../model/crimea-date";
+import {
+  getFirstAvailableRecommendationTime,
+  getUnavailableRecommendationTimes,
+  isTodayUnavailable,
+  type RecommendationTime,
+} from "../../model/recommendation-time-availability";
+import {
   dateOptions,
-  originOptions,
   priorityOptions,
-  surfaceOptions,
   timeOptions,
   travelTimeOptions,
 } from "../../model/preference-options";
@@ -21,6 +29,28 @@ export function RecommendationPreferences() {
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] =
+    useState<RelativeRecommendationDate>("today");
+  const [selectedTime, setSelectedTime] = useState<RecommendationTime>("day");
+  const canShowCurrentDates = useSyncExternalStore(
+    subscribeToClientState,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+  const currentDate = canShowCurrentDates ? new Date() : null;
+  const todayIsUnavailable = currentDate
+    ? isTodayUnavailable(currentDate)
+    : false;
+  const effectiveDate =
+    selectedDate === "today" && todayIsUnavailable
+      ? "tomorrow"
+      : selectedDate;
+  const unavailableTimes = currentDate
+    ? getUnavailableRecommendationTimes(effectiveDate, currentDate)
+    : new Set<RecommendationTime>();
+  const effectiveTime = currentDate && unavailableTimes.has(selectedTime)
+    ? getFirstAvailableRecommendationTime(effectiveDate, currentDate)
+    : selectedTime;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,16 +85,7 @@ export function RecommendationPreferences() {
 
       <form aria-busy={isLoading} className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
-          <label className={styles.selectField}>
-            <span>Откуда выезжаем</span>
-            <select defaultValue="simferopol" name="origin">
-              {originOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <DepartureLocationField />
 
           <label className={styles.selectField}>
             <span>Максимум в дороге</span>
@@ -80,13 +101,20 @@ export function RecommendationPreferences() {
 
         <fieldset className={styles.fieldset}>
           <legend>Когда</legend>
-          <div className={styles.twoColumns}>
-            {dateOptions.map((option, index) => (
+          <div className={styles.threeColumns}>
+            {dateOptions.map((option) => (
               <PreferenceChoice
-                defaultChecked={index === 0}
+                checked={effectiveDate === option.value}
+                detail={
+                  currentDate
+                    ? formatRecommendationDate(option.value, currentDate)
+                    : undefined
+                }
                 key={option.value}
                 label={option.label}
                 name="date"
+                disabled={option.value === "today" && todayIsUnavailable}
+                onChange={() => setSelectedDate(option.value)}
                 value={option.value}
               />
             ))}
@@ -95,51 +123,21 @@ export function RecommendationPreferences() {
 
         <fieldset className={styles.fieldset}>
           <legend>В какое время</legend>
-          <div className={styles.threeColumns}>
-            {timeOptions.map((option, index) => (
+          <div className={styles.fourColumns}>
+            {timeOptions.map((option) => (
               <PreferenceChoice
-                defaultChecked={index === 1}
+                checked={effectiveTime === option.value}
                 detail={option.detail}
+                disabled={unavailableTimes.has(option.value)}
                 key={option.value}
                 label={option.label}
                 name="time"
+                onChange={() => setSelectedTime(option.value)}
                 value={option.value}
               />
             ))}
           </div>
         </fieldset>
-
-        <div className={styles.row}>
-          <fieldset className={styles.fieldset}>
-            <legend>Кто едет</legend>
-            <div className={styles.threeColumns}>
-              {companyOptions.map((option, index) => (
-                <PreferenceChoice
-                  defaultChecked={index === 0}
-                  key={option.value}
-                  label={option.label}
-                  name="company"
-                  value={option.value}
-                />
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset className={styles.fieldset}>
-            <legend>Покрытие пляжа</legend>
-            <div className={styles.threeColumns}>
-              {surfaceOptions.map((option, index) => (
-                <PreferenceChoice
-                  defaultChecked={index === 0}
-                  key={option.value}
-                  label={option.label}
-                  name="surface"
-                  value={option.value}
-                />
-              ))}
-            </div>
-          </fieldset>
-        </div>
 
         <fieldset className={styles.fieldset}>
           <legend>Что важнее всего</legend>
@@ -179,4 +177,16 @@ export function RecommendationPreferences() {
       {result ? <RecommendationResults result={result} /> : null}
     </section>
   );
+}
+
+function subscribeToClientState() {
+  return () => undefined;
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
 }
