@@ -72,6 +72,14 @@ export {
   type CoastalForecast,
 } from "./coastal-locations/coastal-forecast.contract.js";
 export {
+  departureLocationSchema,
+  departureLocationSearchQuerySchema,
+  departureLocationSearchResponseSchema,
+  type DepartureLocation,
+  type DepartureLocationSearchQuery,
+  type DepartureLocationSearchResponse,
+} from "./recommendations/departure-location-search.contract.js";
+export {
   recommendationDateSchema,
   recommendationOriginSchema,
   recommendationPrioritySchema,
