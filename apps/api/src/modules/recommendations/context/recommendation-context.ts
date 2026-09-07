@@ -15,7 +15,6 @@ export type RecommendationContext = Readonly<{
     startsAt: string;
     endsAt: string;
   }>;
-  preferredSurface: "ANY" | "SAND" | "PEBBLE";
   priority: "CALM_SEA" | "WARM_WATER" | "COMFORT";
   maxTravelMinutes: number;
 }>;

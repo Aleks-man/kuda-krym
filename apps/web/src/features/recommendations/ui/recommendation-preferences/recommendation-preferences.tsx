@@ -9,7 +9,6 @@ import { formatRecommendationDate } from "../../model/crimea-date";
 import {
   dateOptions,
   priorityOptions,
-  surfaceOptions,
   timeOptions,
   travelTimeOptions,
 } from "../../model/preference-options";
@@ -105,21 +104,6 @@ export function RecommendationPreferences() {
                 key={option.value}
                 label={option.label}
                 name="time"
-                value={option.value}
-              />
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className={styles.fieldset}>
-          <legend>Покрытие пляжа</legend>
-          <div className={styles.threeColumns}>
-            {surfaceOptions.map((option, index) => (
-              <PreferenceChoice
-                defaultChecked={index === 0}
-                key={option.value}
-                label={option.label}
-                name="surface"
                 value={option.value}
               />
             ))}

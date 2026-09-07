@@ -86,7 +86,6 @@ export {
   recommendationPrioritySchema,
   recommendationMaxTravelMinutesSchema,
   recommendationRequestSchema,
-  recommendationSurfaceSchema,
   recommendationTimeSchema,
   type RecommendationOriginCode,
   type RecommendationRequest,

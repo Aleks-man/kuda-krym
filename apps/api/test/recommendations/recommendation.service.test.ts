@@ -16,7 +16,6 @@ const request = {
   origin: "simferopol",
   date: "2026-08-24",
   time: "day",
-  surface: "any",
   priority: "calm_sea",
   maxTravelMinutes: 120,
 } as const;
@@ -50,16 +49,15 @@ describe("RecommendationService", () => {
 
     const result = await service.calculate(request);
 
-    expect(listEligible).toHaveBeenCalledWith(
-      expect.objectContaining({
-        forecastDays: 1,
-        priority: "CALM_SEA",
-        visitWindow: {
-          startsAt: "2026-08-24T09:00:00.000Z",
-          endsAt: "2026-08-24T14:00:00.000Z",
-        },
-      }),
-    );
+    expect(listEligible).toHaveBeenCalledOnce();
+    expect(result.context).toMatchObject({
+      forecastDays: 1,
+      priority: "CALM_SEA",
+      visitWindow: {
+        startsAt: "2026-08-24T09:00:00.000Z",
+        endsAt: "2026-08-24T14:00:00.000Z",
+      },
+    });
     expect(result.recommendations[0]?.candidate.slug).toBe("calm");
     expect(result.candidateRoutes).toHaveLength(2);
     expect(result.meta).toEqual({

@@ -8,12 +8,6 @@ import { visitWindows } from "./visit-window.config.js";
 const crimeaOffsetMilliseconds = 3 * 60 * 60 * 1_000;
 const dayMilliseconds = 24 * 60 * 60 * 1_000;
 
-const surfaceMap = {
-  any: "ANY",
-  sand: "SAND",
-  pebble: "PEBBLE",
-} as const;
-
 const priorityMap = {
   calm_sea: "CALM_SEA",
   warm_water: "WARM_WATER",
@@ -49,7 +43,6 @@ export function normalizeRecommendationRequest(
       startsAt: toUtc(request.date, window.startsAt),
       endsAt: toUtc(request.date, window.endsAt),
     },
-    preferredSurface: surfaceMap[request.surface],
     priority: priorityMap[request.priority],
     maxTravelMinutes: request.maxTravelMinutes,
   };

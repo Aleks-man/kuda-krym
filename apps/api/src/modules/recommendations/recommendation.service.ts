@@ -29,9 +29,7 @@ export class RecommendationService {
     request: RecommendationRequest,
   ): Promise<RecommendationCalculation> {
     const context = normalizeRecommendationRequest(request, this.now());
-    const candidates = await this.dependencies.candidateService.listEligible(
-      context,
-    );
+    const candidates = await this.dependencies.candidateService.listEligible();
     const routes = await this.dependencies.routeLoader.load(candidates, {
       latitude: context.origin.latitude,
       longitude: context.origin.longitude,

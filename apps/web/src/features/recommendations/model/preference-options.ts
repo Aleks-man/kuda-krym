@@ -37,12 +37,6 @@ export const timeOptions = [
   { value: "all_day", label: "Весь день", detail: "08:00–20:00" },
 ] as const;
 
-export const surfaceOptions = [
-  { value: "any", label: "Неважно" },
-  { value: "sand", label: "Песок" },
-  { value: "pebble", label: "Галька" },
-] as const;
-
 export const priorityOptions = [
   { value: "calm_sea", label: "Спокойное море", icon: "≈" },
   { value: "warm_water", label: "Тёплая вода", icon: "°" },

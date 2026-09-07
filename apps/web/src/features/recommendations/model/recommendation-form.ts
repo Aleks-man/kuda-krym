@@ -19,7 +19,6 @@ export function createRecommendationRequest(
       parseRelativeRecommendationDate(relativeDate),
     ),
     time: formData.get("time"),
-    surface: formData.get("surface"),
     priority: formData.get("priority"),
     maxTravelMinutes: Number(formData.get("maxTravelMinutes")),
   });

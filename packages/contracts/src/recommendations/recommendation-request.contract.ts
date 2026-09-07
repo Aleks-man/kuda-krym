@@ -31,7 +31,6 @@ export const recommendationTimeSchema = z.enum([
   "evening",
   "all_day",
 ]);
-export const recommendationSurfaceSchema = z.enum(["any", "sand", "pebble"]);
 export const recommendationPrioritySchema = z.enum([
   "calm_sea",
   "warm_water",
@@ -48,7 +47,6 @@ export const recommendationRequestSchema = z
     origin: recommendationOriginSchema,
     date: recommendationDateSchema,
     time: recommendationTimeSchema,
-    surface: recommendationSurfaceSchema,
     priority: recommendationPrioritySchema,
     maxTravelMinutes: recommendationMaxTravelMinutesSchema,
   })

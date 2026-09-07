@@ -225,7 +225,6 @@ describe("API contracts", () => {
       origin: "simferopol",
       date: "2026-08-20",
       time: "day",
-      surface: "sand",
       priority: "calm_sea",
       maxTravelMinutes: 120,
     });
@@ -239,7 +238,6 @@ describe("API contracts", () => {
       origin: "yalta",
       date: "2026-08-20",
       time: "all_day",
-      surface: "any",
       priority: "comfort",
       maxTravelMinutes: 90,
     });
@@ -252,7 +250,6 @@ describe("API contracts", () => {
       origin: "dzhankoy",
       date: "2026-08-20",
       time: "day",
-      surface: "any",
       priority: "comfort",
       maxTravelMinutes: 180,
     });
@@ -271,7 +268,6 @@ describe("API contracts", () => {
       },
       date: "2026-08-20",
       time: "day",
-      surface: "any",
       priority: "comfort",
       maxTravelMinutes: 120,
     });

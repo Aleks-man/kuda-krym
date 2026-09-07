@@ -13,7 +13,6 @@ const recommendationRequest = {
   origin: "simferopol",
   date: "2026-08-20",
   time: "day",
-  surface: "sand",
   priority: "calm_sea",
   maxTravelMinutes: 120,
 };
