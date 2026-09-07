@@ -5,6 +5,7 @@ import type {
 import Link from "next/link";
 
 import { getBeachRegionLabel } from "../../model/beach-labels";
+import { AutoSubmitSelect } from "./auto-submit-select";
 import styles from "./beach-catalog-filters.module.css";
 
 type BeachCatalogFiltersProps = Readonly<{
@@ -39,24 +40,23 @@ export function BeachCatalogFilters({
       >
         <label className={styles.field}>
           <span>Регион</span>
-          <select defaultValue={query.region ?? ""} name="region">
+          <AutoSubmitSelect defaultValue={query.region ?? ""} name="region">
             <option value="">Весь Крым</option>
             {options.regions.map((region) => (
               <option key={region} value={region}>
                 {getBeachRegionLabel(region)}
               </option>
             ))}
-          </select>
+          </AutoSubmitSelect>
         </label>
 
-        <div className={styles.actions}>
-          <button type="submit">Показать</button>
-          {hasActiveFilters ? (
+        {hasActiveFilters ? (
+          <div className={styles.actions}>
             <Link className={styles.reset} href="/beaches">
               Сбросить
             </Link>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </form>
     </section>
   );

@@ -100,7 +100,6 @@
   min-height: 52px;
 }
 
-.actions button,
 .reset {
   display: inline-grid;
   min-height: 52px;
@@ -111,22 +110,6 @@
   font-size: 14px;
   font-weight: 800;
   white-space: nowrap;
-}
-
-.actions button {
-  border: 0;
-  background: var(--foreground);
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 12px 28px rgb(22 48 43 / 18%);
-  transition:
-    transform 160ms ease,
-    background 160ms ease;
-}
-
-.actions button:hover {
-  background: var(--accent-strong);
-  transform: translateY(-1px);
 }
 
 .reset {
@@ -159,9 +142,5 @@
 
   .actions {
     flex-wrap: wrap;
-  }
-
-  .actions button {
-    flex: 1;
   }
 }
