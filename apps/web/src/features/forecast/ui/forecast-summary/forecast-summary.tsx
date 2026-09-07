@@ -1,7 +1,6 @@
 import type {
   ForecastFreshness,
   ForecastHour,
-  WeatherModelComparisonResponse,
 } from "@kuda-krym/contracts";
 
 import {
@@ -14,7 +13,6 @@ import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
 import { ForecastFreshnessNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
 import { ForecastTimeline } from "../forecast-timeline/forecast-timeline";
-import { WeatherModelComparison } from "../weather-model-comparison/weather-model-comparison";
 import styles from "./forecast-summary.module.css";
 
 type ForecastSummaryProps = Readonly<{
@@ -23,7 +21,6 @@ type ForecastSummaryProps = Readonly<{
   generatedAt: string;
   freshness: ForecastFreshness;
   hours: ForecastHour[];
-  modelComparison?: WeatherModelComparisonResponse | null;
   title: string;
 }>;
 
@@ -33,7 +30,6 @@ export function ForecastSummary({
   generatedAt,
   freshness,
   hours: forecastHours,
-  modelComparison,
   title,
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
@@ -66,13 +62,6 @@ export function ForecastSummary({
 
       <ConditionScores scores={current.scores} />
       <ForecastConfidence confidence={current.confidence} />
-      {modelComparison && (
-        <WeatherModelComparison
-          comparison={modelComparison}
-          targetTime={current.time}
-        />
-      )}
-
       <ForecastTimeline hours={forecastHours} />
 
       <ForecastProvenance generatedAt={generatedAt} />
