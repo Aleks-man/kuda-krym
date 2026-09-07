@@ -9,14 +9,10 @@ describe("beach catalog filter contracts", () => {
   it("normalizes supported catalog filters", () => {
     expect(
       beachCatalogQuerySchema.parse({
-        q: "  золотой пляж ",
         region: "EAST_CRIMEA",
-        locality: " Береговое ",
       }),
     ).toEqual({
-      q: "золотой пляж",
       region: "EAST_CRIMEA",
-      locality: "Береговое",
     });
   });
 
@@ -25,20 +21,18 @@ describe("beach catalog filter contracts", () => {
   });
 
   it.each([
-    { q: "" },
-    { q: "a".repeat(101) },
+    { q: "Ялта" },
     { region: "UNKNOWN_REGION" },
-    { locality: "   " },
+    { locality: "Ялта" },
     { surface: "SAND" },
   ])("rejects unsupported query $q", (query) => {
     expect(beachCatalogQuerySchema.safeParse(query).success).toBe(false);
   });
 
-  it("accepts available region and locality options", () => {
+  it("accepts available region options", () => {
     const response = {
       data: {
         regions: ["WEST_CRIMEA", "SOUTH_COAST"],
-        localities: ["Евпатория", "Ялта"],
       },
     } as const;
 

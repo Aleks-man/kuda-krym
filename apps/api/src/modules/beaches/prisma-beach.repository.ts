@@ -114,26 +114,15 @@ export class PrismaBeachRepository implements BeachRepository {
     BeachCatalogFilterOptions["data"]
   > {
     const publishedWhere = createPublishedBeachWhere({});
-    const [regionRows, localityRows] = await Promise.all([
-      this.prisma.beach.findMany({
-        where: publishedWhere,
-        select: { region: true },
-        distinct: ["region"],
-        orderBy: { region: "asc" },
-      }),
-      this.prisma.beach.findMany({
-        where: { ...publishedWhere, locality: { not: null } },
-        select: { locality: true },
-        distinct: ["locality"],
-        orderBy: { locality: "asc" },
-      }),
-    ]);
+    const regionRows = await this.prisma.beach.findMany({
+      where: publishedWhere,
+      select: { region: true },
+      distinct: ["region"],
+      orderBy: { region: "asc" },
+    });
 
     return {
       regions: regionRows.map(({ region }) => region),
-      localities: localityRows.flatMap(({ locality }) =>
-        locality === null ? [] : [locality],
-      ),
     };
   }
 

@@ -22,32 +22,21 @@ export function BeachCatalogFilters({
     <section className={styles.panel} aria-labelledby="catalog-filter-title">
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>Поиск места</p>
-          <h2 id="catalog-filter-title">Найдите пляж на побережье</h2>
+          <p className={styles.eyebrow}>Фильтры каталога</p>
+          <h2 id="catalog-filter-title">Выберите часть побережья</h2>
         </div>
         <p className={styles.note}>
-          Фильтры используют только проверенные названия и расположение.
+          Показываем только опубликованные пляжи выбранного региона.
         </p>
       </div>
 
       <form
         action="/beaches"
-        aria-label="Поиск пляжей"
+        aria-label="Фильтры пляжей"
         className={styles.form}
         method="get"
         role="search"
       >
-        <label className={`${styles.field} ${styles.search}`}>
-          <span>Название или населённый пункт</span>
-          <input
-            defaultValue={query.q ?? ""}
-            maxLength={100}
-            name="q"
-            placeholder="Например, Ялта или Золотой пляж"
-            type="search"
-          />
-        </label>
-
         <label className={styles.field}>
           <span>Регион</span>
           <select defaultValue={query.region ?? ""} name="region">
@@ -55,18 +44,6 @@ export function BeachCatalogFilters({
             {options.regions.map((region) => (
               <option key={region} value={region}>
                 {getBeachRegionLabel(region)}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className={styles.field}>
-          <span>Населённый пункт</span>
-          <select defaultValue={query.locality ?? ""} name="locality">
-            <option value="">Все места</option>
-            {options.localities.map((locality) => (
-              <option key={locality} value={locality}>
-                {locality}
               </option>
             ))}
           </select>

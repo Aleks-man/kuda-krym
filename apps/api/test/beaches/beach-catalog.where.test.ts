@@ -10,23 +10,15 @@ describe("createPublishedBeachWhere", () => {
     });
   });
 
-  it("builds case-insensitive search and exact catalog filters", () => {
+  it("builds a region filter", () => {
     expect(
       createPublishedBeachWhere({
-        q: "золотой",
         region: "EAST_CRIMEA",
-        locality: "Береговое",
       }),
     ).toEqual({
       publicationStatus: "PUBLISHED",
       profile: { isNot: null },
       region: "EAST_CRIMEA",
-      locality: { equals: "Береговое", mode: "insensitive" },
-      OR: [
-        { name: { contains: "золотой", mode: "insensitive" } },
-        { officialName: { contains: "золотой", mode: "insensitive" } },
-        { locality: { contains: "золотой", mode: "insensitive" } },
-      ],
     });
   });
 });
