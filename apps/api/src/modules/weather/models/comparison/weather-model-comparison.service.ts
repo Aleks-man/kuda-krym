@@ -1,4 +1,5 @@
 import type { ForecastLocation } from "../../weather-forecast.js";
+import type { ForecastDays } from "../../../../shared/forecast/forecast-days.js";
 import { calculateWeatherModelAgreement } from "../agreement/calculate-weather-model-agreement.js";
 import { alignWeatherModelForecasts } from "./align-weather-model-forecasts.js";
 import { summarizeWeatherModelFreshness } from "./weather-model-freshness.js";
@@ -24,7 +25,7 @@ export class WeatherModelComparisonService {
 
   public async compare(
     location: ForecastLocation,
-    days: 1 | 2,
+    days: ForecastDays,
   ): Promise<WeatherModelComparison> {
     const batch = await this.dependencies.batchLoader.load(location, days);
     const aligned = alignWeatherModelForecasts(batch.available);

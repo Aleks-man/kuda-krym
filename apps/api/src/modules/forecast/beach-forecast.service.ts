@@ -1,5 +1,7 @@
 import type { BeachForecast } from "@kuda-krym/contracts";
 
+import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
+
 import type { MarineForecastProvider } from "../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../weather/weather-forecast.js";
 import type { WeatherModelComparisonService } from "../weather/models/comparison/weather-model-comparison.service.js";
@@ -27,7 +29,7 @@ export class BeachForecastService {
 
   public async getForecast(
     beachId: string,
-    days: 1 | 2,
+    days: ForecastDays,
   ): Promise<BeachForecast | null> {
     const beach = await this.dependencies.beachRepository.findPublishedById(
       beachId,

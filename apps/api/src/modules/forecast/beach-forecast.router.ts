@@ -3,10 +3,13 @@ import { Router } from "express";
 import { z } from "zod";
 
 import { HttpError } from "../../shared/http/http-error.js";
+import { forecastDaysSchema } from "../../shared/forecast/forecast-days.js";
 import type { BeachForecastService } from "./beach-forecast.service.js";
 
 const paramsSchema = z.object({ beachId: z.uuid() });
-const querySchema = z.object({ days: z.coerce.number().pipe(z.union([z.literal(1), z.literal(2)])).default(2) });
+const querySchema = z.object({
+  days: z.coerce.number().pipe(forecastDaysSchema).default(3),
+});
 
 export function createBeachForecastRouter(service: BeachForecastService): Router {
   const router = Router();

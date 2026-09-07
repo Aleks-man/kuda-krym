@@ -1,4 +1,5 @@
 import type { ForecastLocation } from "../../weather-forecast.js";
+import type { ForecastDays } from "../../../../shared/forecast/forecast-days.js";
 import type {
   ModelWeatherForecast,
   ModelWeatherForecastProvider,
@@ -21,7 +22,7 @@ export class WeatherModelBatchLoader {
 
   public async load(
     location: ForecastLocation,
-    days: 1 | 2,
+    days: ForecastDays,
   ): Promise<WeatherModelBatch> {
     const results = await Promise.all(
       comparisonWeatherModels.map((model) =>
@@ -45,7 +46,7 @@ export class WeatherModelBatchLoader {
   private async loadModel(
     model: WeatherModel,
     location: ForecastLocation,
-    days: 1 | 2,
+    days: ForecastDays,
   ): Promise<ModelLoadResult> {
     try {
       const forecast = await this.provider.getForecast({

@@ -25,7 +25,7 @@ describe("GET /api/weather/model-comparison", () => {
         },
       }),
     ).get(
-      "/api/weather/model-comparison?latitude=44.495&longitude=34.166&days=2",
+      "/api/weather/model-comparison?latitude=44.495&longitude=34.166&days=3",
     );
 
     const body = weatherModelComparisonResponseSchema.parse(response.body);

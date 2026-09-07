@@ -3,14 +3,15 @@ import { Router } from "express";
 import { z } from "zod";
 
 import { HttpError } from "../../shared/http/http-error.js";
+import { forecastDaysSchema } from "../../shared/forecast/forecast-days.js";
 import type { CoastalForecastService } from "./coastal-forecast.service.js";
 
 const paramsSchema = z.object({ slug: z.string().trim().min(1) });
 const querySchema = z.object({
   days: z.coerce
     .number()
-    .pipe(z.union([z.literal(1), z.literal(2)]))
-    .default(2),
+    .pipe(forecastDaysSchema)
+    .default(3),
 });
 
 export function createCoastalForecastRouter(
