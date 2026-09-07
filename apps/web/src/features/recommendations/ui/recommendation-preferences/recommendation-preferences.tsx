@@ -107,7 +107,7 @@ export function RecommendationPreferences() {
 
         <fieldset className={styles.fieldset}>
           <legend>В какое время</legend>
-          <div className={styles.threeColumns}>
+          <div className={styles.fourColumns}>
             {timeOptions.map((option, index) => (
               <PreferenceChoice
                 defaultChecked={index === 1}

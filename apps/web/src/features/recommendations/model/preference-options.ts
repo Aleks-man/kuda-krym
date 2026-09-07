@@ -21,9 +21,10 @@ export const travelTimeOptions = [
 ] as const;
 
 export const timeOptions = [
-  { value: "morning", label: "Утро", detail: "09:00–13:00" },
+  { value: "morning", label: "Утро", detail: "08:00–13:00" },
   { value: "day", label: "День", detail: "12:00–17:00" },
-  { value: "evening", label: "Вечер", detail: "15:00–19:00" },
+  { value: "evening", label: "Вечер", detail: "15:00–20:00" },
+  { value: "all_day", label: "Весь день", detail: "08:00–20:00" },
 ] as const;
 
 export const companyOptions = [

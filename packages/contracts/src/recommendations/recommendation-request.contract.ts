@@ -10,7 +10,12 @@ export const recommendationOriginSchema = z.enum([
 ]);
 
 export const recommendationDateSchema = z.iso.date();
-export const recommendationTimeSchema = z.enum(["morning", "day", "evening"]);
+export const recommendationTimeSchema = z.enum([
+  "morning",
+  "day",
+  "evening",
+  "all_day",
+]);
 export const recommendationCompanySchema = z.enum([
   "alone",
   "children",

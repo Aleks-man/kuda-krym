@@ -56,10 +56,30 @@ describe("normalizeRecommendationRequest", () => {
 
     expect(context.forecastDays).toBe(2);
     expect(context.visitWindow).toEqual({
-      startsAt: "2026-08-21T06:00:00.000Z",
+      startsAt: "2026-08-21T05:00:00.000Z",
       endsAt: "2026-08-21T10:00:00.000Z",
     });
     expect(context.priority).toBe("COMFORT");
+  });
+
+  it("supports a full-day visit window", () => {
+    const context = normalizeRecommendationRequest(
+      {
+        origin: "sevastopol",
+        date: "2026-08-20",
+        time: "all_day",
+        company: "alone",
+        surface: "any",
+        priority: "comfort",
+        maxTravelMinutes: 60,
+      },
+      now,
+    );
+
+    expect(context.visitWindow).toEqual({
+      startsAt: "2026-08-20T05:00:00.000Z",
+      endsAt: "2026-08-20T17:00:00.000Z",
+    });
   });
 
   it("uses three forecast days for the day after tomorrow", () => {

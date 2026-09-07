@@ -235,6 +235,20 @@ describe("API contracts", () => {
     expect(result.maxTravelMinutes).toBe(120);
   });
 
+  it("accepts an all-day recommendation window", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: "yalta",
+      date: "2026-08-20",
+      time: "all_day",
+      company: "alone",
+      surface: "any",
+      priority: "comfort",
+      maxTravelMinutes: 90,
+    });
+
+    expect(result.time).toBe("all_day");
+  });
+
   it("accepts a combined beach forecast", () => {
     const result = beachForecastSchema.parse({
       beach: {
