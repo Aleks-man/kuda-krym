@@ -13,7 +13,7 @@ import { ConditionScores } from "../condition-scores/condition-scores";
 import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
 import { ForecastFreshnessNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
-import { TwoDayForecast } from "../two-day-forecast/two-day-forecast";
+import { ForecastTimeline } from "../forecast-timeline/forecast-timeline";
 import { WeatherModelComparison } from "../weather-model-comparison/weather-model-comparison";
 import styles from "./forecast-summary.module.css";
 
@@ -73,7 +73,7 @@ export function ForecastSummary({
         />
       )}
 
-      <TwoDayForecast hours={forecastHours} />
+      <ForecastTimeline hours={forecastHours} />
 
       <ForecastProvenance generatedAt={generatedAt} />
     </section>

@@ -17,7 +17,7 @@ export async function getWeatherModelComparison(
   const url = new URL("/api/weather/model-comparison", apiUrl);
   url.searchParams.set("latitude", String(coordinates.latitude));
   url.searchParams.set("longitude", String(coordinates.longitude));
-  url.searchParams.set("days", "2");
+  url.searchParams.set("days", "3");
 
   const response = await fetch(url, { next: { revalidate: 900 } });
   if (!response.ok) {

@@ -68,7 +68,7 @@ function createModelResponse(url) {
 function createHourlyTimes() {
   const firstHour = new Date();
   firstHour.setUTCMinutes(0, 0, 0);
-  return Array.from({ length: 48 }, (_, index) =>
+  return Array.from({ length: 72 }, (_, index) =>
     new Date(firstHour.getTime() + index * 3_600_000)
       .toISOString()
       .slice(0, 16),

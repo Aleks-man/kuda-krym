@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("shows a two-day coastal forecast from all configured sources", async ({
+test("shows a three-day coastal forecast from all configured sources", async ({
   page,
 }) => {
   await page.goto("/coast/yalta");
@@ -18,9 +18,9 @@ test("shows a two-day coastal forecast from all configured sources", async ({
   await expect(forecast.getByText("3.2 м/с", { exact: true }).first()).toBeVisible();
 
   await expect(
-    forecast.getByRole("heading", { level: 3, name: "Ближайшие два дня" }),
+    forecast.getByRole("heading", { level: 3, name: "Ближайшие три дня" }),
   ).toBeVisible();
-  await expect(forecast.getByRole("heading", { level: 4 })).toHaveCount(2);
+  await expect(forecast.getByRole("heading", { level: 4 })).toHaveCount(3);
 
   const models = forecast.locator(
     'section[aria-labelledby="model-comparison-title"]',

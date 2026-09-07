@@ -11,7 +11,7 @@ export async function getCoastalForecast(
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(
     new URL(
-      `/api/coastal-locations/${encodeURIComponent(slug)}/forecast?days=2`,
+      `/api/coastal-locations/${encodeURIComponent(slug)}/forecast?days=3`,
       apiUrl,
     ),
     { next: { revalidate: 900 } },
