@@ -12,7 +12,6 @@ describe("normalizeRecommendationRequest", () => {
         origin: "simferopol",
         date: "2026-08-20",
         time: "day",
-        company: "children",
         surface: "sand",
         priority: "calm_sea",
         maxTravelMinutes: 120,
@@ -33,7 +32,6 @@ describe("normalizeRecommendationRequest", () => {
         startsAt: "2026-08-20T09:00:00.000Z",
         endsAt: "2026-08-20T14:00:00.000Z",
       },
-      company: "WITH_CHILDREN",
       preferredSurface: "SAND",
       priority: "CALM_SEA",
       maxTravelMinutes: 120,
@@ -46,7 +44,6 @@ describe("normalizeRecommendationRequest", () => {
         origin: "yalta",
         date: "2026-08-21",
         time: "morning",
-        company: "alone",
         surface: "any",
         priority: "comfort",
         maxTravelMinutes: 90,
@@ -68,7 +65,6 @@ describe("normalizeRecommendationRequest", () => {
         origin: "sevastopol",
         date: "2026-08-20",
         time: "all_day",
-        company: "alone",
         surface: "any",
         priority: "comfort",
         maxTravelMinutes: 60,
@@ -88,7 +84,6 @@ describe("normalizeRecommendationRequest", () => {
         origin: "feodosia",
         date: "2026-08-22",
         time: "day",
-        company: "friends",
         surface: "pebble",
         priority: "warm_water",
         maxTravelMinutes: 120,
@@ -109,7 +104,6 @@ describe("normalizeRecommendationRequest", () => {
         origin: "kerch",
         date: "2026-08-21",
         time: "evening",
-        company: "friends",
         surface: "pebble",
         priority: "warm_water",
         maxTravelMinutes: 180,
@@ -118,7 +112,6 @@ describe("normalizeRecommendationRequest", () => {
     );
 
     expect(context.forecastDays).toBe(1);
-    expect(context.company).toBe("FRIENDS");
   });
 
   it("rejects a date outside the three-day forecast window", () => {
@@ -128,7 +121,6 @@ describe("normalizeRecommendationRequest", () => {
           origin: "sevastopol",
           date: "2026-08-23",
           time: "day",
-          company: "alone",
           surface: "any",
           priority: "calm_sea",
           maxTravelMinutes: 60,

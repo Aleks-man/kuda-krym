@@ -72,7 +72,6 @@ export {
   type CoastalForecast,
 } from "./coastal-locations/coastal-forecast.contract.js";
 export {
-  recommendationCompanySchema,
   recommendationDateSchema,
   recommendationOriginSchema,
   recommendationPrioritySchema,

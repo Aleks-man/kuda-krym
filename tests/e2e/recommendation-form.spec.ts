@@ -15,7 +15,7 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
   await page.getByLabel("Откуда выезжаем").selectOption("yalta");
   await page.getByLabel("Максимум в дороге").selectOption("60");
   const preferences = page.locator("#preferences");
-  const choices = ["Завтра", "Утро", "С детьми", "Песок", "Тёплая вода"];
+  const choices = ["Завтра", "Утро", "Песок", "Тёплая вода"];
 
   for (const choice of choices) {
     await preferences.getByText(choice, { exact: true }).click();
@@ -31,7 +31,6 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
   expect(submittedRequest).toMatchObject({
     origin: "yalta",
     time: "morning",
-    company: "children",
     surface: "sand",
     priority: "warm_water",
     maxTravelMinutes: 60,

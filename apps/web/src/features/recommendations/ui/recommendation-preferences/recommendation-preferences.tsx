@@ -6,7 +6,6 @@ import { submitRecommendations } from "../../api/submit-recommendations";
 import { createRecommendationRequest } from "../../model/recommendation-form";
 import { formatRecommendationDate } from "../../model/crimea-date";
 import {
-  companyOptions,
   dateOptions,
   originOptions,
   priorityOptions,
@@ -121,37 +120,20 @@ export function RecommendationPreferences() {
           </div>
         </fieldset>
 
-        <div className={styles.row}>
-          <fieldset className={styles.fieldset}>
-            <legend>Кто едет</legend>
-            <div className={styles.threeColumns}>
-              {companyOptions.map((option, index) => (
-                <PreferenceChoice
-                  defaultChecked={index === 0}
-                  key={option.value}
-                  label={option.label}
-                  name="company"
-                  value={option.value}
-                />
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset className={styles.fieldset}>
-            <legend>Покрытие пляжа</legend>
-            <div className={styles.threeColumns}>
-              {surfaceOptions.map((option, index) => (
-                <PreferenceChoice
-                  defaultChecked={index === 0}
-                  key={option.value}
-                  label={option.label}
-                  name="surface"
-                  value={option.value}
-                />
-              ))}
-            </div>
-          </fieldset>
-        </div>
+        <fieldset className={styles.fieldset}>
+          <legend>Покрытие пляжа</legend>
+          <div className={styles.threeColumns}>
+            {surfaceOptions.map((option, index) => (
+              <PreferenceChoice
+                defaultChecked={index === 0}
+                key={option.value}
+                label={option.label}
+                name="surface"
+                value={option.value}
+              />
+            ))}
+          </div>
+        </fieldset>
 
         <fieldset className={styles.fieldset}>
           <legend>Что важнее всего</legend>

@@ -43,20 +43,19 @@ const candidates: RecommendationCandidate[] = [
 ];
 
 describe("filterRecommendationCandidates", () => {
-  it("keeps only confirmed child-suitable sandy beaches", () => {
+  it("filters candidates only by the requested surface", () => {
     const result = filterRecommendationCandidates(candidates, {
-      company: "WITH_CHILDREN",
       preferredSurface: "SAND",
     });
 
     expect(result.map((candidate) => candidate.slug)).toEqual([
       "sandy-family",
+      "sandy-unknown",
     ]);
   });
 
   it("does not treat mixed or unknown surfaces as a requested surface", () => {
     const result = filterRecommendationCandidates(candidates, {
-      company: "FRIENDS",
       preferredSurface: "PEBBLE",
     });
 
@@ -67,7 +66,6 @@ describe("filterRecommendationCandidates", () => {
 
   it("keeps all published candidates when preferences impose no filter", () => {
     const result = filterRecommendationCandidates(candidates, {
-      company: "ALONE",
       preferredSurface: "ANY",
     });
 

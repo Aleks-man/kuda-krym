@@ -8,12 +8,6 @@ import { visitWindows } from "./visit-window.config.js";
 const crimeaOffsetMilliseconds = 3 * 60 * 60 * 1_000;
 const dayMilliseconds = 24 * 60 * 60 * 1_000;
 
-const companyMap = {
-  alone: "ALONE",
-  children: "WITH_CHILDREN",
-  friends: "FRIENDS",
-} as const;
-
 const surfaceMap = {
   any: "ANY",
   sand: "SAND",
@@ -55,7 +49,6 @@ export function normalizeRecommendationRequest(
       startsAt: toUtc(request.date, window.startsAt),
       endsAt: toUtc(request.date, window.endsAt),
     },
-    company: companyMap[request.company],
     preferredSurface: surfaceMap[request.surface],
     priority: priorityMap[request.priority],
     maxTravelMinutes: request.maxTravelMinutes,

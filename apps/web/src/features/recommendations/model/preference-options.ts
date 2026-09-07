@@ -27,12 +27,6 @@ export const timeOptions = [
   { value: "all_day", label: "Весь день", detail: "08:00–20:00" },
 ] as const;
 
-export const companyOptions = [
-  { value: "alone", label: "Один или вдвоём" },
-  { value: "children", label: "С детьми" },
-  { value: "friends", label: "Компанией" },
-] as const;
-
 export const surfaceOptions = [
   { value: "any", label: "Неважно" },
   { value: "sand", label: "Песок" },

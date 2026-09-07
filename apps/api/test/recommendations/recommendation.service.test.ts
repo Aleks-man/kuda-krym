@@ -16,7 +16,6 @@ const request = {
   origin: "simferopol",
   date: "2026-08-24",
   time: "day",
-  company: "alone",
   surface: "any",
   priority: "calm_sea",
   maxTravelMinutes: 120,

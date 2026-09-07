@@ -16,14 +16,13 @@ const context: RecommendationContext = {
     startsAt: "2026-08-20T09:00:00.000Z",
     endsAt: "2026-08-20T14:00:00.000Z",
   },
-  company: "WITH_CHILDREN",
   preferredSurface: "SAND",
   maxTravelMinutes: 120,
   priority: "CALM_SEA",
 };
 
 describe("RecommendationCandidateService", () => {
-  it("loads published candidates and applies context preferences", async () => {
+  it("keeps published candidates with the requested surface", async () => {
     const findPublished = vi.fn().mockResolvedValue([
       {
         id: "1",
@@ -49,6 +48,9 @@ describe("RecommendationCandidateService", () => {
     const result = await service.listEligible(context);
 
     expect(findPublished).toHaveBeenCalledOnce();
-    expect(result.map((candidate) => candidate.slug)).toEqual(["family"]);
+    expect(result.map((candidate) => candidate.slug)).toEqual([
+      "family",
+      "unknown",
+    ]);
   });
 });

@@ -71,7 +71,6 @@ const emptyRecommendationCalculation: RecommendationCalculation = {
       startsAt: "2026-08-20T09:00:00.000Z",
       endsAt: "2026-08-20T14:00:00.000Z",
     },
-    company: "ALONE",
     preferredSurface: "ANY",
     priority: "CALM_SEA",
     maxTravelMinutes: 120,

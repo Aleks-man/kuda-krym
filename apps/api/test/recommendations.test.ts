@@ -9,7 +9,6 @@ const validRequest = {
   origin: "simferopol",
   date: "2026-08-20",
   time: "day",
-  company: "children",
   surface: "sand",
   priority: "calm_sea",
   maxTravelMinutes: 120,
