@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState, type KeyboardEvent } from "react";
+import { useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import {
   getPopularDepartureLocations,
@@ -16,6 +16,7 @@ const initialOption = getPopularDepartureLocations("Симферополь")[0];
 export function DepartureLocationField() {
   const inputId = useId();
   const listboxId = useId();
+  const shouldClearInitialOrigin = useRef(true);
   const [query, setQuery] = useState(initialOption?.label ?? "");
   const [selected, setSelected] = useState<DepartureLocationOption | null>(
     initialOption ?? null,
@@ -84,7 +85,16 @@ export function DepartureLocationField() {
             setIsOpen(true);
             setActiveIndex(0);
           }}
-          onFocus={() => setIsOpen(true)}
+          onFocus={() => {
+            setIsOpen(true);
+
+            if (shouldClearInitialOrigin.current) {
+              shouldClearInitialOrigin.current = false;
+              setQuery("");
+              setSelected(null);
+              setActiveIndex(0);
+            }
+          }}
           onKeyDown={handleKeyDown}
           placeholder="Введите город или посёлок"
           role="combobox"
