@@ -28,16 +28,18 @@ describe("PhotonClient", () => {
     expect(requestedUrl.searchParams.getAll("layer")).toEqual([
       "city",
       "locality",
+      "district",
     ]);
     expect(locations).toEqual([
       {
         id: "osm:N:100",
         name: "Николаевка",
-        context: "Симферопольский район · Крым",
+        context: "Симферопольский район",
         latitude: 44.966,
         longitude: 33.614,
       },
     ]);
+    expect(requestedUrl.searchParams.has("lang")).toBe(false);
   });
 
   it("reports an upstream HTTP error", async () => {
@@ -49,6 +51,50 @@ describe("PhotonClient", () => {
       "Photon returned status 503",
     );
   });
+
+  it("keeps a settlement classified as a district and drops a boundary", async () => {
+    const payload = {
+      features: [
+        photonFeature(
+          "Первомайское",
+          33.864073,
+          45.7124068,
+          "Автономна Республіка Крим",
+          "town",
+        ),
+        {
+          ...photonFeature(
+            "Первомайское сельское поселение",
+            33.8644406,
+            45.7199761,
+            "Автономна Республіка Крим",
+            "city",
+          ),
+          properties: {
+            ...photonFeature("", 0, 0, "", "city").properties,
+            name: "Первомайское сельское поселение",
+            osm_key: "boundary",
+            osm_value: "administrative",
+            state: "Автономна Республіка Крим",
+          },
+        },
+      ],
+    };
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response(JSON.stringify(payload), { status: 200 }));
+
+    const locations = await new PhotonClient({ fetch: fetchMock }).search(
+      "Первомайское",
+    );
+
+    expect(locations).toHaveLength(1);
+    expect(locations[0]).toMatchObject({
+      name: "Первомайское",
+      latitude: 45.7124068,
+      longitude: 33.864073,
+    });
+  });
 });
 
 function feature(
@@ -57,6 +103,16 @@ function feature(
   latitude: number,
   state: string,
 ) {
+  return photonFeature(name, longitude, latitude, state, "village");
+}
+
+function photonFeature(
+  name: string,
+  longitude: number,
+  latitude: number,
+  state: string,
+  placeType: string,
+) {
   return {
     type: "Feature",
     geometry: { type: "Point", coordinates: [longitude, latitude] },
@@ -64,6 +120,8 @@ function feature(
       name,
       osm_type: "N",
       osm_id: 100,
+      osm_key: "place",
+      osm_value: placeType,
       county: "Симферопольский район",
       state,
       country: "Россия",

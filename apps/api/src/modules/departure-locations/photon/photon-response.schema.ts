@@ -9,6 +9,8 @@ const photonFeatureSchema = z.object({
     name: z.string().min(1),
     osm_type: z.string().min(1),
     osm_id: z.union([z.string(), z.number()]),
+    osm_key: z.string().optional(),
+    osm_value: z.string().optional(),
     city: z.string().optional(),
     county: z.string().optional(),
     state: z.string().optional(),

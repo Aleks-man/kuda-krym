@@ -60,7 +60,7 @@ describe("CachedDepartureLocationProvider", () => {
 
     expect(provider.search).toHaveBeenCalledWith("НИКО");
     expect(cacheSet).toHaveBeenCalledWith(
-      "departure-location:search:%D0%BD%D0%B8%D0%BA%D0%BE",
+      "departure-location:search:v2:%D0%BD%D0%B8%D0%BA%D0%BE",
       locations,
       departureLocationCacheTtlSeconds,
     );

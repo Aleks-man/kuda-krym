@@ -56,10 +56,10 @@ export class PhotonClient implements DepartureLocationProvider {
         bounds.maxLatitude,
       ].join(","),
     );
-    url.searchParams.set("lang", "ru");
     url.searchParams.set("limit", "12");
     url.searchParams.append("layer", "city");
     url.searchParams.append("layer", "locality");
+    url.searchParams.append("layer", "district");
     return url;
   }
 }
