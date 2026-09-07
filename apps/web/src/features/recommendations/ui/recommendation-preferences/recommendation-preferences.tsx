@@ -3,11 +3,11 @@
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { submitRecommendations } from "../../api/submit-recommendations";
+import { DepartureLocationField } from "@/features/departure-locations/ui/departure-location-field/departure-location-field";
 import { createRecommendationRequest } from "../../model/recommendation-form";
 import { formatRecommendationDate } from "../../model/crimea-date";
 import {
   dateOptions,
-  originOptions,
   priorityOptions,
   surfaceOptions,
   timeOptions,
@@ -61,16 +61,7 @@ export function RecommendationPreferences() {
 
       <form aria-busy={isLoading} className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
-          <label className={styles.selectField}>
-            <span>Откуда выезжаем</span>
-            <select defaultValue="simferopol" name="origin">
-              {originOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <DepartureLocationField />
 
           <label className={styles.selectField}>
             <span>Максимум в дороге</span>

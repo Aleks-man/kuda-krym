@@ -6,6 +6,7 @@ import {
   parseRelativeRecommendationDate,
   resolveRecommendationDate,
 } from "./crimea-date";
+import { parseRecommendationOrigin } from "./recommendation-origin";
 
 export function createRecommendationRequest(
   formData: FormData,
@@ -13,7 +14,7 @@ export function createRecommendationRequest(
   const relativeDate = formData.get("date");
 
   return recommendationRequestSchema.parse({
-    origin: formData.get("origin"),
+    origin: parseRecommendationOrigin(formData.get("origin")),
     date: resolveRecommendationDate(
       parseRelativeRecommendationDate(relativeDate),
     ),
