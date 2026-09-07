@@ -8,3 +8,6 @@
 .choice:hover .content { border-color: #9dcac5; transform: translateY(-1px); }
 .choice input:checked + .content { border-color: var(--accent); background: #eff9f7; box-shadow: inset 0 0 0 1px var(--accent); }
 .choice input:focus-visible + .content { outline: 3px solid rgb(8 127 140 / 20%); outline-offset: 2px; }
+.disabled { cursor: not-allowed; }
+.disabled .content { border-color: #dce6e3; background: rgb(238 242 241 / 68%); filter: saturate(.35); opacity: .48; transform: none; }
+.disabled:hover .content { border-color: #dce6e3; transform: none; }

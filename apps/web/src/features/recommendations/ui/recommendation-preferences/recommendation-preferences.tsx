@@ -5,7 +5,16 @@ import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { submitRecommendations } from "../../api/submit-recommendations";
 import { DepartureLocationField } from "@/features/departure-locations/ui/departure-location-field/departure-location-field";
 import { createRecommendationRequest } from "../../model/recommendation-form";
-import { formatRecommendationDate } from "../../model/crimea-date";
+import {
+  formatRecommendationDate,
+  type RelativeRecommendationDate,
+} from "../../model/crimea-date";
+import {
+  getFirstAvailableRecommendationTime,
+  getUnavailableRecommendationTimes,
+  isTodayUnavailable,
+  type RecommendationTime,
+} from "../../model/recommendation-time-availability";
 import {
   dateOptions,
   priorityOptions,
@@ -20,12 +29,28 @@ export function RecommendationPreferences() {
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] =
+    useState<RelativeRecommendationDate>("today");
+  const [selectedTime, setSelectedTime] = useState<RecommendationTime>("day");
   const canShowCurrentDates = useSyncExternalStore(
     subscribeToClientState,
     getClientSnapshot,
     getServerSnapshot,
   );
   const currentDate = canShowCurrentDates ? new Date() : null;
+  const todayIsUnavailable = currentDate
+    ? isTodayUnavailable(currentDate)
+    : false;
+  const effectiveDate =
+    selectedDate === "today" && todayIsUnavailable
+      ? "tomorrow"
+      : selectedDate;
+  const unavailableTimes = currentDate
+    ? getUnavailableRecommendationTimes(effectiveDate, currentDate)
+    : new Set<RecommendationTime>();
+  const effectiveTime = currentDate && unavailableTimes.has(selectedTime)
+    ? getFirstAvailableRecommendationTime(effectiveDate, currentDate)
+    : selectedTime;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,9 +102,9 @@ export function RecommendationPreferences() {
         <fieldset className={styles.fieldset}>
           <legend>Когда</legend>
           <div className={styles.threeColumns}>
-            {dateOptions.map((option, index) => (
+            {dateOptions.map((option) => (
               <PreferenceChoice
-                defaultChecked={index === 0}
+                checked={effectiveDate === option.value}
                 detail={
                   currentDate
                     ? formatRecommendationDate(option.value, currentDate)
@@ -88,6 +113,8 @@ export function RecommendationPreferences() {
                 key={option.value}
                 label={option.label}
                 name="date"
+                disabled={option.value === "today" && todayIsUnavailable}
+                onChange={() => setSelectedDate(option.value)}
                 value={option.value}
               />
             ))}
@@ -97,13 +124,15 @@ export function RecommendationPreferences() {
         <fieldset className={styles.fieldset}>
           <legend>В какое время</legend>
           <div className={styles.fourColumns}>
-            {timeOptions.map((option, index) => (
+            {timeOptions.map((option) => (
               <PreferenceChoice
-                defaultChecked={index === 1}
+                checked={effectiveTime === option.value}
                 detail={option.detail}
+                disabled={unavailableTimes.has(option.value)}
                 key={option.value}
                 label={option.label}
                 name="time"
+                onChange={() => setSelectedTime(option.value)}
                 value={option.value}
               />
             ))}
