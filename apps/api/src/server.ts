@@ -14,6 +14,8 @@ import { CoastalLocationService } from "./modules/coastal-locations/coastal-loca
 import { CoastalLocationBeachesService } from "./modules/coastal-locations/coastal-location-beaches.service.js";
 import { PrismaCoastalLocationRepository } from "./modules/coastal-locations/prisma-coastal-location.repository.js";
 import { BeachForecastService } from "./modules/forecast/beach-forecast.service.js";
+import { CachedDepartureLocationProvider } from "./modules/departure-locations/cache/cached-departure-location.provider.js";
+import { PhotonClient } from "./modules/departure-locations/photon/photon.client.js";
 import { PrismaForecastBeachRepository } from "./modules/forecast/prisma-forecast-beach.repository.js";
 import { HealthService } from "./modules/health/health.service.js";
 import { PrismaDatabaseHealthProbe } from "./modules/health/prisma-database-health.probe.js";
@@ -121,6 +123,14 @@ const routingProvider = new CachedRoutingProvider({
     logger.warn("cache.routes.failed", { error });
   },
 });
+const departureLocationProvider = new CachedDepartureLocationProvider({
+  cache: redisCache,
+  coalescer: requestCoalescer,
+  provider: new PhotonClient({ baseUrl: env.PHOTON_BASE_URL }),
+  onCacheError: (error) => {
+    logger.warn("cache.departure_locations.failed", { error });
+  },
+});
 const beachForecastService = new BeachForecastService({
   beachRepository: new PrismaForecastBeachRepository(prisma),
   weatherProvider,
@@ -155,6 +165,7 @@ const app = createApp({
     coastalLocationService,
     coastalLocationBeachesService,
     coastalForecastService,
+    departureLocationProvider,
     beachForecastService,
     recommendationService,
     routingService,

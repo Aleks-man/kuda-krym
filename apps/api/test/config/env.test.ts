@@ -36,6 +36,12 @@ describe("API environment", () => {
     expect(env.WEATHER_MODEL_ECMWF_BASE_URL).toContain("/v1/ecmwf");
   });
 
+  it("accepts a configured location search provider", () => {
+    const env = parseEnv({ PHOTON_BASE_URL: "https://photon.example.test/" });
+
+    expect(env.PHOTON_BASE_URL).toBe("https://photon.example.test/");
+  });
+
   it("uses conservative rate limit defaults", () => {
     const env = parseEnv({ NODE_ENV: "test" });
 

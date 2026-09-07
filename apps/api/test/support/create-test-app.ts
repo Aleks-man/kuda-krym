@@ -2,6 +2,7 @@ import type {
   BeachDetail,
   BeachListItem,
   CoastalLocation,
+  DepartureLocation,
   WeatherModelComparisonResponse,
 } from "@kuda-krym/contracts";
 
@@ -31,6 +32,8 @@ type TestAppData = Readonly<{
   details?: BeachDetail[];
   coastalLocations?: CoastalLocation[];
   coastalLocationBeaches?: Readonly<Record<string, readonly string[]>>;
+  departureLocations?: DepartureLocation[];
+  departureLocationError?: Error | null;
   forecastBeach?: ForecastBeach | null;
   weatherForecast?: WeatherForecast;
   marineForecast?: MarineForecast;
@@ -94,6 +97,8 @@ export function createTestApp({
   details = [],
   coastalLocations = [],
   coastalLocationBeaches = {},
+  departureLocations = [],
+  departureLocationError = null,
   forecastBeach = null,
   weatherForecast = emptyWeatherForecast,
   marineForecast = emptyMarineForecast,
@@ -196,6 +201,12 @@ export function createTestApp({
         coastalLocationRepository,
       }),
       coastalForecastService,
+      departureLocationProvider: {
+        search: async () => {
+          if (departureLocationError) throw departureLocationError;
+          return departureLocations;
+        },
+      },
       beachForecastService,
       recommendationService: {
         calculate: async () => {
