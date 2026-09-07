@@ -2,7 +2,7 @@ import type { RecommendationRequest } from "@kuda-krym/contracts";
 
 import type { RecommendationContext } from "./recommendation-context.js";
 import { UnsupportedRecommendationDateError } from "./recommendation-context.error.js";
-import { recommendationOrigins } from "./recommendation-origin.config.js";
+import { normalizeRecommendationOrigin } from "./normalize-recommendation-origin.js";
 import { visitWindows } from "./visit-window.config.js";
 
 const crimeaOffsetMilliseconds = 3 * 60 * 60 * 1_000;
@@ -41,7 +41,7 @@ export function normalizeRecommendationRequest(
   const window = visitWindows[request.time];
 
   return {
-    origin: recommendationOrigins[request.origin],
+    origin: normalizeRecommendationOrigin(request.origin),
     date: request.date,
     forecastDays:
       request.date === today ? 1 : request.date === tomorrow ? 2 : 3,

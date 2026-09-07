@@ -1,10 +1,11 @@
-import type { RecommendationRequest } from "@kuda-krym/contracts";
+import type { RecommendationOriginCode } from "@kuda-krym/contracts";
 
 import type { RecommendationOrigin } from "./recommendation-context.js";
 
-type OriginCode = RecommendationRequest["origin"];
-
-export const recommendationOrigins: Record<OriginCode, RecommendationOrigin> = {
+export const recommendationOrigins: Record<
+  RecommendationOriginCode,
+  RecommendationOrigin
+> = {
   simferopol: {
     code: "simferopol",
     name: "Симферополь",

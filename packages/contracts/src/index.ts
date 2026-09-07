@@ -81,12 +81,14 @@ export {
 } from "./recommendations/departure-location-search.contract.js";
 export {
   recommendationDateSchema,
+  recommendationOriginCodeSchema,
   recommendationOriginSchema,
   recommendationPrioritySchema,
   recommendationMaxTravelMinutesSchema,
   recommendationRequestSchema,
   recommendationSurfaceSchema,
   recommendationTimeSchema,
+  type RecommendationOriginCode,
   type RecommendationRequest,
 } from "./recommendations/recommendation-request.contract.js";
 export {

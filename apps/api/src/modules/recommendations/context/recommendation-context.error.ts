@@ -6,3 +6,10 @@ export class UnsupportedRecommendationDateError extends Error {
     this.name = "UnsupportedRecommendationDateError";
   }
 }
+
+export class UnsupportedRecommendationOriginError extends Error {
+  public constructor(public readonly originId: string) {
+    super(`Recommendation origin ${originId} must be located in Crimea`);
+    this.name = "UnsupportedRecommendationOriginError";
+  }
+}

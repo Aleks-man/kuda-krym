@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { departureLocationSchema } from "./departure-location-search.contract.js";
 
-export const recommendationOriginSchema = z.enum([
+export const recommendationOriginCodeSchema = z.enum([
   "simferopol",
   "sevastopol",
   "yalta",
@@ -17,6 +18,10 @@ export const recommendationOriginSchema = z.enum([
   "armyansk",
   "chernomorskoe",
   "shchelkino",
+]);
+export const recommendationOriginSchema = z.union([
+  recommendationOriginCodeSchema,
+  departureLocationSchema,
 ]);
 
 export const recommendationDateSchema = z.iso.date();
@@ -51,4 +56,7 @@ export const recommendationRequestSchema = z
 
 export type RecommendationRequest = z.infer<
   typeof recommendationRequestSchema
+>;
+export type RecommendationOriginCode = z.infer<
+  typeof recommendationOriginCodeSchema
 >;

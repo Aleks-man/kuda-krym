@@ -260,6 +260,25 @@ describe("API contracts", () => {
     expect(result.origin).toBe("dzhankoy");
   });
 
+  it("accepts a searched departure location", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: {
+        id: "osm:N:100",
+        name: "Николаевка",
+        context: "Симферопольский район · Крым",
+        latitude: 44.966,
+        longitude: 33.614,
+      },
+      date: "2026-08-20",
+      time: "day",
+      surface: "any",
+      priority: "comfort",
+      maxTravelMinutes: 120,
+    });
+
+    expect(result.origin).toMatchObject({ name: "Николаевка" });
+  });
+
   it("accepts a combined beach forecast", () => {
     const result = beachForecastSchema.parse({
       beach: {
