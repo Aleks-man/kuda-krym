@@ -7,6 +7,16 @@ export const recommendationOriginSchema = z.enum([
   "evpatoria",
   "feodosia",
   "kerch",
+  "alushta",
+  "sudak",
+  "saki",
+  "bakhchisaray",
+  "dzhankoy",
+  "belogorsk",
+  "krasnoperekopsk",
+  "armyansk",
+  "chernomorskoe",
+  "shchelkino",
 ]);
 
 export const recommendationDateSchema = z.iso.date();

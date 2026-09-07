@@ -247,6 +247,19 @@ describe("API contracts", () => {
     expect(result.time).toBe("all_day");
   });
 
+  it("accepts an expanded departure location", () => {
+    const result = recommendationRequestSchema.parse({
+      origin: "dzhankoy",
+      date: "2026-08-20",
+      time: "day",
+      surface: "any",
+      priority: "comfort",
+      maxTravelMinutes: 180,
+    });
+
+    expect(result.origin).toBe("dzhankoy");
+  });
+
   it("accepts a combined beach forecast", () => {
     const result = beachForecastSchema.parse({
       beach: {

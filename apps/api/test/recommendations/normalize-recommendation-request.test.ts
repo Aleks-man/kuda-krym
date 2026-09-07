@@ -78,6 +78,27 @@ describe("normalizeRecommendationRequest", () => {
     });
   });
 
+  it("resolves an expanded departure location", () => {
+    const context = normalizeRecommendationRequest(
+      {
+        origin: "dzhankoy",
+        date: "2026-08-20",
+        time: "day",
+        surface: "any",
+        priority: "comfort",
+        maxTravelMinutes: 180,
+      },
+      now,
+    );
+
+    expect(context.origin).toEqual({
+      code: "dzhankoy",
+      name: "Джанкой",
+      latitude: 45.7131,
+      longitude: 34.3927,
+    });
+  });
+
   it("uses three forecast days for the day after tomorrow", () => {
     const context = normalizeRecommendationRequest(
       {

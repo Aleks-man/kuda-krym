@@ -5,6 +5,16 @@ export const originOptions = [
   { value: "evpatoria", label: "Евпатория" },
   { value: "feodosia", label: "Феодосия" },
   { value: "kerch", label: "Керчь" },
+  { value: "alushta", label: "Алушта" },
+  { value: "sudak", label: "Судак" },
+  { value: "saki", label: "Саки" },
+  { value: "bakhchisaray", label: "Бахчисарай" },
+  { value: "dzhankoy", label: "Джанкой" },
+  { value: "belogorsk", label: "Белогорск" },
+  { value: "krasnoperekopsk", label: "Красноперекопск" },
+  { value: "armyansk", label: "Армянск" },
+  { value: "chernomorskoe", label: "Черноморское" },
+  { value: "shchelkino", label: "Щёлкино" },
 ] as const;
 
 export const dateOptions = [
