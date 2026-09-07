@@ -32,15 +32,17 @@
 }
 
 .brandMark {
-  display: grid;
   width: 34px;
   height: 34px;
-  place-items: center;
-  border-radius: 11px;
-  background: var(--foreground);
-  color: white;
-  font-size: 15px;
-  letter-spacing: 0;
+  flex: 0 0 auto;
+}
+
+.brandName {
+  background: linear-gradient(105deg, #153f42 5%, #087f8c 55%, #20aaa3 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .navigation {
@@ -76,7 +78,7 @@
     width: min(100% - 20px, 1180px);
   }
 
-  .brand > span:last-child {
+  .brandName {
     display: none;
   }
 

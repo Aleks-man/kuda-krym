@@ -20,6 +20,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteName}`,
   },
   description: defaultSiteDescription,
+  icons: {
+    icon: [{ url: "/brand/kuda-krym-mark.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/kuda-krym-mark.svg",
+  },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

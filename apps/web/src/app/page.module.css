@@ -68,11 +68,39 @@
 }
 
 .liveDot {
-  width: 7px;
-  height: 7px;
+  position: relative;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
   border-radius: 50%;
-  background: #12a594;
-  box-shadow: 0 0 0 5px rgb(18 165 148 / 12%);
+  background: #00b99f;
+  box-shadow: 0 0 8px rgb(0 185 159 / 70%);
+}
+
+.liveDot::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: 2px solid rgb(0 185 159 / 62%);
+  border-radius: inherit;
+  animation: live-pulse 1.8s ease-out infinite;
+  content: "";
+}
+
+@keyframes live-pulse {
+  0% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
 }
 
 .title {
@@ -168,6 +196,7 @@
   display: flex;
   align-items: start;
   justify-content: space-between;
+  gap: 24px;
 }
 
 .previewLabel {
@@ -185,13 +214,35 @@
   letter-spacing: -0.05em;
 }
 
+.scoreSummary {
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+}
+
+.scoreSummary > span {
+  max-width: 110px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .score {
   display: grid;
   width: 72px;
   height: 72px;
+  flex: 0 0 auto;
   place-content: center;
   border-radius: 50%;
-  background: var(--foreground);
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 24%), transparent 38%),
+    hsl(calc(18 + var(--score) * 1.62) 52% 36%);
+  box-shadow:
+    0 12px 24px hsl(calc(18 + var(--score) * 1.62) 42% 30% / 24%),
+    inset 0 1px rgb(255 255 255 / 28%);
   color: white;
   text-align: center;
 }
@@ -201,10 +252,11 @@
   line-height: 0.9;
 }
 
-.score span {
+.score small {
   margin-top: 4px;
-  color: #b9cfca;
+  color: rgb(255 255 255 / 76%);
   font-size: 9px;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -295,5 +347,13 @@
 
   .conditions div {
     padding: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liveDot::after {
+    animation: none;
+    opacity: 0.35;
+    transform: translate(-50%, -50%);
   }
 }
