@@ -1,9 +1,10 @@
 "use client";
 
 import type { RecommendationResponse } from "@kuda-krym/contracts";
-import { useState, type FormEvent } from "react";
+import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { submitRecommendations } from "../../api/submit-recommendations";
 import { createRecommendationRequest } from "../../model/recommendation-form";
+import { formatRecommendationDate } from "../../model/crimea-date";
 import {
   companyOptions,
   dateOptions,
@@ -21,6 +22,12 @@ export function RecommendationPreferences() {
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const canShowCurrentDates = useSyncExternalStore(
+    subscribeToClientState,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+  const currentDate = canShowCurrentDates ? new Date() : null;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,10 +87,15 @@ export function RecommendationPreferences() {
 
         <fieldset className={styles.fieldset}>
           <legend>Когда</legend>
-          <div className={styles.twoColumns}>
+          <div className={styles.threeColumns}>
             {dateOptions.map((option, index) => (
               <PreferenceChoice
                 defaultChecked={index === 0}
+                detail={
+                  currentDate
+                    ? formatRecommendationDate(option.value, currentDate)
+                    : undefined
+                }
                 key={option.value}
                 label={option.label}
                 name="date"
@@ -179,4 +191,16 @@ export function RecommendationPreferences() {
       {result ? <RecommendationResults result={result} /> : null}
     </section>
   );
+}
+
+function subscribeToClientState() {
+  return () => undefined;
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
 }

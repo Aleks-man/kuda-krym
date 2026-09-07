@@ -62,6 +62,27 @@ describe("normalizeRecommendationRequest", () => {
     expect(context.priority).toBe("COMFORT");
   });
 
+  it("uses three forecast days for the day after tomorrow", () => {
+    const context = normalizeRecommendationRequest(
+      {
+        origin: "feodosia",
+        date: "2026-08-22",
+        time: "day",
+        company: "friends",
+        surface: "pebble",
+        priority: "warm_water",
+        maxTravelMinutes: 120,
+      },
+      now,
+    );
+
+    expect(context.forecastDays).toBe(3);
+    expect(context.visitWindow).toEqual({
+      startsAt: "2026-08-22T09:00:00.000Z",
+      endsAt: "2026-08-22T14:00:00.000Z",
+    });
+  });
+
   it("uses the Crimea calendar date around UTC midnight", () => {
     const context = normalizeRecommendationRequest(
       {
@@ -80,12 +101,12 @@ describe("normalizeRecommendationRequest", () => {
     expect(context.company).toBe("FRIENDS");
   });
 
-  it("rejects a date outside today and tomorrow", () => {
+  it("rejects a date outside the three-day forecast window", () => {
     expect(() =>
       normalizeRecommendationRequest(
         {
           origin: "sevastopol",
-          date: "2026-08-22",
+          date: "2026-08-23",
           time: "day",
           company: "alone",
           surface: "any",

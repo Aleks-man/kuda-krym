@@ -10,6 +10,7 @@ export const originOptions = [
 export const dateOptions = [
   { value: "today", label: "Сегодня" },
   { value: "tomorrow", label: "Завтра" },
+  { value: "dayAfterTomorrow", label: "Послезавтра" },
 ] as const;
 
 export const travelTimeOptions = [

@@ -2,7 +2,10 @@ import {
   recommendationRequestSchema,
   type RecommendationRequest,
 } from "@kuda-krym/contracts";
-import { resolveRecommendationDate } from "./crimea-date";
+import {
+  parseRelativeRecommendationDate,
+  resolveRecommendationDate,
+} from "./crimea-date";
 
 export function createRecommendationRequest(
   formData: FormData,
@@ -12,7 +15,7 @@ export function createRecommendationRequest(
   return recommendationRequestSchema.parse({
     origin: formData.get("origin"),
     date: resolveRecommendationDate(
-      relativeDate === "tomorrow" ? "tomorrow" : "today",
+      parseRelativeRecommendationDate(relativeDate),
     ),
     time: formData.get("time"),
     company: formData.get("company"),

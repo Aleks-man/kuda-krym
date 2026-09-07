@@ -32,8 +32,15 @@ export function normalizeRecommendationRequest(
 ): RecommendationContext {
   const today = getCrimeaDate(now);
   const tomorrow = getCrimeaDate(new Date(now.getTime() + dayMilliseconds));
+  const dayAfterTomorrow = getCrimeaDate(
+    new Date(now.getTime() + 2 * dayMilliseconds),
+  );
 
-  if (request.date !== today && request.date !== tomorrow) {
+  if (
+    request.date !== today &&
+    request.date !== tomorrow &&
+    request.date !== dayAfterTomorrow
+  ) {
     throw new UnsupportedRecommendationDateError(request.date);
   }
 
@@ -42,7 +49,8 @@ export function normalizeRecommendationRequest(
   return {
     origin: recommendationOrigins[request.origin],
     date: request.date,
-    forecastDays: request.date === today ? 1 : 2,
+    forecastDays:
+      request.date === today ? 1 : request.date === tomorrow ? 2 : 3,
     visitWindow: {
       startsAt: toUtc(request.date, window.startsAt),
       endsAt: toUtc(request.date, window.endsAt),
