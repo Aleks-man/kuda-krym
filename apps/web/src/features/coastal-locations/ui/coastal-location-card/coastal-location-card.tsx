@@ -31,9 +31,6 @@ export function CoastalLocationCard({ location }: CoastalLocationCardProps) {
         </span>
         <strong>{location.name}</strong>
       </span>
-      <span className={styles.arrow} aria-hidden="true">
-        →
-      </span>
     </Link>
   );
 }
