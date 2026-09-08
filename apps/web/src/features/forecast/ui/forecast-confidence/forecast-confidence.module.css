@@ -18,20 +18,23 @@
 }
 
 .score {
-  display: flex;
-  align-items: start;
+  display: grid;
+  width: 66px;
+  height: 66px;
+  place-items: center;
   flex: 0 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 24%), transparent 38%),
+    hsl(calc(18 + var(--score) * 1.62) 52% 36%);
+  box-shadow:
+    0 10px 22px hsl(calc(18 + var(--score) * 1.62) 42% 30% / 22%),
+    inset 0 1px rgb(255 255 255 / 28%);
+  color: white;
 }
 
 .score strong {
-  font-size: clamp(38px, 6vw, 52px);
-  letter-spacing: -0.07em;
-  line-height: 0.85;
-}
-
-.score span {
-  margin: 1px 0 0 6px;
-  color: var(--accent-strong);
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }

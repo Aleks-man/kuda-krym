@@ -13,9 +13,8 @@ test("filters the published beach catalog by region", async ({ page }) => {
   await expect(page.getByText("Опубликовано: 50")).toBeVisible();
   await expect(page.getByRole("article")).toHaveCount(50);
 
-  await page.getByRole("combobox", { name: "Регион" }).selectOption(
-    "WEST_CRIMEA",
-  );
+  await page.getByRole("combobox", { name: "Регион" }).click();
+  await page.getByRole("option", { name: "Западный Крым" }).click();
 
   await expect
     .poll(() => new URL(page.url()).searchParams.get("region"))

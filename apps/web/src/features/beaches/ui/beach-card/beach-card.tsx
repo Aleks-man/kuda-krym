@@ -26,12 +26,6 @@ export function BeachCard({ beach }: BeachCardProps) {
         ) : (
           <span className={styles.fallback} aria-hidden="true" />
         )}
-        <span className={styles.shade} aria-hidden="true" />
-        <span className={styles.imageLabel}>
-          {beach.coverImage?.context === "COASTAL_LOCATION"
-            ? "Фото побережья"
-            : "Море рядом"}
-        </span>
       </div>
       <div className={styles.content}>
         <p className={styles.region}>{labels.region}</p>
@@ -44,13 +38,15 @@ export function BeachCard({ beach }: BeachCardProps) {
             ))}
           </ul>
         ) : null}
-        <Link
-          aria-label={`Подробнее о пляже ${beach.name}`}
-          className={styles.link}
-          href={`/beaches/${beach.slug}`}
-        >
-          Подробнее <span aria-hidden="true">→</span>
-        </Link>
+        <span className={styles.linkRow}>
+          <Link
+            aria-label={`Подробнее о пляже ${beach.name}`}
+            className={styles.link}
+            href={`/beaches/${beach.slug}`}
+          >
+            Подробнее <span aria-hidden="true">→</span>
+          </Link>
+        </span>
       </div>
     </article>
   );

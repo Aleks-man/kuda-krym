@@ -1,6 +1,7 @@
 .panel {
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+  overflow: visible;
   margin: 0 0 36px;
   padding: clamp(24px, 4vw, 38px);
   border: 1px solid rgb(255 255 255 / 82%);
@@ -53,56 +54,16 @@
   align-items: end;
 }
 
-.field {
-  display: grid;
-  gap: 8px;
-  min-width: 0;
-}
-
-.field span {
-  padding-left: 3px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 750;
-  letter-spacing: 0.035em;
-}
-
-.field select {
-  width: 100%;
-  min-height: 52px;
-  padding: 0 15px;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  outline: none;
-  background: rgb(255 255 255 / 88%);
-  color: var(--foreground);
-  font: inherit;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
-}
-
-.field select {
-  cursor: pointer;
-}
-
-.field select:focus {
-  border-color: var(--accent);
-  background: var(--surface);
-  box-shadow: 0 0 0 4px rgb(8 127 140 / 12%);
-}
-
 .actions {
   display: flex;
   gap: 10px;
   align-items: center;
-  min-height: 52px;
+  min-height: 66px;
 }
 
 .reset {
   display: inline-grid;
-  min-height: 52px;
+  min-height: 66px;
   padding: 0 20px;
   place-items: center;
   border-radius: 15px;

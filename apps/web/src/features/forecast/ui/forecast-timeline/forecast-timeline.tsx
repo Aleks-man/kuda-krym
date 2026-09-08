@@ -56,6 +56,15 @@ function ForecastHourCard({ hour }: Readonly<{ hour: ForecastHour }>) {
 
       <dl className={styles.metrics}>
         <div>
+          <dt>Вода</dt>
+          <dd>
+            {formatMeasurement(
+              hour.marine.seaSurfaceTemperatureCelsius,
+              "°C",
+            )}
+          </dd>
+        </div>
+        <div>
           <dt>Волна</dt>
           <dd>{formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</dd>
         </div>
@@ -70,7 +79,7 @@ function ForecastHourCard({ hour }: Readonly<{ hour: ForecastHour }>) {
       </dl>
 
       <div className={styles.confidence}>
-        <span>Уверенность</span>
+        <span>Надёжность прогноза</span>
         <strong>{hour.confidence.score}%</strong>
       </div>
     </article>

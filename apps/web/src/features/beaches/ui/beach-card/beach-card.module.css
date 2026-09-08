@@ -1,5 +1,6 @@
 .card {
   position: relative;
+  display: flex;
   content-visibility: auto;
   contain-intrinsic-size: auto 420px;
   overflow: hidden;
@@ -7,6 +8,7 @@
   border-radius: 22px;
   background: var(--surface);
   box-shadow: 0 16px 44px rgb(22 48 43 / 7%);
+  flex-direction: column;
   transition: box-shadow 200ms ease, transform 200ms ease;
 }
 
@@ -22,13 +24,9 @@
 
 .visual {
   position: relative;
-  display: flex;
   min-height: 180px;
   overflow: hidden;
-  align-items: flex-end;
-  padding: 20px;
   background: #1b6569;
-  color: white;
   isolation: isolate;
 }
 
@@ -54,27 +52,11 @@
     linear-gradient(160deg, #bde8e5 0%, #68bac1 52%, #217b91 53%, #15546b 100%);
 }
 
-.shade {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 54%, rgb(5 31 33 / 62%));
-}
-
-.imageLabel {
-  padding: 7px 10px;
-  border: 1px solid rgb(255 255 255 / 28%);
-  border-radius: 999px;
-  background: rgb(7 43 46 / 28%);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  backdrop-filter: blur(8px);
-}
-
 .content {
+  display: flex;
+  flex: 1;
   padding: 24px;
+  flex-direction: column;
 }
 
 .region {
@@ -87,21 +69,28 @@
 }
 
 .title {
+  display: -webkit-box;
+  min-height: 55px;
+  overflow: hidden;
   margin: 0;
   font-size: 24px;
   letter-spacing: -0.025em;
   line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .locality {
+  min-height: 22px;
   margin: 8px 0 0;
   color: var(--muted);
 }
 
 .facts {
   display: grid;
+  min-height: 60px;
   gap: 8px;
-  margin: 22px 0;
+  margin: 22px 0 0;
   padding: 0;
   color: #334e49;
   font-size: 14px;
@@ -124,6 +113,13 @@
   color: var(--accent-strong);
   font-size: 12px;
   font-weight: 750;
+}
+
+.linkRow {
+  display: flex;
+  margin-top: auto;
+  padding-top: 26px;
+  justify-content: flex-end;
 }
 
 .link::after {

@@ -4,7 +4,7 @@ import type {
 } from "@kuda-krym/contracts";
 
 import {
-  formatForecastDate,
+  formatForecastUpdatedAt,
   formatMeasurement,
   selectUpcomingHours,
 } from "../../model/forecast-view";
@@ -34,6 +34,7 @@ export function ForecastSummary({
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
   const current = hours[0]!;
+  const sky = getSkyPresentation(current.weather.cloudCoverPercent);
 
   return (
     <section className={styles.section} aria-labelledby="forecast-title">
@@ -42,14 +43,32 @@ export function ForecastSummary({
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 id="forecast-title">{title}</h2>
         </div>
-        <p className={styles.date}>{formatForecastDate(current.time)}</p>
       </div>
 
       <ForecastFreshnessNotice freshness={freshness} />
 
+      <p className={styles.updated}>
+        Обновлено{" "}
+        <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time>
+      </p>
+
       <div className={styles.now}>
         <div>
-          <span>{currentLabel}</span>
+          <span
+            aria-label={sky.label}
+            className={styles.weatherIcon}
+            data-sky={sky.variant}
+            role="img"
+          >
+            <i className={styles.sun} />
+            <i className={styles.cloud} />
+          </span>
+          <span className={styles.currentMeta}>
+            <b>{currentLabel}</b>
+            <span className={styles.skyStatus}>
+              {sky.label} · облачность {current.weather.cloudCoverPercent}%
+            </span>
+          </span>
           <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
         </div>
         <dl className={styles.summary}>
@@ -67,4 +86,16 @@ export function ForecastSummary({
       <ForecastProvenance generatedAt={generatedAt} />
     </section>
   );
+}
+
+function getSkyPresentation(cloudCoverPercent: number) {
+  if (cloudCoverPercent < 30) {
+    return { variant: "clear", label: "Ясно" } as const;
+  }
+
+  if (cloudCoverPercent < 70) {
+    return { variant: "partly-cloudy", label: "Переменная облачность" } as const;
+  }
+
+  return { variant: "cloudy", label: "Облачно" } as const;
 }

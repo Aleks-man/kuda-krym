@@ -120,7 +120,8 @@
 .metrics dt,
 .confidence span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10px;
+  line-height: 1.25;
 }
 
 .metrics dd,

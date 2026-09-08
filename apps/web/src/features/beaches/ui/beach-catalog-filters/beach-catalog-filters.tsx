@@ -4,8 +4,9 @@ import type {
 } from "@kuda-krym/contracts";
 import Link from "next/link";
 
+import { SelectField } from "@/shared/ui/select-field/select-field";
+
 import { getBeachRegionLabel } from "../../model/beach-labels";
-import { AutoSubmitSelect } from "./auto-submit-select";
 import styles from "./beach-catalog-filters.module.css";
 
 type BeachCatalogFiltersProps = Readonly<{
@@ -38,17 +39,20 @@ export function BeachCatalogFilters({
         method="get"
         role="search"
       >
-        <label className={styles.field}>
-          <span>Регион</span>
-          <AutoSubmitSelect defaultValue={query.region ?? ""} name="region">
-            <option value="">Весь Крым</option>
-            {options.regions.map((region) => (
-              <option key={region} value={region}>
-                {getBeachRegionLabel(region)}
-              </option>
-            ))}
-          </AutoSubmitSelect>
-        </label>
+        <SelectField
+          initialValue={query.region ?? ""}
+          key={query.region ?? "all"}
+          label="Регион"
+          name="region"
+          options={[
+            { value: "", label: "Весь Крым" },
+            ...options.regions.map((region) => ({
+              value: region,
+              label: getBeachRegionLabel(region),
+            })),
+          ]}
+          submitOnChange
+        />
 
         {hasActiveFilters ? (
           <div className={styles.actions}>
