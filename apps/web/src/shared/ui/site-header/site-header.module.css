@@ -34,6 +34,18 @@
   font-size: 20px;
   font-weight: 850;
   letter-spacing: -0.035em;
+  border-radius: 10px;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.brand:hover {
+  opacity: 0.82;
+  transform: translateY(-1px);
+}
+
+.brand:focus-visible {
+  outline: 3px solid rgb(25 126 126 / 22%);
+  outline-offset: 4px;
 }
 
 .brandMark {
@@ -61,8 +73,12 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: calc(50% - 1px);
+  border: 1px solid rgb(15 126 124 / 16%);
   border-radius: 11px;
-  background: var(--accent-soft);
+  background: linear-gradient(135deg, rgb(119 216 204 / 32%), rgb(89 194 190 / 20%));
+  box-shadow:
+    0 5px 14px rgb(24 117 116 / 10%),
+    inset 0 1px rgb(255 255 255 / 62%);
   opacity: 1;
   pointer-events: none;
   transition:
@@ -100,7 +116,8 @@
 }
 
 .navLink[aria-current="page"] {
-  color: var(--accent-strong);
+  color: #075f64;
+  font-weight: 800;
 }
 
 @media (max-width: 520px) {
@@ -116,5 +133,11 @@
     min-width: 76px;
     padding-inline: 10px;
     font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand {
+    transition: none;
   }
 }

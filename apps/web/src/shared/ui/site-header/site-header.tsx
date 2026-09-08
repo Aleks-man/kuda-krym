@@ -8,7 +8,11 @@ export function SiteHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Link className={styles.brand} href="/">
+        <Link
+          aria-label="На главную"
+          className={styles.brand}
+          href="/"
+        >
           <Image
             alt=""
             aria-hidden="true"
