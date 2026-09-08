@@ -12,7 +12,8 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
 
   await page.goto("/");
 
-  await page.getByLabel("Откуда выезжаем").selectOption("yalta");
+  await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
+  await page.getByRole("option", { name: /^Ялта/ }).first().click();
   await page
     .getByRole("combobox", { name: "Максимум в дороге" })
     .click();
@@ -29,7 +30,7 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
   await page.getByRole("button", { name: "Подобрать пляж" }).click();
 
   await expect(
-    page.getByRole("heading", { level: 4, name: "Приморский пляж Ялты" }),
+    page.getByRole("heading", { level: 4, name: "Ялта" }),
   ).toBeVisible();
   expect(submittedRequest).toMatchObject({
     origin: "yalta",

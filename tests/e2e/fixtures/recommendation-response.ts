@@ -8,6 +8,7 @@ export const recommendationResponseFixture = {
         id: "f1f7c831-965f-46bb-9d34-2265ea080c72",
         slug: "yalta-primorsky-beach",
         name: "Приморский пляж Ялты",
+        coastalLocation: { slug: "yalta", name: "Ялта" },
         coordinates: { latitude: 44.495, longitude: 34.166 },
         surface: "PEBBLE",
         childSuitability: "UNKNOWN",

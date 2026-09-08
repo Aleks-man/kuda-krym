@@ -13,6 +13,7 @@ export function mapRecommendationResponse(
         id: recommendation.candidate.id,
         slug: recommendation.candidate.slug,
         name: recommendation.candidate.name,
+        coastalLocation: recommendation.candidate.coastalLocation ?? null,
         coordinates: {
           latitude: recommendation.candidate.latitude,
           longitude: recommendation.candidate.longitude,

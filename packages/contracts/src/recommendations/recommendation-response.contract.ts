@@ -8,6 +8,13 @@ const recommendationItemSchema = z.object({
     id: z.uuid(),
     slug: z.string().min(1),
     name: z.string().min(1),
+    coastalLocation: z
+      .object({
+        slug: z.string().min(1),
+        name: z.string().min(1),
+      })
+      .nullable()
+      .optional(),
     coordinates: z.object({
       latitude: z.number().min(-90).max(90),
       longitude: z.number().min(-180).max(180),

@@ -1,9 +1,6 @@
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 import Link from "next/link";
-import {
-  formatMeasurement,
-  surfaceLabels,
-} from "../../model/recommendation-labels";
+import { formatMeasurement } from "../../model/recommendation-labels";
 import { RecommendationTravel } from "../recommendation-travel/recommendation-travel";
 import styles from "./recommendation-results.module.css";
 
@@ -20,10 +17,6 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
     );
   }
 
-  const comparisonUrl = `/compare?beaches=${result.data
-    .map(({ beach }) => beach.slug)
-    .join(",")}`;
-
   return (
     <section
       aria-labelledby="recommendation-results-title"
@@ -32,8 +25,8 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
     >
       <header>
         <p>Результат подбора</p>
-        <h3 id="recommendation-results-title">Лучшие варианты на выбранное время</h3>
-        <span>Сравнили {result.meta.candidateCount} пляжей по погоде и морю.</span>
+        <h3 id="recommendation-results-title">Куда лучше поехать к морю</h3>
+        <span>Проверили {result.meta.candidateCount} вариантов по дороге, погоде и морю.</span>
       </header>
       <div className={styles.grid}>
         {result.data.map((item) => (
@@ -42,8 +35,8 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
               <span>№ {item.position}</span>
               <strong>{item.score}<small>/100</small></strong>
             </div>
-            <h4>{item.beach.name}</h4>
-            <p>{surfaceLabels[item.beach.surface]} · уверенность {item.confidencePercent}%</p>
+            <h4>{item.beach.coastalLocation?.name ?? item.beach.name}</h4>
+            <p>{item.beach.name} · уверенность {item.confidencePercent}%</p>
             <RecommendationTravel travel={item.travel} />
             <dl>
               <div><dt>Море</dt><dd>{formatMeasurement(item.conditions.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
@@ -51,15 +44,22 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
               <div><dt>Воздух</dt><dd>{formatMeasurement(item.conditions.airTemperatureCelsius, "°C")}</dd></div>
               <div><dt>Ветер</dt><dd>{formatMeasurement(item.conditions.windSpeedMetersPerSecond, "м/с", 1)}</dd></div>
             </dl>
-            <Link href={`/beaches/${item.beach.slug}`}>Открыть пляж <span>→</span></Link>
+            <Link
+              href={
+                item.beach.coastalLocation
+                  ? `/coast/${item.beach.coastalLocation.slug}`
+                  : `/beaches/${item.beach.slug}`
+              }
+            >
+              {item.beach.coastalLocation ? "Открыть прогноз" : "Открыть пляж"}{" "}
+              <span>→</span>
+            </Link>
           </article>
         ))}
       </div>
-      {result.data.length >= 2 ? (
-        <Link className={styles.compare} href={comparisonUrl}>
-          Сравнить эти пляжи <span>→</span>
-        </Link>
-      ) : null}
+      <Link className={styles.more} href="/coast">
+        Другие варианты у моря <span>→</span>
+      </Link>
     </section>
   );
 }

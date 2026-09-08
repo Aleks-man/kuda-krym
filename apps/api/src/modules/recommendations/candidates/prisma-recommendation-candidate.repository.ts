@@ -18,6 +18,9 @@ export class PrismaRecommendationCandidateRepository
         id: true,
         slug: true,
         name: true,
+        coastalLocation: {
+          select: { slug: true, name: true },
+        },
         latitude: true,
         longitude: true,
         profile: {
@@ -36,6 +39,7 @@ export class PrismaRecommendationCandidateRepository
         id: beach.id,
         slug: beach.slug,
         name: beach.name,
+        coastalLocation: beach.coastalLocation,
         latitude: beach.latitude.toNumber(),
         longitude: beach.longitude.toNumber(),
         surface: beach.profile.surface,
