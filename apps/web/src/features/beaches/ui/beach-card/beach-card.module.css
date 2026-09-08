@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   content-visibility: auto;
   contain-intrinsic-size: auto 420px;
   overflow: hidden;
@@ -6,6 +7,17 @@
   border-radius: 22px;
   background: var(--surface);
   box-shadow: 0 16px 44px rgb(22 48 43 / 7%);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 22px 52px rgb(22 48 43 / 13%);
+  transform: translateY(-3px);
+}
+
+.card:focus-within {
+  outline: 3px solid rgb(25 126 126 / 28%);
+  outline-offset: 3px;
 }
 
 .visual {
@@ -114,10 +126,22 @@
   font-weight: 750;
 }
 
+.link::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
 .link:hover span { transform: translateX(3px); }
 .link span { transition: transform 160ms ease; }
 
 @media (prefers-reduced-motion: reduce) {
+  .card,
   .image,
   .link span {
     transition: none;

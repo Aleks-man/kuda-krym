@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { placeImageSchema } from "../media/place-image.contract.js";
 
 const nullableMeasurement = z.number().nullable();
 
@@ -12,6 +13,7 @@ const recommendationItemSchema = z.object({
       .object({
         slug: z.string().min(1),
         name: z.string().min(1),
+        coverImage: placeImageSchema.nullable(),
       })
       .nullable()
       .optional(),

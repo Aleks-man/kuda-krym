@@ -44,7 +44,11 @@ export function BeachCard({ beach }: BeachCardProps) {
             ))}
           </ul>
         ) : null}
-        <Link className={styles.link} href={`/beaches/${beach.slug}`}>
+        <Link
+          aria-label={`Подробнее о пляже ${beach.name}`}
+          className={styles.link}
+          href={`/beaches/${beach.slug}`}
+        >
           Подробнее <span aria-hidden="true">→</span>
         </Link>
       </div>

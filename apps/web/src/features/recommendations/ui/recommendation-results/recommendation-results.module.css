@@ -3,17 +3,30 @@
 .results h3 { margin: 0; font-size: clamp(26px, 4vw, 38px); letter-spacing: -.04em; }
 .results header > span { display: block; margin-top: 8px; color: var(--muted); }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.card { display: flex; min-width: 0; padding: 20px; border: 1px solid rgb(255 255 255 / 85%); border-radius: 22px; background: rgb(255 255 255 / 76%); box-shadow: 0 16px 40px rgb(19 77 80 / 8%); flex-direction: column; }
-.cardHeader { display: flex; align-items: center; justify-content: space-between; color: var(--accent); font-size: 12px; font-weight: 800; }
-.cardHeader strong { color: var(--foreground); font-size: 26px; letter-spacing: -.04em; }
-.cardHeader small { color: var(--muted); font-size: 11px; }
-.card h4 { margin: 16px 0 6px; font-size: 21px; }
+.card { position: relative; display: flex; min-width: 0; overflow: hidden; padding: 190px 20px 20px; border: 1px solid rgb(255 255 255 / 85%); border-radius: 22px; background: rgb(255 255 255 / 82%); box-shadow: 0 16px 40px rgb(19 77 80 / 10%); flex-direction: column; transition: box-shadow 200ms ease, transform 200ms ease; }
+.card:hover { box-shadow: 0 22px 48px rgb(19 77 80 / 16%); transform: translateY(-3px); }
+.card:focus-within { outline: 3px solid rgb(25 126 126 / 28%); outline-offset: 3px; }
+.visual { position: absolute; top: 0; right: 0; left: 0; height: 170px; overflow: hidden; background: #397f83; }
+.image, .imageFallback { position: absolute; inset: 0; }
+.image { object-fit: cover; transition: transform 500ms cubic-bezier(.2, .7, .2, 1); }
+.card:hover .image { transform: scale(1.035); }
+.imageFallback { background: radial-gradient(circle at 76% 22%, rgb(255 215 137 / 58%), transparent 30%), linear-gradient(145deg, #70bec0, #195b61 74%); }
+.imageShade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(5 35 38 / 8%), rgb(5 35 38 / 58%)); }
+.cardHeader { position: absolute; z-index: 1; top: 14px; right: 14px; left: 14px; display: flex; align-items: start; justify-content: space-between; color: white; font-size: 11px; font-weight: 800; }
+.position { padding: 7px 10px; border: 1px solid rgb(255 255 255 / 28%); border-radius: 999px; background: rgb(8 42 44 / 32%); box-shadow: inset 0 1px rgb(255 255 255 / 14%); backdrop-filter: blur(9px); text-transform: uppercase; }
+.score { display: grid; width: 64px; height: 64px; flex: 0 0 auto; place-content: center; border-radius: 50%; background: radial-gradient(circle at 35% 28%, rgb(255 255 255 / 24%), transparent 38%), hsl(calc(18 + var(--score) * 1.62) 52% 36%); box-shadow: 0 10px 22px hsl(calc(18 + var(--score) * 1.62) 42% 30% / 24%), inset 0 1px rgb(255 255 255 / 28%); color: white; text-align: center; }
+.score strong { font-size: 23px; line-height: .9; letter-spacing: -.04em; }
+.score small { margin-top: 4px; color: rgb(255 255 255 / 76%); font-size: 8px; font-weight: 700; text-transform: uppercase; }
+.card h4 { margin: 0 0 6px; font-size: 24px; letter-spacing: -.035em; }
 .card > p { margin: 0; color: var(--muted); font-size: 13px; }
-.card dl { display: grid; margin: 20px 0; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.card dl { display: grid; margin: 20px 0; padding: 0 14px; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .card dl div { display: grid; gap: 3px; }
 .card dt { color: var(--muted); font-size: 11px; }
 .card dd { margin: 0; font-size: 13px; font-weight: 750; }
-.card a { display: flex; align-items: center; justify-content: space-between; margin-top: auto; color: var(--foreground); font-size: 13px; font-weight: 800; text-decoration: none; }
+.cardLink { display: flex; align-items: center; justify-content: space-between; margin-top: auto; color: var(--foreground); font-size: 13px; font-weight: 800; text-decoration: none; }
+.cardLink::after { position: absolute; z-index: 2; inset: 0; border-radius: inherit; content: ""; }
+.cardLink:focus-visible { outline: none; }
 .empty { grid-column: 1 / -1; margin-top: 16px; padding: 22px; border-radius: 18px; background: rgb(255 255 255 / 65%); color: var(--muted); }
 .more { display: flex; align-items: center; justify-content: space-between; width: fit-content; min-width: 230px; padding: 14px 18px; border-radius: 14px; background: var(--foreground); color: white; font-size: 13px; font-weight: 800; text-decoration: none; }
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .card, .image { transition: none; } }

@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   display: flex;
   gap: 32px;
   align-items: center;
@@ -9,6 +10,17 @@
   border-radius: 24px;
   background: var(--surface);
   box-shadow: 0 16px 44px rgb(22 48 43 / 7%);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 22px 52px rgb(22 48 43 / 13%);
+  transform: translateY(-3px);
+}
+
+.card:focus-within {
+  outline: 3px solid rgb(25 126 126 / 28%);
+  outline-offset: 3px;
 }
 
 .card div {
@@ -41,7 +53,7 @@
   line-height: 1.6;
 }
 
-.card a {
+.cardLink {
   display: inline-flex;
   flex: none;
   gap: 10px;
@@ -54,9 +66,26 @@
   font-weight: 800;
 }
 
+.cardLink::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+}
+
+.cardLink:focus-visible {
+  outline: none;
+}
+
 @media (max-width: 760px) {
   .card {
     align-items: start;
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
   }
 }

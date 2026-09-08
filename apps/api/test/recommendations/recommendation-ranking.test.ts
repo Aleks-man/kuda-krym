@@ -131,7 +131,11 @@ function createSummary(
       slug,
       name: slug,
       coastalLocation: coastalLocationSlug
-        ? { slug: coastalLocationSlug, name: coastalLocationSlug }
+        ? {
+            slug: coastalLocationSlug,
+            name: coastalLocationSlug,
+            coverImage: null,
+          }
         : null,
       latitude: 44.5,
       longitude: 34,
