@@ -22,7 +22,7 @@ test("shows verified beach media and a three-day forecast", async ({ page }) => 
       name: "Прогноз на ближайшие часы",
     }),
   ).toBeVisible();
-  await expect(forecast.getByText("Сейчас рядом с пляжем")).toBeVisible();
+  await expect(forecast.getByText("Пляж Поповка", { exact: true })).toBeVisible();
   await expect(forecast.getByText("25 °C", { exact: true })).toBeVisible();
   await expect(forecast.getByText("0.3 м", { exact: true }).first()).toBeVisible();
   await expect(

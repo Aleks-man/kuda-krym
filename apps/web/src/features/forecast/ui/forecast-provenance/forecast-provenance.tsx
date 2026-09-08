@@ -34,6 +34,9 @@ export function ForecastProvenance({ generatedAt }: ForecastProvenanceProps) {
             </li>
           ))}
         </ul>
+        <span className={styles.models}>
+          <b>Модели погоды:</b> ECMWF IFS, DWD ICON, NOAA GFS
+        </span>
       </div>
       <p>
         Данные рассчитываются по численным моделям и могут отличаться от фактических

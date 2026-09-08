@@ -3,6 +3,7 @@ import type {
   ForecastHour,
 } from "@kuda-krym/contracts";
 
+import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import {
   formatForecastUpdatedAt,
   formatMeasurement,
@@ -34,7 +35,7 @@ export function ForecastSummary({
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
   const current = hours[0]!;
-  const sky = getSkyPresentation(current.weather.cloudCoverPercent);
+  const sky = getSkyPresentation(current);
 
   return (
     <section className={styles.section} aria-labelledby="forecast-title">
@@ -61,6 +62,10 @@ export function ForecastSummary({
             role="img"
           >
             <i className={styles.sun} />
+            <svg aria-hidden="true" className={styles.moon} viewBox="0 0 32 32">
+              <path d="M24.8 21.6A11.3 11.3 0 0 1 10.4 7.2 11.4 11.4 0 1 0 24.8 21.6Z" />
+              <path className={styles.moonStar} d="m24.7 5 .8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8.8-1.8Zm3.1 7.8.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5.5-1.1Z" />
+            </svg>
             <i className={styles.cloud} />
           </span>
           <span className={styles.currentMeta}>
@@ -88,14 +93,17 @@ export function ForecastSummary({
   );
 }
 
-function getSkyPresentation(cloudCoverPercent: number) {
+function getSkyPresentation(hour: ForecastHour) {
+  const cloudCoverPercent = hour.weather.cloudCoverPercent;
+  const isNight = !isCrimeaDaylight(hour.time);
+
   if (cloudCoverPercent < 30) {
-    return { variant: "clear", label: "Ясно" } as const;
+    return { variant: isNight ? "clear-night" : "clear", label: "Ясно" } as const;
   }
 
   if (cloudCoverPercent < 70) {
-    return { variant: "partly-cloudy", label: "Переменная облачность" } as const;
+    return { variant: isNight ? "partly-cloudy-night" : "partly-cloudy", label: "Переменная облачность" } as const;
   }
 
-  return { variant: "cloudy", label: "Облачно" } as const;
+  return { variant: isNight ? "cloudy-night" : "cloudy", label: "Облачно" } as const;
 }
