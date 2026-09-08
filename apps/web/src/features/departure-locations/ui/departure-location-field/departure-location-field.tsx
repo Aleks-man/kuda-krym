@@ -121,7 +121,7 @@ export function DepartureLocationField() {
               onMouseDown={(event) => event.preventDefault()}
               onMouseEnter={() => setActiveIndex(index)}
               role="option"
-              tabIndex={isOpen ? 0 : -1}
+              tabIndex={-1}
               type="button"
             >
               <strong>{option.label}</strong>

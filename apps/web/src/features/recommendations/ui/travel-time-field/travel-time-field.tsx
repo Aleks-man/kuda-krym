@@ -91,7 +91,7 @@ export function TravelTimeField() {
               onMouseDown={(event) => event.preventDefault()}
               onMouseEnter={() => setActiveIndex(index)}
               role="option"
-              tabIndex={isOpen ? 0 : -1}
+              tabIndex={-1}
               type="button"
             >
               {option.label}
