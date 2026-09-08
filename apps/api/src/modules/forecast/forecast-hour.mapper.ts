@@ -44,12 +44,34 @@ export function mapForecastHours(
   );
 }
 
+export function mapWeatherForecastHours(
+  weather: WeatherForecast,
+  options: ForecastHourMappingOptions = {},
+): ForecastHour[] {
+  const agreementByTime = new Map(
+    options.modelAgreements?.map((agreement) => [agreement.time, agreement.score]),
+  );
+  const evaluatedAt = options.evaluatedAt ?? new Date();
+
+  return weather.hourly.map((conditions) =>
+    mapForecastHour(
+      conditions,
+      undefined,
+      weather.generatedAt,
+      evaluatedAt,
+      agreementByTime.get(conditions.time),
+      false,
+    ),
+  );
+}
+
 function mapForecastHour(
   weather: HourlyWeather,
   marine: HourlyMarineConditions | undefined,
   generatedAt: string,
   evaluatedAt: Date,
   modelAgreementPercent: number | null | undefined,
+  includeMarine = true,
 ): ForecastHour {
   const seaSurfaceTemperatureCelsius =
     marine?.seaSurfaceTemperatureCelsius ?? null;
@@ -93,9 +115,9 @@ function mapForecastHour(
     confidence: calculateForecastConfidence({
       generatedAt,
       forecastTime: `${weather.time}Z`,
-      completenessPercent: Math.round(
-        (scores.sea.coveragePercent + scores.weather.coveragePercent) / 2,
-      ),
+      completenessPercent: includeMarine
+        ? Math.round((scores.sea.coveragePercent + scores.weather.coveragePercent) / 2)
+        : scores.weather.coveragePercent,
       ...(modelAgreementPercent === undefined
         ? {}
         : { modelAgreementPercent }),

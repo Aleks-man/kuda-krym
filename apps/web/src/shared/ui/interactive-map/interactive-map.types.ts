@@ -7,6 +7,7 @@ export type MapPoint = Readonly<{
   position: MapPosition;
   href?: string;
   actionLabel?: string;
+  variant?: "default" | "city";
 }>;
 
 export type InteractiveMapProps = Readonly<{

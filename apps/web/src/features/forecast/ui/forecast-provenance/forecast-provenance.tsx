@@ -3,6 +3,7 @@ import styles from "./forecast-provenance.module.css";
 
 type ForecastProvenanceProps = Readonly<{
   generatedAt: string;
+  showMarine?: boolean;
 }>;
 
 const sources = [
@@ -16,7 +17,7 @@ const sources = [
   },
 ] as const;
 
-export function ForecastProvenance({ generatedAt }: ForecastProvenanceProps) {
+export function ForecastProvenance({ generatedAt, showMarine = true }: ForecastProvenanceProps) {
   return (
     <aside className={styles.panel} aria-label="Источники и ограничения прогноза">
       <div>
@@ -26,7 +27,7 @@ export function ForecastProvenance({ generatedAt }: ForecastProvenanceProps) {
       <div>
         <span className={styles.label}>Источники</span>
         <ul>
-          {sources.map((source) => (
+          {sources.filter((source) => showMarine || !source.label.startsWith("Море")).map((source) => (
             <li key={source.href}>
               <a href={source.href} rel="noreferrer" target="_blank">
                 {source.label}
@@ -40,7 +41,7 @@ export function ForecastProvenance({ generatedAt }: ForecastProvenanceProps) {
       </div>
       <p>
         Данные рассчитываются по численным моделям и могут отличаться от фактических
-        условий. Морской прогноз не предназначен для навигации.
+        условий.{showMarine ? " Морской прогноз не предназначен для навигации." : ""}
       </p>
     </aside>
   );

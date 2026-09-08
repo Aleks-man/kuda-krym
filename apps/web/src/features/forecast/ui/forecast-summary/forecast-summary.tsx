@@ -22,6 +22,7 @@ type ForecastSummaryProps = Readonly<{
   generatedAt: string;
   freshness: ForecastFreshness;
   hours: ForecastHour[];
+  showMarine?: boolean;
   title: string;
 }>;
 
@@ -31,6 +32,7 @@ export function ForecastSummary({
   generatedAt,
   freshness,
   hours: forecastHours,
+  showMarine = true,
   title,
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
@@ -77,18 +79,20 @@ export function ForecastSummary({
           <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
         </div>
         <dl className={styles.summary}>
-          <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
-          <div><dt>Волна</dt><dd>{formatMeasurement(current.marine.waveHeightMeters, "м", 1)}</dd></div>
+          {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
+          {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(current.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
           <div><dt>Ветер</dt><dd>{formatMeasurement(current.weather.windSpeedMetersPerSecond, "м/с", 1)}</dd></div>
+          {!showMarine ? <div><dt>Порывы</dt><dd>{formatMeasurement(current.weather.windGustMetersPerSecond, "м/с", 1)}</dd></div> : null}
           <div><dt>Осадки</dt><dd>{current.weather.precipitationProbabilityPercent}%</dd></div>
+          {!showMarine ? <div><dt>Облачность</dt><dd>{current.weather.cloudCoverPercent}%</dd></div> : null}
         </dl>
       </div>
 
-      <ConditionScores scores={current.scores} />
+      {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} />
+      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} />
 
-      <ForecastProvenance generatedAt={generatedAt} />
+      <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
     </section>
   );
 }

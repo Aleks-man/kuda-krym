@@ -10,9 +10,7 @@ import styles from "./condition-scores.module.css";
 
 type ForecastScores = BeachForecast["hourly"][number]["scores"];
 
-export function ConditionScores({
-  scores,
-}: Readonly<{ scores: ForecastScores }>) {
+export function ConditionScores({ scores }: Readonly<{ scores: ForecastScores }>) {
   return (
     <div className={styles.grid} aria-label="Оценка текущих условий">
       <ScoreCard title="Состояние моря" score={scores.sea} />

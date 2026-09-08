@@ -31,7 +31,7 @@ describe("forecast freshness mapper", () => {
 
     expect(freshness.status).toBe("STALE");
     expect(freshness.sources.weather.status).toBe("STALE");
-    expect(freshness.sources.marine.status).toBe("FRESH");
+    expect(freshness.sources.marine?.status).toBe("FRESH");
   });
 
   it("allows unavailable model freshness without making data stale", () => {

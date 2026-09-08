@@ -44,6 +44,14 @@
   background-position: center;
 }
 
+.city {
+  background-image:
+    radial-gradient(circle at 16% 18%, rgb(255 214 143 / 32%), transparent 34%),
+    radial-gradient(circle at 82% 12%, rgb(179 221 210 / 42%), transparent 32%),
+    linear-gradient(145deg, #f7f4e9 0%, #edf5ef 48%, #e6f1ed 100%);
+  filter: none;
+}
+
 .coast,
 .beaches {
   filter: blur(4px) saturate(.9);

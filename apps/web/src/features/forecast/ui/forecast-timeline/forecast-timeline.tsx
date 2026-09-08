@@ -7,10 +7,10 @@ import { selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
-type Props = Readonly<{ generatedAt: string; hours: ForecastHour[] }>;
+type Props = Readonly<{ generatedAt: string; hours: ForecastHour[]; showMarine?: boolean }>;
 type DragState = { pointerId: number; startX: number; scrollLeft: number };
 
-export function ForecastTimeline({ generatedAt, hours }: Props) {
+export function ForecastTimeline({ generatedAt, hours, showMarine = true }: Props) {
   const days = selectForecastDays(hours);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState>({ pointerId: -1, startX: 0, scrollLeft: 0 });
@@ -64,6 +64,7 @@ export function ForecastTimeline({ generatedAt, hours }: Props) {
                 key={`${dateKey}-${hour.time}`}
                 maximumTemperature={maximumTemperature}
                 minimumTemperature={minimumTemperature}
+                showMarine={showMarine}
               />
             ))}
           </div>
@@ -103,9 +104,9 @@ function endDragging(event: ReactPointerEvent<HTMLDivElement>, dragRef: RefObjec
   delete event.currentTarget.dataset.dragging;
 }
 
-type CardProps = Readonly<{ dateKey: string; hour: ForecastHour; isDayStart: boolean; maximumTemperature: number; minimumTemperature: number }>;
+type CardProps = Readonly<{ dateKey: string; hour: ForecastHour; isDayStart: boolean; maximumTemperature: number; minimumTemperature: number; showMarine: boolean }>;
 
-function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minimumTemperature }: CardProps) {
+function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minimumTemperature, showMarine }: CardProps) {
   const weather = getWeatherPresentation(hour);
   const temperaturePosition = getTemperaturePosition(hour.weather.temperatureCelsius, minimumTemperature, maximumTemperature);
   return (
@@ -128,8 +129,8 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
         <span aria-hidden="true" className={styles.temperatureScale}><i style={{ width: `${temperaturePosition}%` }} /></span>
       </div>
       <dl className={styles.metrics}>
-        <div><dt>Вода</dt><dd>{formatMeasurement(hour.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
-        <div><dt>Волна</dt><dd>{formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</dd></div>
+        {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(hour.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
+        {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
         <div><dt>Вероятность дождя</dt><dd>{hour.weather.precipitationProbabilityPercent}%</dd></div>
       </dl>
       <div
