@@ -21,7 +21,8 @@ test("shows a three-day coastal forecast from all configured sources", async ({
   await expect(
     forecast.getByRole("heading", { level: 3, name: "Ближайшие три дня" }),
   ).toBeVisible();
-  await expect(forecast.getByRole("heading", { level: 4 })).toHaveCount(3);
+  await expect(forecast.getByRole("tab")).toHaveCount(3);
+  await expect(forecast.getByRole("tabpanel")).toBeVisible();
 
   await expect(
     forecast.getByRole("progressbar", { name: "Надёжность прогноза" }),
