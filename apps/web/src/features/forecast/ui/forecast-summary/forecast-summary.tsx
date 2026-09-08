@@ -81,7 +81,7 @@ export function ForecastSummary({
 
       <ConditionScores scores={current.scores} />
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline hours={forecastHours} />
+      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} />
 
       <ForecastProvenance generatedAt={generatedAt} />
     </section>

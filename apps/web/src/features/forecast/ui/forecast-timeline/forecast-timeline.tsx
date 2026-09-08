@@ -3,15 +3,17 @@ import type { ForecastHour } from "@kuda-krym/contracts";
 import { selectForecastDays } from "../../model/forecast-days";
 import {
   formatForecastTime,
+  formatForecastUpdatedAt,
   formatMeasurement,
 } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
 type ForecastTimelineProps = Readonly<{
+  generatedAt: string;
   hours: ForecastHour[];
 }>;
 
-export function ForecastTimeline({ hours }: ForecastTimelineProps) {
+export function ForecastTimeline({ generatedAt, hours }: ForecastTimelineProps) {
   const days = selectForecastDays(hours);
 
   if (days.length === 0) return null;
@@ -23,7 +25,6 @@ export function ForecastTimeline({ hours }: ForecastTimelineProps) {
           <p className={styles.eyebrow}>Почасовой прогноз</p>
           <h3 id="forecast-timeline-title">Ближайшие три дня</h3>
         </div>
-        <p>Время местное</p>
       </div>
 
       <div className={styles.days}>
@@ -31,7 +32,12 @@ export function ForecastTimeline({ hours }: ForecastTimelineProps) {
           <section className={styles.day} key={day.dateKey}>
             <header>
               <h4>{day.label}</h4>
-              <span>Ключевые интервалы</span>
+              <p className={styles.updated}>
+                Обновлено{" "}
+                <time dateTime={generatedAt}>
+                  {formatForecastUpdatedAt(generatedAt)}
+                </time>
+              </p>
             </header>
 
             <div className={styles.timeline}>

@@ -12,8 +12,7 @@
 
 .heading h3,
 .heading p,
-.day h4,
-.day header span {
+.day h4 {
   margin: 0;
 }
 
@@ -22,8 +21,19 @@
   letter-spacing: -.035em;
 }
 
-.heading > p,
-.day header span {
+.updated {
+  margin: 0;
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+}
+
+.updated time {
+  color: var(--foreground);
+  font-weight: 750;
+}
+
+.heading > p {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
