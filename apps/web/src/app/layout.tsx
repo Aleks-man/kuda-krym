@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SiteHeader } from "@/shared/ui/site-header/site-header";
+import { SiteBackground } from "@/shared/ui/site-background/site-background";
 import { getSiteUrl } from "@/shared/config/site-url";
 import {
   defaultSiteDescription,
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <JsonLd data={createWebsiteStructuredData(getSiteUrl())} />
         <SiteHeader />
         <div id="main-content" tabIndex={-1}>
+          <SiteBackground />
           {children}
         </div>
       </body>

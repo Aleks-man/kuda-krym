@@ -13,7 +13,10 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
   await page.goto("/");
 
   await page.getByLabel("Откуда выезжаем").selectOption("yalta");
-  await page.getByLabel("Максимум в дороге").selectOption("60");
+  await page
+    .getByRole("combobox", { name: "Максимум в дороге" })
+    .click();
+  await page.getByRole("option", { name: "До 1 часа" }).click();
   const preferences = page.locator("#preferences");
   const choices = ["Завтра", "Утро", "Тёплая вода"];
 

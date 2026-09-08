@@ -14,7 +14,7 @@
   height: 38vw;
   min-height: 360px;
   border-radius: 50%;
-  background: rgb(133 221 208 / 20%);
+  background: rgb(242 216 158 / 12%);
   filter: blur(90px);
   content: "";
   pointer-events: none;
@@ -29,7 +29,7 @@
   height: 48vw;
   min-height: 480px;
   border-radius: 50%;
-  background: rgb(74 170 205 / 17%);
+  background: rgb(50 184 177 / 17%);
   filter: blur(110px);
   pointer-events: none;
 }
@@ -105,15 +105,16 @@
 
 .title {
   margin: 0;
-  font-size: clamp(54px, 8vw, 92px);
+  font-size: clamp(52px, 7.2vw, 84px);
   font-weight: 780;
-  letter-spacing: -0.075em;
-  line-height: 0.92;
+  letter-spacing: -0.062em;
+  line-height: 0.98;
 }
 
 .title span {
   display: block;
   margin-top: 8px;
+  padding-bottom: 0.12em;
   background: linear-gradient(100deg, var(--accent-strong), #2e91a5 58%, #6b9cc5);
   background-clip: text;
   color: transparent;
@@ -189,7 +190,7 @@
     0 34px 90px rgb(19 77 80 / 15%),
     inset 0 1px rgb(255 255 255 / 85%);
   backdrop-filter: blur(22px) saturate(130%);
-  transform: rotate(1.2deg);
+  transform: translateX(-14px) rotate(1.2deg);
 }
 
 .previewTop {
@@ -337,7 +338,7 @@
   }
 
   .title {
-    font-size: clamp(48px, 15vw, 66px);
+    font-size: clamp(46px, 14vw, 62px);
   }
 
   .preview {

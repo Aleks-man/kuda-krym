@@ -23,7 +23,7 @@ export default function HomePage() {
             <span>к морю?</span>
           </h1>
           <p className={styles.description}>
-            Выбираем лучшее побережье по погоде и состоянию моря.
+            Выберем лучшее побережье по погоде и состоянию моря.
           </p>
           <div className={styles.actions}>
             <Link className={styles.action} href="/beaches">
