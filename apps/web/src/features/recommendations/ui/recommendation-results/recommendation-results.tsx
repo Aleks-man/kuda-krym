@@ -3,12 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { formatMeasurement } from "../../model/recommendation-labels";
+import {
+  formatTravelDistance,
+  formatTravelDuration,
+} from "../../model/travel-labels";
 import { RecommendationTravel } from "../recommendation-travel/recommendation-travel";
 import styles from "./recommendation-results.module.css";
 
 type RecommendationResultsProps = {
   result: RecommendationResponse;
 };
+
+type RecommendationItem = RecommendationResponse["data"][number];
+
+const weakConditionLabels = {
+  SEA: "Море менее спокойное",
+  WEATHER: "Погода менее комфортная",
+  WARM_WATER: "Вода прохладнее",
+} as const;
 
 export function RecommendationResults({ result }: RecommendationResultsProps) {
   if (result.data.length === 0) {
@@ -18,6 +30,9 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
       </div>
     );
   }
+
+  const featured = result.data.slice(0, 3);
+  const alternatives = result.data.slice(3);
 
   return (
     <section
@@ -31,7 +46,7 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
         <span>Проверили {result.meta.candidateCount} вариантов по дороге, погоде и морю.</span>
       </header>
       <div className={styles.grid}>
-        {result.data.map((item) => (
+        {featured.map((item) => (
           <article className={styles.card} key={item.beach.id}>
             <div className={styles.visual}>
               {item.beach.coastalLocation?.coverImage ? (
@@ -82,9 +97,72 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
           </article>
         ))}
       </div>
-      <Link className={styles.more} href="/coast">
-        Другие варианты у моря <span>→</span>
-      </Link>
+      {alternatives.length > 0 ? (
+        <details className={styles.alternatives}>
+          <summary>
+            Показать остальные варианты
+            <span>{alternatives.length}</span>
+          </summary>
+          <ol>
+            {alternatives.map((item) => {
+              const weakConditions = getWeakConditions(item);
+              const locationName =
+                item.beach.coastalLocation?.name ?? item.beach.name;
+
+              return (
+                <li key={item.beach.id}>
+                  <Link href={getRecommendationHref(item)}>
+                    <span className={styles.alternativePosition}>
+                      {item.position}
+                    </span>
+                    <span className={styles.alternativeName}>
+                      <strong>{locationName}</strong>
+                      <small>{item.beach.name}</small>
+                    </span>
+                    <span className={styles.alternativeTravel}>
+                      <strong>{formatTravelDuration(item.travel.durationMinutes)}</strong>
+                      <small>{formatTravelDistance(item.travel.distanceMeters)}</small>
+                    </span>
+                    <span className={styles.alternativeConditions}>
+                      {weakConditions.length > 0 ? (
+                        weakConditions.map((condition) => (
+                          <small className={styles.weak} key={condition}>
+                            {condition}
+                          </small>
+                        ))
+                      ) : (
+                        <small className={styles.suitable}>Условия подходят</small>
+                      )}
+                    </span>
+                    <strong
+                      aria-label={`Общая оценка условий: ${item.score} из 100`}
+                      className={styles.alternativeScore}
+                      style={{ "--score": item.score } as CSSProperties}
+                    >
+                      {item.score}
+                    </strong>
+                    <span aria-hidden="true" className={styles.alternativeArrow}>
+                      →
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </details>
+      ) : null}
     </section>
   );
+}
+
+function getRecommendationHref(item: RecommendationItem) {
+  return item.beach.coastalLocation
+    ? `/coast/${item.beach.coastalLocation.slug}`
+    : `/beaches/${item.beach.slug}`;
+}
+
+function getWeakConditions(item: RecommendationItem) {
+  return item.components
+    .filter((component) => component.score !== null && component.score < 60)
+    .map((component) => weakConditionLabels[component.name]);
 }

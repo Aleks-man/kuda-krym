@@ -49,6 +49,7 @@ export class RecommendationService {
     const ranking = rankRecommendationCandidates(
       summaries,
       context.priority,
+      10,
     );
 
     return {
