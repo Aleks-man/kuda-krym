@@ -12,8 +12,17 @@ test("submits preferences and shows a recommendation", async ({ page }) => {
 
   await page.goto("/");
 
+<<<<<<< Updated upstream
   await page.getByLabel("Откуда выезжаем").selectOption("yalta");
   await page.getByLabel("Максимум в дороге").selectOption("60");
+=======
+  await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
+  await page.getByRole("option", { name: /^Ялта/ }).first().click();
+  await page
+    .getByRole("combobox", { name: "Максимум в дороге" })
+    .click();
+  await page.getByRole("option", { name: "До 1 часа" }).click();
+>>>>>>> Stashed changes
   const preferences = page.locator("#preferences");
   const choices = ["Завтра", "Утро", "Тёплая вода"];
 
