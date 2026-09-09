@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: kuda-krym-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health/ready
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: WEB_ORIGIN
+        value: https://kudakrym.ru
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: OSRM_BASE_URL
+        value: https://router.project-osrm.org/
+      - key: PHOTON_BASE_URL
+        value: https://photon.komoot.io/
+    buildFilter:
+      paths:
+        - apps/api/**
+        - packages/contracts/**
+        - packages/database/**
+        - package.json
+        - package-lock.json
+        - render.yaml

@@ -12,10 +12,10 @@ import { seedPublishedBeachImages } from "./seed-beach-images.js";
 import { seedPublishedCoastalLocationImages } from "./seed-coastal-location-images.js";
 import { seedPublishedCoastalLocations } from "./seed-coastal-locations.js";
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required to seed the database");
+  throw new Error("DIRECT_URL or DATABASE_URL is required to seed the database");
 }
 
 const prisma = createPrismaClient(databaseUrl);
