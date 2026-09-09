@@ -6,9 +6,9 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "../..");
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-  output: "standalone",
   outputFileTracingRoot: repositoryRoot,
   reactStrictMode: true,
+  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
 };
 
 export default nextConfig;
