@@ -38,3 +38,16 @@
   letter-spacing: -0.04em;
   line-height: 1;
 }
+
+@media (max-width: 680px) {
+  .panel { padding: 16px 18px; border-radius: 18px; gap: 16px; }
+  .score { width: 58px; height: 58px; }
+  .score strong { font-size: 18px; }
+}
+
+@media (max-width: 400px) {
+  .panel { padding: 14px 16px; }
+  .panel h3 { font-size: 16px; }
+  .score { width: 52px; height: 52px; }
+  .score strong { font-size: 17px; }
+}

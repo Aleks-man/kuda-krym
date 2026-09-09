@@ -327,24 +327,33 @@
   }
 
   .preview {
-    width: min(100%, 620px);
+    width: 100%;
+    padding: 22px;
+    border-radius: 26px;
     transform: none;
   }
+
+  .score { width: 64px; height: 64px; }
+  .score strong { font-size: 22px; }
 }
 
 @media (max-width: 520px) {
   .main {
-    padding-top: 54px;
+    padding: 54px 16px 64px;
   }
 
   .title {
-    font-size: clamp(46px, 14vw, 62px);
+    font-size: clamp(42px, 14vw, 62px);
   }
 
   .preview {
     padding: 18px;
     border-radius: 24px;
   }
+
+  .preview h2 { font-size: 26px; }
+  .score { width: 56px; height: 56px; }
+  .score strong { font-size: 20px; }
 
   .conditions div {
     padding: 10px;

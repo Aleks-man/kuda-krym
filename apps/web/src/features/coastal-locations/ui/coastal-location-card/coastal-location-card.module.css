@@ -60,10 +60,11 @@
 }
 
 .content strong {
+  overflow-wrap: break-word;
   font-size: clamp(20px, 2.4vw, 25px);
   letter-spacing: -0.025em;
   line-height: 1.12;
-  hyphens: none;
+  hyphens: auto;
   text-wrap: pretty;
 }
 

@@ -32,7 +32,8 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true }: Prop
       <div aria-label="День прогноза" className={styles.tabs} role="tablist">
         {days.map((day) => (
           <button aria-controls="forecast-days-timeline" aria-selected={day.dateKey === selectedDay.dateKey} key={day.dateKey} onClick={() => scrollToDay(scrollerRef.current, day.dateKey)} role="tab" type="button">
-            {day.label}
+            <span className={styles.fullDayLabel}>{day.label}</span>
+            <span className={styles.compactDayLabel}>{day.label.split(",")[0]}</span>
           </button>
         ))}
       </div>
@@ -112,18 +113,20 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
   return (
     <article className={styles.hour} data-date={dateKey} data-day-start={isDayStart || undefined}>
       <time dateTime={`${hour.time}Z`}>{formatForecastTime(hour.time)}</time>
-      <span aria-label={weather.label} className={styles.weatherSymbol} data-weather={weather.variant} role="img">
-        <i className={styles.sun} />
-        <svg aria-hidden="true" className={styles.moon} viewBox="0 0 32 32">
-          <path d="M24.8 21.6A11.3 11.3 0 0 1 10.4 7.2 11.4 11.4 0 1 0 24.8 21.6Z" />
-          <path className={styles.moonStar} d="m24.7 5 .8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8.8-1.8Zm3.1 7.8.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5.5-1.1Z" />
-        </svg>
-        <i className={styles.cloud} /><i className={styles.rain} />
-      </span>
-      <small className={styles.weatherLabel}>{weather.label}</small>
-      {weather.precipitation ? (
-        <small className={styles.precipitation}>{weather.precipitation}</small>
-      ) : null}
+      <div className={styles.weatherGroup}>
+        <span aria-label={weather.label} className={styles.weatherSymbol} data-weather={weather.variant} role="img">
+          <i className={styles.sun} />
+          <svg aria-hidden="true" className={styles.moon} viewBox="0 0 32 32">
+            <path d="M24.8 21.6A11.3 11.3 0 0 1 10.4 7.2 11.4 11.4 0 1 0 24.8 21.6Z" />
+            <path className={styles.moonStar} d="m24.7 5 .8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8.8-1.8Zm3.1 7.8.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5.5-1.1Z" />
+          </svg>
+          <i className={styles.cloud} /><i className={styles.rain} />
+        </span>
+        <small className={styles.weatherLabel}>{weather.label}</small>
+        {weather.precipitation ? (
+          <small className={styles.precipitation}>{weather.precipitation}</small>
+        ) : null}
+      </div>
       <div className={styles.temperature}>
         <strong>{Math.round(hour.weather.temperatureCelsius)}°</strong>
         <span aria-hidden="true" className={styles.temperatureScale}><i style={{ width: `${temperaturePosition}%` }} /></span>
@@ -131,7 +134,7 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
       <dl className={styles.metrics}>
         {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(hour.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
         {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
-        <div><dt>Вероятность дождя</dt><dd>{hour.weather.precipitationProbabilityPercent}%</dd></div>
+        <div><dt><span className={styles.fullMetricLabel}>Вероятность дождя</span><span className={styles.compactMetricLabel}>Дождь</span></dt><dd>{hour.weather.precipitationProbabilityPercent}%</dd></div>
       </dl>
       <div
         aria-label={`Ветер с ${formatWindDirectionName(hour.weather.windDirectionDegrees)}`}

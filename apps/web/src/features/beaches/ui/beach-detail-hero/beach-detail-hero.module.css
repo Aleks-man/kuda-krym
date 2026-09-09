@@ -9,6 +9,7 @@
 }
 
 .copy {
+  min-width: 0;
   padding: clamp(34px, 6vw, 72px);
 }
 
@@ -30,8 +31,11 @@
 }
 
 .copy h1 {
+  max-width: 100%;
   margin: 0;
-  font-size: clamp(46px, 7vw, 76px);
+  overflow-wrap: break-word;
+  font-size: clamp(40px, 5vw, 64px);
+  hyphens: auto;
   letter-spacing: -0.055em;
   line-height: 0.98;
 }
@@ -109,8 +113,19 @@
   color: white;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 960px) {
   .hero { grid-template-columns: 1fr; }
   .visual { min-height: 300px; }
   .back { margin-bottom: 30px; }
+}
+
+@media (max-width: 520px) {
+  .hero { border-radius: 24px; }
+  .copy { padding: 28px 24px 30px; }
+  .back { margin-bottom: 24px; }
+  .copy h1 { font-size: clamp(36px, 11vw, 48px); }
+  .locality { margin-top: 14px; font-size: 16px; }
+  .description { margin-top: 22px; font-size: 15px; }
+  .visual { min-height: 270px; }
+  .caption, .fallbackCaption { right: 18px; bottom: 16px; left: 18px; }
 }

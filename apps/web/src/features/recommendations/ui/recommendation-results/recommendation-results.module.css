@@ -51,4 +51,6 @@
 .alternativeArrow { color: var(--accent-strong); font-size: 18px; font-weight: 850; }
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .alternatives li > a { grid-template-columns: 28px 1fr 44px 16px; } .alternativeTravel { grid-column: 2; } .alternativeConditions { grid-column: 2 / -1; } .alternativeScore { grid-column: 3; grid-row: 1 / span 2; } .alternativeArrow { grid-column: 4; grid-row: 1 / span 2; } }
+@media (max-width: 680px) { .card { padding: 174px 18px 18px; border-radius: 19px; } .visual { height: 156px; } .score { width: 56px; height: 56px; } .score strong { font-size: 20px; } .card h4 { font-size: 21px; } }
+@media (max-width: 400px) { .card { padding-top: 164px; } .visual { height: 148px; } .score { width: 50px; height: 50px; } .score strong { font-size: 18px; } .alternatives summary { min-width: 0; width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .card, .image { transition: none; } }

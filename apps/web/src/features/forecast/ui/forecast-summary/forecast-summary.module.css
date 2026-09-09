@@ -30,3 +30,22 @@
 .summary dt { color: #a9cbc7; font-size: 13px; }
 .summary dd { margin: 6px 0 0; font-size: 19px; font-weight: 750; }
 @media (max-width: 720px) { .heading { align-items: start; flex-direction: column; gap: 10px; } .now { grid-template-columns: 1fr; } .now > div:first-child { min-height: 156px; } .summary { padding: 10px; } }
+
+@media (max-width: 680px) {
+  .section { margin-top: 58px; }
+  .heading { margin-bottom: 24px; }
+  .heading h2 { font-size: clamp(30px, 9vw, 40px); }
+  .now { border-radius: 20px; }
+  .now > div:first-child { min-height: 142px; padding: 18px 20px; }
+  .now > div:first-child > strong { font-size: 54px; }
+  .summary div { padding: 10px 12px; }
+  .summary dd { font-size: 17px; }
+}
+
+@media (max-width: 400px) {
+  .now > div:first-child { min-height: 132px; padding: 16px 18px; }
+  .now > div:first-child > strong { font-size: 48px; }
+  .currentMeta b { font-size: 16px; }
+  .summary dt { font-size: 12px; }
+  .summary dd { font-size: 16px; }
+}

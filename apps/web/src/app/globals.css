@@ -13,11 +13,8 @@
   box-sizing: border-box;
 }
 
-html {
-  min-width: 360px;
-}
-
 body {
+  min-width: 0;
   margin: 0;
   background:
     radial-gradient(circle at 82% 9%, rgb(101 205 195 / 20%), transparent 30%),

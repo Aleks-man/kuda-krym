@@ -72,10 +72,12 @@
   display: -webkit-box;
   min-height: 55px;
   overflow: hidden;
+  overflow-wrap: break-word;
   margin: 0;
   font-size: 24px;
   letter-spacing: -0.025em;
   line-height: 1.15;
+  hyphens: auto;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -135,6 +137,21 @@
 
 .link:hover span { transform: translateX(3px); }
 .link span { transition: transform 160ms ease; }
+
+@media (max-width: 680px) {
+  .card { border-radius: 18px; }
+  .visual { min-height: 160px; }
+  .content { padding: 18px; }
+  .title { min-height: 48px; font-size: 21px; }
+  .facts { min-height: 54px; margin-top: 18px; font-size: 13px; }
+  .linkRow { padding-top: 20px; }
+}
+
+@media (max-width: 400px) {
+  .visual { min-height: 148px; }
+  .content { padding: 16px; }
+  .title { font-size: 20px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .card,
