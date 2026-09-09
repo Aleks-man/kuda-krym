@@ -84,7 +84,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: apps/web/Dockerfile
+      dockerfile: Dockerfile
       target: runner
       args:
         SITE_URL: ${SITE_URL:-http://localhost:3000}
