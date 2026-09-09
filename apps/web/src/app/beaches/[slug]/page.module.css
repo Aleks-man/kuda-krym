@@ -4,3 +4,7 @@
   margin: 0 auto;
   padding: clamp(34px, 6vw, 68px) 0 100px;
 }
+
+@media (max-width: 520px) {
+  .main { width: calc(100% - 24px); padding: 28px 0 68px; }
+}

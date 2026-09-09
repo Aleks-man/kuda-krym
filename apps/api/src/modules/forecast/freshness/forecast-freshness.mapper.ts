@@ -30,3 +30,22 @@ export function mapForecastFreshness(
     sources,
   };
 }
+
+export function mapWeatherForecastFreshness(
+  weather: WeatherForecast,
+  weatherModels: ForecastSourceFreshness | null,
+): ForecastFreshness {
+  const weatherFreshness = getDataFreshness(weather);
+  return {
+    status: [weatherFreshness, weatherModels].some(
+      (source) => source?.status === "STALE",
+    )
+      ? "STALE"
+      : "FRESH",
+    sources: {
+      weather: weatherFreshness,
+      marine: null,
+      weatherModels,
+    },
+  };
+}

@@ -18,6 +18,25 @@ export class PrismaRecommendationCandidateRepository
         id: true,
         slug: true,
         name: true,
+        coastalLocation: {
+          select: {
+            slug: true,
+            name: true,
+            images: {
+              where: { isCover: true },
+              select: {
+                url: true,
+                alt: true,
+                title: true,
+                author: true,
+                license: true,
+                licenseUrl: true,
+                sourceUrl: true,
+              },
+              take: 1,
+            },
+          },
+        },
         latitude: true,
         longitude: true,
         profile: {
@@ -36,6 +55,13 @@ export class PrismaRecommendationCandidateRepository
         id: beach.id,
         slug: beach.slug,
         name: beach.name,
+        coastalLocation: beach.coastalLocation
+          ? {
+              slug: beach.coastalLocation.slug,
+              name: beach.coastalLocation.name,
+              coverImage: beach.coastalLocation.images[0] ?? null,
+            }
+          : null,
         latitude: beach.latitude.toNumber(),
         longitude: beach.longitude.toNumber(),
         surface: beach.profile.surface,

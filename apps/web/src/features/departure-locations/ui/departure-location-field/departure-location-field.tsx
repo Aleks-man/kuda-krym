@@ -105,34 +105,39 @@ export function DepartureLocationField() {
           type="hidden"
           value={selected ? serializeDepartureLocation(selected.value) : ""}
         />
-        {isOpen ? (
-          <span className={styles.dropdown} id={listboxId} role="listbox">
-            {options.map((option, index) => (
-              <button
-                aria-selected={index === activeIndex}
-                className={styles.option}
-                id={`${listboxId}-${option.id}`}
-                key={option.id}
-                onClick={() => selectOption(option)}
-                onMouseEnter={() => setActiveIndex(index)}
-                role="option"
-                type="button"
-              >
-                <strong>{option.label}</strong>
-                <small>{option.context}</small>
-              </button>
-            ))}
-            {search.status === "loading" ? (
-              <span className={styles.status}>Ищем населённые пункты…</span>
-            ) : null}
-            {search.status === "error" ? (
-              <span className={styles.status}>Поиск временно недоступен</span>
-            ) : null}
-            {search.status === "success" && options.length === 0 ? (
-              <span className={styles.status}>Ничего не найдено</span>
-            ) : null}
-          </span>
-        ) : null}
+        <span
+          aria-hidden={!isOpen}
+          className={`${styles.dropdown} ${isOpen ? styles.dropdownOpen : ""}`}
+          id={listboxId}
+          role="listbox"
+        >
+          {options.map((option, index) => (
+            <button
+              aria-selected={index === activeIndex}
+              className={styles.option}
+              id={`${listboxId}-${option.id}`}
+              key={option.id}
+              onClick={() => selectOption(option)}
+              onMouseDown={(event) => event.preventDefault()}
+              onMouseEnter={() => setActiveIndex(index)}
+              role="option"
+              tabIndex={-1}
+              type="button"
+            >
+              <strong>{option.label}</strong>
+              <small>{option.context}</small>
+            </button>
+          ))}
+          {search.status === "loading" ? (
+            <span className={styles.status}>Ищем населённые пункты…</span>
+          ) : null}
+          {search.status === "error" ? (
+            <span className={styles.status}>Поиск временно недоступен</span>
+          ) : null}
+          {search.status === "success" && options.length === 0 ? (
+            <span className={styles.status}>Ничего не найдено</span>
+          ) : null}
+        </span>
       </span>
     </div>
   );

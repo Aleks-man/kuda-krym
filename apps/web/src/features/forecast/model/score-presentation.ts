@@ -23,12 +23,6 @@ export function getScoreLabel(score: number | null): string {
   return "Некомфортные условия";
 }
 
-export function getConfidenceLabel(coveragePercent: number): string {
-  if (coveragePercent >= 90) return "Высокая надёжность";
-  if (coveragePercent >= 70) return "Средняя надёжность";
-  return "Ограниченные данные";
-}
-
 export function getScoreExplanation(score: ConditionsScore): string {
   const availableFactors = score.factors.filter(
     (factor): factor is ScoreFactor & { score: number } =>

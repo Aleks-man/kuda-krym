@@ -5,6 +5,8 @@ import helmet from "helmet";
 import type { AppEnv } from "./config/env.js";
 import { createBeachRouter } from "./modules/beaches/beach.router.js";
 import type { BeachService } from "./modules/beaches/beach.service.js";
+import { createCityForecastRouter } from "./modules/city-forecast/city-forecast.router.js";
+import type { CityForecastService } from "./modules/city-forecast/city-forecast.service.js";
 import { createCoastalForecastRouter } from "./modules/coastal-forecast/coastal-forecast.router.js";
 import type { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
 import { createCoastalLocationRouter } from "./modules/coastal-locations/coastal-location.router.js";
@@ -47,6 +49,7 @@ export type AppDependencies = Readonly<{
     "listPublished"
   >;
   coastalForecastService: Pick<CoastalForecastService, "getForecast">;
+  cityForecastService: Pick<CityForecastService, "getForecast">;
   departureLocationProvider: Pick<DepartureLocationProvider, "search">;
   beachForecastService: BeachForecastService;
   recommendationService: Pick<RecommendationService, "calculate">;
@@ -95,6 +98,7 @@ export function createApp({
   app.use("/api/health", createHealthRouter(dependencies.healthService));
   app.use("/api", globalRateLimit);
   app.use("/api/beaches", createBeachRouter(dependencies.beachService));
+  app.use("/api/cities", createCityForecastRouter(dependencies.cityForecastService));
   app.use(
     "/api/departure-locations",
     createDepartureLocationRouter(dependencies.departureLocationProvider),

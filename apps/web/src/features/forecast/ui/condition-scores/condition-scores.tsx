@@ -1,7 +1,7 @@
 import type { BeachForecast } from "@kuda-krym/contracts";
+import type { CSSProperties } from "react";
 
 import {
-  getConfidenceLabel,
   getScoreExplanation,
   getScoreLabel,
   type ConditionsScore,
@@ -10,9 +10,7 @@ import styles from "./condition-scores.module.css";
 
 type ForecastScores = BeachForecast["hourly"][number]["scores"];
 
-export function ConditionScores({
-  scores,
-}: Readonly<{ scores: ForecastScores }>) {
+export function ConditionScores({ scores }: Readonly<{ scores: ForecastScores }>) {
   return (
     <div className={styles.grid} aria-label="Оценка текущих условий">
       <ScoreCard title="Состояние моря" score={scores.sea} />
@@ -29,20 +27,16 @@ function ScoreCard({
 
   return (
     <article className={styles.card}>
-      <div className={styles.topline}>
-        <p>{title}</p>
-        <span>{getConfidenceLabel(score.coveragePercent)}</span>
-      </div>
-      <div className={styles.result}>
-        <strong>{value ?? "—"}</strong>
-        <span>/ 100</span>
+      <p className={styles.title}>{title}</p>
+      <div
+        aria-label={value === null ? "Оценка недоступна" : `${value} из 100`}
+        className={`${styles.result} ${value === null ? styles.resultUnavailable : ""}`}
+        style={{ "--score": value ?? 0 } as CSSProperties}
+      >
+        <strong>{value === null ? "—" : `${value}/100`}</strong>
       </div>
       <p className={styles.label}>{getScoreLabel(value)}</p>
       <p className={styles.explanation}>{getScoreExplanation(score)}</p>
-      <div className={styles.coverage}>
-        <span style={{ width: `${score.coveragePercent}%` }} />
-      </div>
-      <small>Покрытие данных: {score.coveragePercent}%</small>
     </article>
   );
 }

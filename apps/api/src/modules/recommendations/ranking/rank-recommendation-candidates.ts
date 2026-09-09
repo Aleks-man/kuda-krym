@@ -39,6 +39,16 @@ export function rankRecommendationCandidates(
         right.confidencePercent - left.confidencePercent ||
         left.candidate.slug.localeCompare(right.candidate.slug),
     )
+    .filter((recommendation, index, recommendations) => {
+      const locationKey =
+        recommendation.candidate.coastalLocation?.slug ??
+        recommendation.candidate.slug;
+
+      return recommendations.findIndex((candidate) =>
+        (candidate.candidate.coastalLocation?.slug ?? candidate.candidate.slug) ===
+        locationKey,
+      ) === index;
+    })
     .slice(0, limit)
     .map((recommendation, index) => ({
       ...recommendation,

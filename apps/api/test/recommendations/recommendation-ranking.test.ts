@@ -95,6 +95,25 @@ describe("recommendation ranking", () => {
       },
     ]);
   });
+
+  it("returns only the best beach for each coastal location", () => {
+    const result = rankRecommendationCandidates(
+      {
+        available: [
+          createSummary("yalta-best", 95, 95, 26, 100, 100, "yalta"),
+          createSummary("yalta-second", 90, 90, 25, 100, 100, "yalta"),
+          createSummary("alushta", 85, 85, 24, 100, 100, "alushta"),
+        ],
+        failures: [],
+      },
+      "CALM_SEA",
+    );
+
+    expect(result.recommendations.map(({ candidate }) => candidate.slug)).toEqual([
+      "yalta-best",
+      "alushta",
+    ]);
+  });
 });
 
 function createSummary(
@@ -104,12 +123,20 @@ function createSummary(
   waterTemperature: number | null,
   seaCoveragePercent = 100,
   weatherCoveragePercent = 100,
+  coastalLocationSlug?: string,
 ): CandidateWindowSummary {
   return {
     candidate: {
       id: slug,
       slug,
       name: slug,
+      coastalLocation: coastalLocationSlug
+        ? {
+            slug: coastalLocationSlug,
+            name: coastalLocationSlug,
+            coverImage: null,
+          }
+        : null,
       latitude: 44.5,
       longitude: 34,
       surface: "SAND",

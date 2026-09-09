@@ -19,10 +19,10 @@ import {
   dateOptions,
   priorityOptions,
   timeOptions,
-  travelTimeOptions,
 } from "../../model/preference-options";
 import { PreferenceChoice } from "../preference-choice/preference-choice";
 import { RecommendationResults } from "../recommendation-results/recommendation-results";
+import { TravelTimeField } from "../travel-time-field/travel-time-field";
 import styles from "./recommendation-preferences.module.css";
 
 export function RecommendationPreferences() {
@@ -75,11 +75,11 @@ export function RecommendationPreferences() {
       id="preferences"
     >
       <div className={styles.intro}>
-        <p>Персональный подбор</p>
-        <h2 id="preferences-title">Расскажите, какой день у моря вам нужен</h2>
+        <p>Подбор поездки</p>
+        <h2 id="preferences-title">Найдём подходящее место у моря</h2>
         <span>
-          Эти параметры станут входными данными для понятной рекомендации, а
-          не просто фильтрами каталога.
+          Укажите, откуда и когда хотите поехать. Сравним дорогу, погоду и
+          состояние моря.
         </span>
       </div>
 
@@ -87,16 +87,7 @@ export function RecommendationPreferences() {
         <div className={styles.row}>
           <DepartureLocationField />
 
-          <label className={styles.selectField}>
-            <span>Максимум в дороге</span>
-            <select defaultValue="120" name="maxTravelMinutes">
-              {travelTimeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <TravelTimeField />
         </div>
 
         <fieldset className={styles.fieldset}>

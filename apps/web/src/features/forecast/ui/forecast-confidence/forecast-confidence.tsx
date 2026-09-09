@@ -1,4 +1,5 @@
 import type { ForecastConfidence as ForecastConfidenceData } from "@kuda-krym/contracts";
+import type { CSSProperties } from "react";
 
 import styles from "./forecast-confidence.module.css";
 
@@ -17,9 +18,9 @@ export function ForecastConfidence({ confidence }: ForecastConfidenceProps) {
         aria-valuenow={confidence.score}
         className={styles.score}
         role="progressbar"
+        style={{ "--score": confidence.score } as CSSProperties}
       >
-        <strong>{confidence.score}</strong>
-        <span>%</span>
+        <strong>{confidence.score}%</strong>
       </div>
     </section>
   );

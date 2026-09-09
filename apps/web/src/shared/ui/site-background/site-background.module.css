@@ -1,0 +1,76 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #edf7f5;
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: -8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(2px) saturate(.94);
+  transform: scale(1.015);
+  animation: reveal-background 520ms ease both;
+}
+
+@keyframes reveal-background {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.home {
+  background-image:
+    linear-gradient(90deg, rgb(248 252 251 / 66%), rgb(248 252 251 / 28%)),
+    url("/images/site-home-sunset-v3.webp");
+  background-position: center;
+}
+
+.coast {
+  background-image:
+    linear-gradient(135deg, rgb(242 250 249 / 58%), rgb(232 246 246 / 38%)),
+    url("/images/site-coast-sea-v2.webp");
+  background-position: center;
+}
+
+.beaches {
+  background-image:
+    linear-gradient(130deg, rgb(250 251 246 / 56%), rgb(238 248 247 / 36%)),
+    url("/images/site-beaches-shore-v2.webp");
+  background-position: center;
+}
+
+.city {
+  background-image:
+    radial-gradient(circle at 16% 18%, rgb(255 214 143 / 32%), transparent 34%),
+    radial-gradient(circle at 82% 12%, rgb(179 221 210 / 42%), transparent 32%),
+    linear-gradient(145deg, #f7f4e9 0%, #edf5ef 48%, #e6f1ed 100%);
+  filter: none;
+}
+
+.coast,
+.beaches {
+  filter: blur(4px) saturate(.9);
+  transform: scale(1.025);
+}
+
+@media (max-width: 680px) {
+  .home {
+    background-position: 62% center;
+  }
+
+  .coast,
+  .beaches {
+    background-position: 58% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    animation: none;
+  }
+}

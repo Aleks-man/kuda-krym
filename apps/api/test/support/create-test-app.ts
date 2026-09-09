@@ -10,6 +10,7 @@ import { createApp } from "../../src/app.js";
 import { parseEnv } from "../../src/config/env.js";
 import type { BeachRepository } from "../../src/modules/beaches/beach.repository.js";
 import { BeachService } from "../../src/modules/beaches/beach.service.js";
+import { CityForecastService } from "../../src/modules/city-forecast/city-forecast.service.js";
 import { CoastalForecastService } from "../../src/modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "../../src/modules/coastal-locations/coastal-location.service.js";
 import { CoastalLocationBeachesService } from "../../src/modules/coastal-locations/coastal-location-beaches.service.js";
@@ -159,6 +160,11 @@ export function createTestApp({
     modelComparisonService,
     now: () => new Date("2026-08-20T08:05:00.000Z"),
   });
+  const cityForecastService = new CityForecastService({
+    weatherProvider: { getForecast: async () => weatherForecast },
+    modelComparisonService,
+    now: () => new Date("2026-08-20T08:05:00.000Z"),
+  });
 
   return createApp({
     env: parseEnv({ NODE_ENV: "test", ...environment }),
@@ -179,6 +185,7 @@ export function createTestApp({
         coastalLocationRepository,
       }),
       coastalForecastService,
+      cityForecastService,
       departureLocationProvider: {
         search: async () => {
           if (departureLocationError) throw departureLocationError;

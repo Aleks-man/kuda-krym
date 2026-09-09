@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 import { RecommendationPreferences } from "@/features/recommendations/ui/recommendation-preferences/recommendation-preferences";
 
 import styles from "./page.module.css";
+
+const previewScore = 84;
 
 export default function HomePage() {
   return (
@@ -13,15 +16,14 @@ export default function HomePage() {
         <div className={styles.content}>
           <p className={styles.eyebrow}>
             <span className={styles.liveDot} aria-hidden="true" />
-            Умный выбор пляжа
+            Умный выбор побережья
           </p>
           <h1 className={styles.title}>
-            Куда ехать
-            <span>к морю сегодня?</span>
+            Куда поехать
+            <span>к морю?</span>
           </h1>
           <p className={styles.description}>
-            Сравним ветер, волны, температуру воды и дорогу — и объясним,
-            почему этот пляж подходит именно вам.
+            Выберем лучшее побережье по погоде и состоянию моря.
           </p>
           <div className={styles.actions}>
             <Link className={styles.action} href="/beaches">
@@ -43,9 +45,16 @@ export default function HomePage() {
               <p className={styles.previewLabel}>Пример результата</p>
               <h2>Заозёрное</h2>
             </div>
-            <div className={styles.score}>
-              <strong>84</strong>
-              <span>из 100</span>
+            <div className={styles.scoreSummary}>
+              <span>Общая оценка условий</span>
+              <div
+                aria-label={`Общая оценка условий: ${previewScore} из 100`}
+                className={styles.score}
+                style={{ "--score": previewScore } as CSSProperties}
+              >
+                <strong>{previewScore}</strong>
+                <small>из 100</small>
+              </div>
             </div>
           </div>
           <div className={styles.seaScene}>

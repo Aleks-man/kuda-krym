@@ -11,7 +11,7 @@ export const forecastFreshnessSchema = z.object({
   status: forecastFreshnessStatusSchema,
   sources: z.object({
     weather: forecastSourceFreshnessSchema,
-    marine: forecastSourceFreshnessSchema,
+    marine: forecastSourceFreshnessSchema.nullable(),
     weatherModels: forecastSourceFreshnessSchema.nullable(),
   }),
 });

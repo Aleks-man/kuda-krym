@@ -24,7 +24,11 @@ export function BeachCoastalLink({
           погоды и моря в районе смотрите в прогнозе для {coastalLocation.name}.
         </p>
       </div>
-      <Link href={`/coast/${coastalLocation.slug}`}>
+      <Link
+        aria-label={`Открыть прогноз для ${coastalLocation.name}`}
+        className={styles.cardLink}
+        href={`/coast/${coastalLocation.slug}`}
+      >
         Прогноз для {coastalLocation.name} <span aria-hidden="true">→</span>
       </Link>
     </aside>

@@ -3,8 +3,9 @@ import type {
   ForecastHour,
 } from "@kuda-krym/contracts";
 
+import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import {
-  formatForecastDate,
+  formatForecastUpdatedAt,
   formatMeasurement,
   selectUpcomingHours,
 } from "../../model/forecast-view";
@@ -21,6 +22,7 @@ type ForecastSummaryProps = Readonly<{
   generatedAt: string;
   freshness: ForecastFreshness;
   hours: ForecastHour[];
+  showMarine?: boolean;
   title: string;
 }>;
 
@@ -30,10 +32,12 @@ export function ForecastSummary({
   generatedAt,
   freshness,
   hours: forecastHours,
+  showMarine = true,
   title,
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
   const current = hours[0]!;
+  const sky = getSkyPresentation(current);
 
   return (
     <section className={styles.section} aria-labelledby="forecast-title">
@@ -42,29 +46,68 @@ export function ForecastSummary({
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 id="forecast-title">{title}</h2>
         </div>
-        <p className={styles.date}>{formatForecastDate(current.time)}</p>
       </div>
 
       <ForecastFreshnessNotice freshness={freshness} />
 
+      <p className={styles.updated}>
+        Обновлено{" "}
+        <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time>
+      </p>
+
       <div className={styles.now}>
         <div>
-          <span>{currentLabel}</span>
+          <span
+            aria-label={sky.label}
+            className={styles.weatherIcon}
+            data-sky={sky.variant}
+            role="img"
+          >
+            <i className={styles.sun} />
+            <svg aria-hidden="true" className={styles.moon} viewBox="0 0 32 32">
+              <path d="M24.8 21.6A11.3 11.3 0 0 1 10.4 7.2 11.4 11.4 0 1 0 24.8 21.6Z" />
+              <path className={styles.moonStar} d="m24.7 5 .8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8.8-1.8Zm3.1 7.8.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5.5-1.1Z" />
+            </svg>
+            <i className={styles.cloud} />
+          </span>
+          <span className={styles.currentMeta}>
+            <b>{currentLabel}</b>
+            <span className={styles.skyStatus}>
+              {sky.label} · облачность {current.weather.cloudCoverPercent}%
+            </span>
+          </span>
           <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
         </div>
         <dl className={styles.summary}>
-          <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
-          <div><dt>Волна</dt><dd>{formatMeasurement(current.marine.waveHeightMeters, "м", 1)}</dd></div>
+          {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
+          {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(current.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
           <div><dt>Ветер</dt><dd>{formatMeasurement(current.weather.windSpeedMetersPerSecond, "м/с", 1)}</dd></div>
+          {!showMarine ? <div><dt>Порывы</dt><dd>{formatMeasurement(current.weather.windGustMetersPerSecond, "м/с", 1)}</dd></div> : null}
           <div><dt>Осадки</dt><dd>{current.weather.precipitationProbabilityPercent}%</dd></div>
+          {!showMarine ? <div><dt>Облачность</dt><dd>{current.weather.cloudCoverPercent}%</dd></div> : null}
         </dl>
       </div>
 
-      <ConditionScores scores={current.scores} />
+      {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline hours={forecastHours} />
+      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} />
 
-      <ForecastProvenance generatedAt={generatedAt} />
+      <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
     </section>
   );
+}
+
+function getSkyPresentation(hour: ForecastHour) {
+  const cloudCoverPercent = hour.weather.cloudCoverPercent;
+  const isNight = !isCrimeaDaylight(hour.time);
+
+  if (cloudCoverPercent < 30) {
+    return { variant: isNight ? "clear-night" : "clear", label: "Ясно" } as const;
+  }
+
+  if (cloudCoverPercent < 70) {
+    return { variant: isNight ? "partly-cloudy-night" : "partly-cloudy", label: "Переменная облачность" } as const;
+  }
+
+  return { variant: isNight ? "cloudy-night" : "cloudy", label: "Облачно" } as const;
 }

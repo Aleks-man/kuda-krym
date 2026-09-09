@@ -1,13 +1,22 @@
 import { z } from "zod";
+import { placeImageSchema } from "../media/place-image.contract.js";
 
 const nullableMeasurement = z.number().nullable();
 
 const recommendationItemSchema = z.object({
-  position: z.number().int().min(1).max(3),
+  position: z.number().int().min(1).max(10),
   beach: z.object({
     id: z.uuid(),
     slug: z.string().min(1),
     name: z.string().min(1),
+    coastalLocation: z
+      .object({
+        slug: z.string().min(1),
+        name: z.string().min(1),
+        coverImage: placeImageSchema.nullable(),
+      })
+      .nullable()
+      .optional(),
     coordinates: z.object({
       latitude: z.number().min(-90).max(90),
       longitude: z.number().min(-180).max(180),
@@ -46,7 +55,7 @@ const recommendationItemSchema = z.object({
 });
 
 export const recommendationResponseSchema = z.object({
-  data: z.array(recommendationItemSchema).max(3),
+  data: z.array(recommendationItemSchema).max(10),
   context: z.object({
     origin: z.object({
       code: z.string().min(1),
@@ -66,7 +75,7 @@ export const recommendationResponseSchema = z.object({
   }),
   meta: z.object({
     candidateCount: z.number().int().nonnegative(),
-    recommendationCount: z.number().int().min(0).max(3),
+    recommendationCount: z.number().int().min(0).max(10),
     unavailableCount: z.number().int().nonnegative(),
   }),
 });

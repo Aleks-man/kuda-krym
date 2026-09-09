@@ -12,9 +12,17 @@ const navigationItems = [
 
 export function SiteNavigation() {
   const pathname = usePathname();
+  const activeIndex = navigationItems.findIndex((item) =>
+    isCurrentSection(pathname, item.href),
+  );
 
   return (
-    <nav className={styles.navigation} aria-label="Основная навигация">
+    <nav
+      className={styles.navigation}
+      aria-label="Основная навигация"
+      data-active-index={activeIndex}
+    >
+      <span aria-hidden="true" className={styles.navIndicator} />
       {navigationItems.map((item) => (
         <Link
           aria-current={isCurrentSection(pathname, item.href) ? "page" : undefined}

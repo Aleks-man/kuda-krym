@@ -15,7 +15,7 @@ type CoastalLocationMapProps = Readonly<{
 const crimeaCenter = [45.15, 34.35] as const;
 
 export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
-  const points: MapPoint[] = locations.map((location) => ({
+  const coastalPoints: MapPoint[] = locations.map((location) => ({
     id: location.id,
     label: location.name,
     description: waterBodyLabels[location.waterBody],
@@ -26,6 +26,15 @@ export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
       location.weatherCoordinates.longitude,
     ],
   }));
+  const points: MapPoint[] = [...coastalPoints, {
+    id: "city-simferopol",
+    label: "Симферополь",
+    description: "Городской прогноз без морских показателей",
+    href: "/cities/simferopol",
+    actionLabel: "Смотреть погоду",
+    position: [44.952117, 34.102417],
+    variant: "city",
+  }];
 
   return (
     <section className={styles.section} aria-labelledby="coast-map-title">

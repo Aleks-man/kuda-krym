@@ -72,6 +72,10 @@ export {
   type CoastalForecast,
 } from "./coastal-locations/coastal-forecast.contract.js";
 export {
+  cityForecastSchema,
+  type CityForecast,
+} from "./cities/city-forecast.contract.js";
+export {
   departureLocationSchema,
   departureLocationSearchQuerySchema,
   departureLocationSearchResponseSchema,

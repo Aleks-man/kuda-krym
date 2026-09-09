@@ -52,7 +52,7 @@
 
 .content {
   position: absolute;
-  right: 58px;
+  right: 22px;
   bottom: 22px;
   left: 22px;
   display: grid;
@@ -60,10 +60,12 @@
 }
 
 .content strong {
-  font-size: clamp(22px, 3vw, 29px);
-  letter-spacing: -0.035em;
-  line-height: 1.05;
-  text-wrap: balance;
+  overflow-wrap: break-word;
+  font-size: clamp(20px, 2.4vw, 25px);
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  hyphens: auto;
+  text-wrap: pretty;
 }
 
 .waterBody {
@@ -74,32 +76,9 @@
   text-transform: uppercase;
 }
 
-.arrow {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgb(255 255 255 / 36%);
-  border-radius: 50%;
-  background: rgb(255 255 255 / 14%);
-  font-size: 18px;
-  font-weight: 800;
-  backdrop-filter: blur(8px);
-  transition: background 180ms ease, transform 180ms ease;
-}
-
-.card:hover .arrow {
-  background: rgb(255 255 255 / 24%);
-  transform: translateX(2px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .image,
-  .arrow {
+  .image {
     transition: none;
   }
 }

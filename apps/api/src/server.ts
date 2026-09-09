@@ -9,6 +9,7 @@ import { RedisCacheStore } from "./shared/cache/redis-cache.store.js";
 import { InMemoryRequestCoalescer } from "./shared/async/request-coalescer.js";
 import { PrismaBeachRepository } from "./modules/beaches/prisma-beach.repository.js";
 import { BeachService } from "./modules/beaches/beach.service.js";
+import { CityForecastService } from "./modules/city-forecast/city-forecast.service.js";
 import { CoastalForecastService } from "./modules/coastal-forecast/coastal-forecast.service.js";
 import { CoastalLocationService } from "./modules/coastal-locations/coastal-location.service.js";
 import { CoastalLocationBeachesService } from "./modules/coastal-locations/coastal-location-beaches.service.js";
@@ -115,6 +116,10 @@ const coastalForecastService = new CoastalForecastService({
   marineProvider,
   modelComparisonService: weatherModelComparisonService,
 });
+const cityForecastService = new CityForecastService({
+  weatherProvider,
+  modelComparisonService: weatherModelComparisonService,
+});
 const routingProvider = new CachedRoutingProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
@@ -165,6 +170,7 @@ const app = createApp({
     coastalLocationService,
     coastalLocationBeachesService,
     coastalForecastService,
+    cityForecastService,
     departureLocationProvider,
     beachForecastService,
     recommendationService,

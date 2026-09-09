@@ -88,7 +88,7 @@ function PointMarker({ point }: Readonly<{ point: MapPoint }>) {
       center={point.position}
       pathOptions={{
         color: "#ffffff",
-        fillColor: "#087f8c",
+        fillColor: point.variant === "city" ? "#e58b45" : "#087f8c",
         fillOpacity: 1,
         weight: 3,
       }}

@@ -6,8 +6,7 @@
 .form { display: grid; gap: 28px; }
 .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
-.fieldset legend, .selectField > span { display: block; margin-bottom: 10px; color: #405b56; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
-.selectField select { width: 100%; min-height: 66px; padding: 0 44px 0 16px; border: 1px solid var(--border); border-radius: 15px; background: rgb(255 255 255 / 72%); color: var(--foreground); font: inherit; font-weight: 700; }
+.fieldset legend { display: block; margin-bottom: 10px; color: #405b56; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .twoColumns, .threeColumns, .fourColumns { display: grid; gap: 9px; }
 .twoColumns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .threeColumns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
