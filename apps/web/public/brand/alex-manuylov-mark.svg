@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="title">
+  <title id="title">Manuylov Studio</title>
+  <rect width="80" height="80" rx="22" fill="#151817"/>
+  <path d="M16 62V20h12l12 19v20L28 40v22H16Z" fill="#F1EFE8"/>
+  <path d="M40 39l12-19h12v42H52V40L40 59V39Z" fill="#0F766E"/>
+  <rect x="60" y="14" width="8" height="8" rx="2" fill="#E45F52"/>
+</svg>

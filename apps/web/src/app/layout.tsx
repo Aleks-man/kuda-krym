@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SiteHeader } from "@/shared/ui/site-header/site-header";
+import { SiteFooter } from "@/shared/ui/site-footer/site-footer";
 import { SiteBackground } from "@/shared/ui/site-background/site-background";
 import { getSiteUrl } from "@/shared/config/site-url";
 import {
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SiteBackground />
           {children}
         </div>
+        <SiteFooter />
       </body>
     </html>
   );
