@@ -6,7 +6,7 @@
 
 .inner {
   display: grid;
-  width: min(100%, 1080px);
+  width: min(100%, 1180px);
   margin: 0 auto;
   padding: 24px 28px 18px;
   align-items: center;
