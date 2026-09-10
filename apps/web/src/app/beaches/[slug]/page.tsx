@@ -6,7 +6,6 @@ import { getBeach } from "@/features/beaches/api/get-beach";
 import { BeachCoastalLink } from "@/features/beaches/ui/beach-coastal-link/beach-coastal-link";
 import { BeachDetailHero } from "@/features/beaches/ui/beach-detail-hero/beach-detail-hero";
 import { BeachFacts } from "@/features/beaches/ui/beach-facts/beach-facts";
-import { BeachSources } from "@/features/beaches/ui/beach-sources/beach-sources";
 import { BeachForecast } from "@/features/forecast/ui/beach-forecast/beach-forecast";
 import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
 import { createPageMetadata } from "@/shared/seo/page-metadata";
@@ -66,7 +65,6 @@ export default async function BeachPage({ params }: BeachPageProps) {
           <BeachForecast beachId={beach.id} />
         </Suspense>
         <BeachFacts beach={beach} />
-        <BeachSources beach={beach} />
       </main>
     </>
   );
