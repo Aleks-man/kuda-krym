@@ -4,7 +4,7 @@
   gap: 32px;
   align-items: center;
   justify-content: space-between;
-  margin-top: clamp(44px, 6vw, 70px);
+  margin-top: var(--layout-section-gap);
   padding: clamp(22px, 4vw, 34px);
   border: 1px solid var(--border);
   border-radius: 24px;

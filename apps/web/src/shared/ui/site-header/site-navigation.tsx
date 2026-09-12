@@ -29,6 +29,7 @@ export function SiteNavigation() {
           className={styles.navLink}
           href={item.href}
           key={item.href}
+          prefetch
         >
           {item.label}
         </Link>

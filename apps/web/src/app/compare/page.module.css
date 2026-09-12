@@ -1,5 +1,5 @@
-.main { width: min(calc(100% - 32px), 1180px); margin: 0 auto; padding: 150px 0 80px; }
-.hero { max-width: 760px; margin-bottom: 42px; }
+.main { width: min(calc(100% - 32px), 1180px); margin: 0 auto; padding: var(--layout-page-start-gap) 0 var(--layout-footer-gap); }
+.hero { max-width: 760px; margin-bottom: var(--layout-block-gap); }
 .hero > p { margin: 0 0 10px; color: var(--accent); font-size: 12px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
 .hero h1 { margin: 0; font-size: clamp(48px, 8vw, 84px); letter-spacing: -.065em; line-height: .95; }
 .hero span { display: block; margin-top: 20px; color: var(--muted); font-size: 17px; }
@@ -7,4 +7,4 @@
 .empty h2 { margin: 0; font-size: 28px; }
 .empty p { margin: 12px 0 22px; color: var(--muted); line-height: 1.6; }
 .empty a { display: inline-block; padding: 13px 17px; border-radius: 13px; background: var(--foreground); color: white; font-weight: 800; text-decoration: none; }
-@media (max-width: 680px) { .main { width: calc(100% - 36px); padding-top: 120px; overflow: hidden; } }
+@media (max-width: 680px) { .main { width: calc(100% - 36px); overflow: hidden; } }

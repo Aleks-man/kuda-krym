@@ -8,15 +8,21 @@
   display: grid;
   width: min(100%, 1180px);
   margin: 0 auto;
-  padding: 24px 28px 18px;
+  padding: 20px 24px 14px;
   align-items: center;
   border: 1px solid rgb(255 255 255 / 72%);
   border-radius: 28px;
-  background: linear-gradient(135deg, #153f42, #105c61 58%, #087f8c);
-  box-shadow: 0 24px 64px rgb(13 60 62 / 16%);
+  background: linear-gradient(
+    135deg,
+    rgb(21 63 66 / 92%),
+    rgb(16 92 97 / 92%) 58%,
+    rgb(8 127 140 / 92%)
+  );
+  box-shadow: 0 20px 52px rgb(13 60 62 / 12%);
+  backdrop-filter: blur(16px);
   color: white;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 21px 36px;
+  gap: 16px 28px;
 }
 
 .identity {
@@ -59,12 +65,13 @@
   margin: 0;
   font-style: normal;
   gap: 9px;
+  grid-template-columns: repeat(2, max-content);
 }
 
 .contacts a {
   display: flex;
-  min-height: 40px;
-  padding: 7px 12px 7px 9px;
+  min-height: 36px;
+  padding: 5px 10px 5px 7px;
   align-items: center;
   border: 1px solid rgb(255 255 255 / 13%);
   border-radius: 13px;
@@ -83,8 +90,8 @@
 }
 
 .contacts svg {
-  width: 25px;
-  height: 25px;
+  width: 23px;
+  height: 23px;
   flex: 0 0 auto;
   padding: 5px;
   border-radius: 8px;
@@ -104,7 +111,7 @@
 .copyright {
   grid-column: 1 / -1;
   margin: 0;
-  padding-top: 18px;
+  padding-top: 14px;
   border-top: 1px solid rgb(255 255 255 / 12%);
   color: rgb(226 246 242 / 68%);
   font-size: 11px;
@@ -115,11 +122,11 @@
 @media (max-width: 720px) {
   .footer { padding-inline: 12px; }
   .inner {
-    padding: 22px 18px 18px;
+    padding: 18px;
     align-items: stretch;
     border-radius: 22px;
     grid-template-columns: 1fr;
-    gap: 22px;
+    gap: 18px;
   }
   .identity {
     justify-self: center;

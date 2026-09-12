@@ -1,4 +1,4 @@
-.section { margin-top: 36px; }
+.section { margin-top: var(--layout-block-gap); }
 .heading { margin-bottom: 16px; }
 .heading h3, .heading p, .day header p { margin: 0; }
 .heading h3 { font-size: clamp(25px, 3vw, 34px); letter-spacing: -.035em; }

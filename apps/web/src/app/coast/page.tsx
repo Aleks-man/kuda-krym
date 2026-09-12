@@ -1,3 +1,5 @@
+import { connection } from "next/server";
+
 import { getCoastalLocations } from "@/features/coastal-locations/api/get-coastal-locations";
 import { CoastalLocationGroups } from "@/features/coastal-locations/ui/coastal-location-groups/coastal-location-groups";
 import { CoastalLocationMap } from "@/features/coastal-locations/ui/coastal-location-map/coastal-location-map";
@@ -11,9 +13,8 @@ export const metadata = createPageMetadata({
   pathname: "/coast",
 });
 
-export const dynamic = "force-dynamic";
-
 export default async function CoastPage() {
+  await connection();
   const { data: locations, meta } = await getCoastalLocations();
 
   return (

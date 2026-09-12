@@ -1,5 +1,5 @@
 .unavailable {
-  margin-top: clamp(64px, 9vw, 110px);
+  margin-top: var(--layout-section-gap);
   padding: 28px;
   border: 1px solid var(--border);
   border-radius: 20px;

@@ -1,4 +1,4 @@
-.section { margin-top: clamp(64px, 9vw, 110px); }
+.section { margin-top: var(--layout-section-gap); }
 .heading { max-width: 620px; margin-bottom: 34px; }
 .heading p { margin: 0 0 10px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .heading h2 { margin: 0; font-size: clamp(34px, 5vw, 52px); letter-spacing: -.045em; }
