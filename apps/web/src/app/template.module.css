@@ -1,0 +1,19 @@
+.content {
+  animation: page-enter 100ms ease-out both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: .75;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    animation: none;
+  }
+}
