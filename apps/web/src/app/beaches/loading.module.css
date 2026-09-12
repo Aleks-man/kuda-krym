@@ -1,7 +1,7 @@
 .main {
   width: min(100% - 40px, 1180px);
   margin: 0 auto;
-  padding: 72px 0;
+  padding: var(--layout-page-start-gap) 0 var(--layout-footer-gap);
 }
 
 .heading,

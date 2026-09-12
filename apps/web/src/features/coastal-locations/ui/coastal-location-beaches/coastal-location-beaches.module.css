@@ -1,7 +1,7 @@
 .section {
   display: grid;
   gap: 24px;
-  margin-top: clamp(64px, 9vw, 108px);
+  margin-top: var(--layout-section-gap);
 }
 
 .heading {

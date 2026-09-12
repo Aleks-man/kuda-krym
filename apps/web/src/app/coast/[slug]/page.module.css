@@ -2,9 +2,9 @@
   width: min(100% - 40px, 1180px);
   min-height: calc(100vh - 76px);
   margin: 0 auto;
-  padding: clamp(44px, 7vw, 82px) 0 96px;
+  padding: var(--layout-page-start-gap) 0 var(--layout-footer-gap);
 }
 
 @media (max-width: 520px) {
-  .main { width: calc(100% - 24px); padding: 32px 0 68px; }
+  .main { width: calc(100% - 24px); padding: var(--layout-page-start-gap) 0 var(--layout-footer-gap); }
 }

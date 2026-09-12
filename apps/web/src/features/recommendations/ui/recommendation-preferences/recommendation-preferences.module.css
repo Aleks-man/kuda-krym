@@ -1,4 +1,4 @@
-.section { position: relative; z-index: 1; display: grid; width: min(100%, 1180px); margin: 40px auto 0; padding: clamp(28px, 5vw, 58px); border: 1px solid rgb(255 255 255 / 78%); border-radius: 32px; background: rgb(255 255 255 / 70%); box-shadow: 0 30px 80px rgb(19 77 80 / 10%); backdrop-filter: blur(22px); grid-template-columns: minmax(240px, .72fr) minmax(0, 1.45fr); gap: clamp(36px, 6vw, 72px); }
+.section { position: relative; z-index: 1; display: grid; width: min(100%, 1180px); margin: var(--layout-block-gap) auto 0; padding: clamp(28px, 5vw, 58px); border: 1px solid rgb(255 255 255 / 78%); border-radius: 32px; background: rgb(255 255 255 / 70%); box-shadow: 0 30px 80px rgb(19 77 80 / 10%); backdrop-filter: blur(22px); grid-template-columns: minmax(240px, .72fr) minmax(0, 1.45fr); gap: clamp(36px, 6vw, 72px); }
 .intro { align-self: start; position: sticky; top: 110px; }
 .intro > p { margin: 0 0 12px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .intro h2 { margin: 0; font-size: clamp(36px, 5vw, 56px); letter-spacing: -.055em; line-height: 1; }

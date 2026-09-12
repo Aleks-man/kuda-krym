@@ -7,6 +7,10 @@
   --accent-soft: #dff1ef;
   --border: #d9e5e2;
   --muted: #526964;
+  --layout-page-start-gap: clamp(28px, 4vw, 44px);
+  --layout-section-gap: clamp(48px, 6vw, 68px);
+  --layout-block-gap: clamp(32px, 4vw, 44px);
+  --layout-footer-gap: clamp(32px, 4vw, 44px);
 }
 
 * {

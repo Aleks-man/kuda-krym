@@ -2,7 +2,7 @@
   position: relative;
   min-height: calc(100vh - 76px);
   overflow: hidden;
-  padding: clamp(48px, 7vw, 96px) 20px 80px;
+  padding: var(--layout-page-start-gap) 20px var(--layout-footer-gap);
 }
 
 .main::before {
@@ -40,8 +40,7 @@
   display: grid;
   width: min(100%, 1180px);
   margin: 0 auto;
-  min-height: calc(100vh - 220px);
-  align-items: center;
+  align-items: start;
   gap: clamp(48px, 7vw, 96px);
   grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
 }
@@ -339,7 +338,7 @@
 
 @media (max-width: 520px) {
   .main {
-    padding: 54px 16px 64px;
+    padding: var(--layout-page-start-gap) 16px var(--layout-footer-gap);
   }
 
   .title {

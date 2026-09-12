@@ -1,6 +1,6 @@
 .section {
   display: grid;
-  margin-bottom: 64px;
+  margin-bottom: var(--layout-section-gap);
   gap: 22px;
 }
 
@@ -32,6 +32,6 @@
 
 @media (max-width: 680px) {
   .section {
-    margin-bottom: 48px;
+    margin-bottom: var(--layout-section-gap);
   }
 }
