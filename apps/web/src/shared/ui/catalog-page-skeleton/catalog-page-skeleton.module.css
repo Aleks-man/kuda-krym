@@ -14,7 +14,7 @@
 .heading {
   width: min(80%, 520px);
   height: 72px;
-  margin-bottom: 48px;
+  margin-bottom: var(--layout-block-gap);
   border-radius: 16px;
 }
 
@@ -25,8 +25,15 @@
 }
 
 .card {
-  min-height: 430px;
   border-radius: 22px;
+}
+
+.beaches {
+  min-height: 430px;
+}
+
+.coast {
+  min-height: 230px;
 }
 
 .srOnly {
@@ -44,3 +51,15 @@
   }
 }
 
+@media (max-width: 520px) {
+  .main {
+    width: calc(100% - 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heading,
+  .card {
+    animation: none;
+  }
+}

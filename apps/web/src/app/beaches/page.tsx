@@ -1,3 +1,5 @@
+import { connection } from "next/server";
+
 import { getBeachCatalogFilterOptions } from "@/features/beaches/api/get-beach-catalog-filter-options";
 import { getBeaches } from "@/features/beaches/api/get-beaches";
 import {
@@ -18,13 +20,12 @@ export const metadata = createPageMetadata({
   pathname: "/beaches",
 });
 
-export const dynamic = "force-dynamic";
-
 type BeachesPageProps = Readonly<{
   searchParams: Promise<BeachCatalogSearchParams>;
 }>;
 
 export default async function BeachesPage({ searchParams }: BeachesPageProps) {
+  await connection();
   const query = parseBeachCatalogSearchParams(await searchParams);
   const [{ data: beaches, meta }, { data: filterOptions }] = await Promise.all([
     getBeaches(query),

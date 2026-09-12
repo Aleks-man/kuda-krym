@@ -1,16 +1,5 @@
-import styles from "./loading.module.css";
+import { CatalogPageSkeleton } from "@/shared/ui/catalog-page-skeleton/catalog-page-skeleton";
 
 export default function BeachesLoading() {
-  return (
-    <main className={styles.main} aria-busy="true" aria-live="polite">
-      <div className={styles.heading} />
-      <div className={styles.grid}>
-        {Array.from({ length: 3 }, (_, index) => (
-          <div className={styles.card} key={index} />
-        ))}
-      </div>
-      <span className={styles.srOnly}>Загружаем пляжи…</span>
-    </main>
-  );
+  return <CatalogPageSkeleton label="Загружаем пляжи…" variant="beaches" />;
 }
-
