@@ -156,8 +156,9 @@
 }
 
 .caption {
-  color: #6d7f7b;
+  color: #48645f;
   font-size: 13px;
+  font-weight: 650;
 }
 
 .trust {
@@ -166,9 +167,9 @@
   gap: 10px 24px;
   margin: 34px 0 0;
   padding: 0;
-  color: #627773;
+  color: #46625d;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 700;
   list-style: none;
 }
 
