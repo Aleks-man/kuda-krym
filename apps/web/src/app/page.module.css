@@ -338,6 +338,16 @@
 }
 
 @media (max-width: 520px) {
+  .main::before,
+  .glow {
+    display: none;
+  }
+
+  .eyebrow,
+  .preview {
+    backdrop-filter: none;
+  }
+
   .main {
     padding: var(--layout-page-start-gap) 16px var(--layout-footer-gap);
   }

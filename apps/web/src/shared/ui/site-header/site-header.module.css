@@ -124,6 +124,11 @@
 
 @media (max-width: 520px) {
   .inner {
+    /* Avoid recompositing a blurred sticky layer on every scroll frame. */
+    backdrop-filter: none;
+  }
+
+  .inner {
     width: calc(100% - 24px);
   }
 

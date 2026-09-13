@@ -59,6 +59,14 @@
 }
 
 @media (max-width: 680px) {
+  .layer,
+  .coast,
+  .beaches {
+    /* Full-viewport blur is repainted while the page scrolls on mobile GPUs. */
+    filter: none;
+    transform: none;
+  }
+
   .coast,
   .beaches {
     background-position: 58% center;
