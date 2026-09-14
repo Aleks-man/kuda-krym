@@ -9,7 +9,8 @@ App Platform, CI/CD или на VPS.
 1. Убедиться, что выбранный коммит находится в `main`, а CI завершился успешно.
 2. Создать резервную копию production-базы перед изменением её схемы.
 3. Задать секреты и адреса в панели хостинга, не сохраняя их в Git:
-   `DATABASE_URL`, `SITE_URL`, `WEB_ORIGIN` и при наличии `REDIS_URL`.
+   `DATABASE_URL`, `SITE_URL`, `WEB_ORIGIN`, `NEXT_PUBLIC_YANDEX_MAPS_API_KEY`
+   и при наличии `REDIS_URL`. Ключ карт должен быть доступен во время сборки web.
 4. Проверить файл production-переменных локально:
 
    ```powershell

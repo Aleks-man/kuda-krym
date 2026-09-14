@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.route("https://*.tile.openstreetmap.org/**", (route) => route.abort());
+  await page.route("https://api-maps.yandex.ru/**", (route) => route.abort());
 });
 
 test("filters the published beach catalog by region", async ({ page }) => {

@@ -6,6 +6,7 @@ import { validateProductionEnv } from "./production-env.mjs";
 
 const validEnvironment = {
   DATABASE_URL: "postgresql://app:secret@postgres:5432/kuda_krym",
+  NEXT_PUBLIC_YANDEX_MAPS_API_KEY: "valid-yandex-key",
   SITE_URL: "https://kuda-krym.ru",
   WEB_ORIGIN: "https://kuda-krym.ru",
 };
@@ -37,6 +38,18 @@ test("requires matching public origins and a PostgreSQL database", () => {
   assert.ok(errors.includes("WEB_ORIGIN must match the public SITE_URL origin"));
   assert.ok(
     errors.includes("DATABASE_URL must use the postgresql or postgres protocol"),
+  );
+});
+
+test("requires a Yandex Maps API key", () => {
+  const { NEXT_PUBLIC_YANDEX_MAPS_API_KEY, ...environmentWithoutMapsKey } =
+    validEnvironment;
+
+  assert.equal(NEXT_PUBLIC_YANDEX_MAPS_API_KEY, "valid-yandex-key");
+  assert.ok(
+    validateProductionEnv(environmentWithoutMapsKey).includes(
+      "NEXT_PUBLIC_YANDEX_MAPS_API_KEY is required",
+    ),
   );
 });
 
