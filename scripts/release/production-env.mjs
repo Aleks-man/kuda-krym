@@ -2,6 +2,11 @@ const placeholderFragments = ["example.com", "replace-with", "changeme"];
 
 export function validateProductionEnv(environment) {
   const errors = [];
+  requireValue(
+    "NEXT_PUBLIC_YANDEX_MAPS_API_KEY",
+    environment.NEXT_PUBLIC_YANDEX_MAPS_API_KEY,
+    errors,
+  );
   const siteUrl = parseRequiredUrl("SITE_URL", environment.SITE_URL, errors);
   const webOrigin = parseRequiredUrl(
     "WEB_ORIGIN",
@@ -39,6 +44,12 @@ export function validateProductionEnv(environment) {
   }
 
   return errors;
+}
+
+function requireValue(name, value, errors) {
+  if (!value?.trim()) {
+    errors.push(`${name} is required`);
+  }
 }
 
 function parseRequiredUrl(name, value, errors) {

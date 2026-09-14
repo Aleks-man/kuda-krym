@@ -158,8 +158,11 @@ docker compose down
 - `RATE_LIMIT_EXPENSIVE_MAX_REQUESTS` — общий строгий лимит рекомендаций и маршрутов;
 - `TRUST_PROXY_HOPS` — число доверенных reverse proxy перед API.
 
-Веб-приложение использует `API_URL` для обращения к API и `SITE_URL` как публичный
-origin сайта. В production задайте `SITE_URL` полным адресом с протоколом, например
+Веб-приложение использует `API_URL` для обращения к API, `SITE_URL` как публичный
+origin сайта и `NEXT_PUBLIC_YANDEX_MAPS_API_KEY` для интерактивных Яндекс Карт.
+Получите ключ JavaScript API в кабинете разработчика Яндекса и ограничьте его
+разрешёнными доменами. Для Vercel и Docker ключ должен быть доступен во время сборки.
+В production задайте `SITE_URL` полным адресом с протоколом, например
 `https://example.com`, без пути и завершающего слеша. Prisma использует `DATABASE_URL`
 из `packages/database/.env` для миграций и seed.
 
