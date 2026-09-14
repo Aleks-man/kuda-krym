@@ -94,7 +94,7 @@ function createMap(
   const map = new api.Map(
     container,
     { center, controls: ["zoomControl"], zoom },
-    { suppressMapOpenBlock: true },
+    { suppressMapOpenBlock: false },
   );
   map.behaviors.disable("scrollZoom");
 
