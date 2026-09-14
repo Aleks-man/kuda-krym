@@ -2,11 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import type {
-  InteractiveMapProps,
-  MapPoint,
-  MapPosition,
-} from "./interactive-map.types";
+import { escapeMapHtml, getMapBounds } from "./interactive-map-content";
+import type { InteractiveMapProps, MapPoint, MapPosition } from "./interactive-map.types";
 import styles from "./interactive-map.module.css";
 import {
   loadYandexMapsApi,
@@ -38,6 +35,7 @@ export function InteractiveMapClient({
       return;
     }
 
+    setStatus("loading");
     let disposed = false;
     let map: YandexMap | undefined;
 
@@ -126,7 +124,7 @@ function createMap(
     : points.map(({ position }) => position);
 
   if (visiblePositions.length >= 2) {
-    map.setBounds(getBounds(visiblePositions), {
+    map.setBounds(getMapBounds(visiblePositions), {
       checkZoomRange: true,
       zoomMargin: 28,
     });
@@ -139,42 +137,20 @@ function createMarker(api: YandexMapsApi, point: MapPoint): YandexGeoObject {
   return new api.Placemark(
     point.position,
     {
-      balloonContentHeader: escapeHtml(point.label),
+      balloonContentHeader: escapeMapHtml(point.label),
       ...(point.description
-        ? { balloonContentBody: escapeHtml(point.description) }
+        ? { balloonContentBody: escapeMapHtml(point.description) }
         : {}),
       ...(point.href
         ? {
-            balloonContentFooter: `<a class="${styles.popupAction}" href="${escapeHtml(point.href)}">${escapeHtml(point.actionLabel ?? "Открыть")} →</a>`,
+            balloonContentFooter: `<a class="${styles.popupAction}" href="${escapeMapHtml(point.href)}">${escapeMapHtml(point.actionLabel ?? "Открыть")} →</a>`,
           }
         : {}),
-      hintContent: escapeHtml(point.label),
+      hintContent: escapeMapHtml(point.label),
     },
     {
       iconColor: point.variant === "city" ? "#e58b45" : "#087f8c",
       preset: "islands#circleDotIcon",
     },
   );
-}
-
-function getBounds(
-  positions: readonly MapPosition[],
-): readonly [MapPosition, MapPosition] {
-  const latitudes = positions.map(([latitude]) => latitude);
-  const longitudes = positions.map(([, longitude]) => longitude);
-
-  return [
-    [Math.min(...latitudes), Math.min(...longitudes)],
-    [Math.max(...latitudes), Math.max(...longitudes)],
-  ];
-}
-
-function escapeHtml(value: string): string {
-  return value.replace(/[&<>'"]/g, (character) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "'": "&#39;",
-    '"': "&quot;",
-  })[character]!);
 }
