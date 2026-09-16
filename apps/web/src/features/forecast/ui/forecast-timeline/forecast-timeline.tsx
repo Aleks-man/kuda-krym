@@ -1,22 +1,23 @@
 "use client";
 
-import type { ForecastHour } from "@kuda-krym/contracts";
+import type { ForecastHour, ForecastSunTimes } from "@kuda-krym/contracts";
 import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import { selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
-type Props = Readonly<{ generatedAt: string; hours: ForecastHour[]; showMarine?: boolean }>;
+type Props = Readonly<{ generatedAt: string; hours: ForecastHour[]; showMarine?: boolean; sunTimes: ForecastSunTimes[] }>;
 type DragState = { pointerId: number; startX: number; scrollLeft: number };
 
-export function ForecastTimeline({ generatedAt, hours, showMarine = true }: Props) {
+export function ForecastTimeline({ generatedAt, hours, showMarine = true, sunTimes }: Props) {
   const days = selectForecastDays(hours);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState>({ pointerId: -1, startX: 0, scrollLeft: 0 });
   const [selectedDate, setSelectedDate] = useState(days[0]?.dateKey ?? "");
   const selectedDay = days.find((day) => day.dateKey === selectedDate) ?? days[0];
   if (!selectedDay) return null;
+  const selectedSunTimes = sunTimes.find((item) => item.date === selectedDay.dateKey);
 
   const timelineHours = days.flatMap((day) => day.hours.map((hour) => ({ dateKey: day.dateKey, hour })));
   const temperatures = timelineHours.map(({ hour }) => hour.weather.temperatureCelsius);
@@ -44,6 +45,7 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true }: Prop
             <p className={styles.updated}>Обновлено <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time></p>
           </div>
         </header>
+        {selectedSunTimes ? <SunTimes value={selectedSunTimes} /> : null}
         <div
           aria-label="Почасовой прогноз: прокрутка по времени"
           className={styles.scroller}
@@ -74,6 +76,31 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true }: Prop
         </div>
       </section>
     </section>
+  );
+}
+
+function SunTimes({ value }: Readonly<{ value: ForecastSunTimes }>) {
+  return (
+    <div aria-label="Восход и закат солнца" className={styles.sunTimes}>
+      <SunTimeEvent kind="sunrise" label="Восход солнца" time={value.sunrise} />
+      <SunTimeEvent kind="sunset" label="Закат солнца" time={value.sunset} />
+    </div>
+  );
+}
+
+function SunTimeEvent({
+  kind,
+  label,
+  time,
+}: Readonly<{ kind: "sunrise" | "sunset"; label: string; time: string }>) {
+  return (
+    <span className={styles.sunTime} data-kind={kind}>
+      <svg aria-hidden="true" className={styles.sunTimeIcon} viewBox="0 0 24 24">
+        <path d="M5 17h14M8 17a4 4 0 0 1 8 0M12 6v3M5.5 10l2 2M18.5 10l-2 2" />
+      </svg>
+      <small>{label}</small>
+      <strong><time dateTime={`${time}Z`}>{formatForecastTime(time)}</time></strong>
+    </span>
   );
 }
 
@@ -155,6 +182,7 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
         <div className={styles.windDetails}>
           <small>Ветер</small>
           <strong>{hour.weather.windSpeedMetersPerSecond.toFixed(1)} м/с</strong>
+          <small className={styles.windGust}>Порывы {hour.weather.windGustMetersPerSecond.toFixed(1)} м/с</small>
         </div>
       </div>
       <div className={styles.confidence}><span>Надёжность прогноза</span><strong>{hour.confidence.score}%</strong></div>

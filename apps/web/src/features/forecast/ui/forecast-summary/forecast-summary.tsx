@@ -1,6 +1,7 @@
 import type {
   ForecastFreshness,
   ForecastHour,
+  ForecastSunTimes,
 } from "@kuda-krym/contracts";
 
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
@@ -23,6 +24,7 @@ type ForecastSummaryProps = Readonly<{
   freshness: ForecastFreshness;
   hours: ForecastHour[];
   showMarine?: boolean;
+  sunTimes: ForecastSunTimes[];
   title: string;
 }>;
 
@@ -33,6 +35,7 @@ export function ForecastSummary({
   freshness,
   hours: forecastHours,
   showMarine = true,
+  sunTimes,
   title,
 }: ForecastSummaryProps) {
   const hours = selectUpcomingHours(forecastHours);
@@ -82,7 +85,7 @@ export function ForecastSummary({
           {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
           {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(current.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
           <div><dt>Ветер</dt><dd>{formatMeasurement(current.weather.windSpeedMetersPerSecond, "м/с", 1)}</dd></div>
-          {!showMarine ? <div><dt>Порывы</dt><dd>{formatMeasurement(current.weather.windGustMetersPerSecond, "м/с", 1)}</dd></div> : null}
+          <div><dt>Порывы</dt><dd>{formatMeasurement(current.weather.windGustMetersPerSecond, "м/с", 1)}</dd></div>
           <div><dt>Осадки</dt><dd>{current.weather.precipitationProbabilityPercent}%</dd></div>
           {!showMarine ? <div><dt>Облачность</dt><dd>{current.weather.cloudCoverPercent}%</dd></div> : null}
         </dl>
@@ -90,7 +93,7 @@ export function ForecastSummary({
 
       {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} />
+      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
 
       <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
     </section>

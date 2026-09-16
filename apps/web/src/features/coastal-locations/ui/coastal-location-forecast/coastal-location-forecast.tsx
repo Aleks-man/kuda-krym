@@ -27,6 +27,7 @@ export async function CoastalLocationForecast({
       generatedAt={forecast.generatedAt}
       freshness={forecast.freshness}
       hours={forecast.hourly}
+      sunTimes={forecast.sunTimes}
       title="Прогноз на ближайшие часы"
     />
   );

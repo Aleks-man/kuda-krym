@@ -4,6 +4,11 @@ export const openMeteoResponseSchema = z.object({
   latitude: z.number(),
   longitude: z.number(),
   timezone: z.literal("GMT"),
+  daily: z.object({
+    time: z.array(z.string()),
+    sunrise: z.array(z.string()),
+    sunset: z.array(z.string()),
+  }),
   hourly: z.object({
     time: z.array(z.string()),
     temperature_2m: z.array(z.number()),

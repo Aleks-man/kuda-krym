@@ -23,10 +23,17 @@ export type HourlyWeather = Readonly<{
   cloudCoverPercent: number;
 }>;
 
+export type DailySunTimes = Readonly<{
+  date: string;
+  sunrise: string;
+  sunset: string;
+}>;
+
 export type WeatherForecast = Readonly<{
   location: ForecastLocation;
   timezone: "UTC";
   generatedAt: string;
+  sunTimes?: DailySunTimes[];
   hourly: HourlyWeather[];
   freshness?: ForecastSourceFreshness;
 }>;

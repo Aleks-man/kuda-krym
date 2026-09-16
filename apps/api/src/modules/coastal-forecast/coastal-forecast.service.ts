@@ -62,6 +62,7 @@ export class CoastalForecastService {
         marine,
         modelAgreementLoad.freshness,
       ),
+      sunTimes: weather.sunTimes ?? [],
       hourly: mapForecastHours(weather, marine, {
         evaluatedAt: generatedAt,
         modelAgreements: modelAgreementLoad.hours,
