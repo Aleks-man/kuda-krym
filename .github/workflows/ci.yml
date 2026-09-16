@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -114,10 +116,18 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  publish-containers:
+  publish-check:
     name: Publish production containers
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [quality, containers, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm publication policy
+        run: echo "Container images are published only after changes reach main."
+
+  publish-containers:
+    name: Publish ${{ matrix.image }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [publish-check]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
