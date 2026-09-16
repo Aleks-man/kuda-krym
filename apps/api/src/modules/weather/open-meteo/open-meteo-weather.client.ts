@@ -17,6 +17,8 @@ const hourlyVariables = [
   "cloud_cover",
 ];
 
+const dailyVariables = ["sunrise", "sunset"];
+
 type OpenMeteoWeatherClientOptions = Readonly<{
   fetch?: typeof globalThis.fetch;
   baseUrl?: string;
@@ -61,6 +63,7 @@ export class OpenMeteoWeatherClient implements WeatherForecastProvider {
     url.searchParams.set("latitude", request.location.latitude.toString());
     url.searchParams.set("longitude", request.location.longitude.toString());
     url.searchParams.set("hourly", hourlyVariables.join(","));
+    url.searchParams.set("daily", dailyVariables.join(","));
     url.searchParams.set("forecast_days", request.days.toString());
     url.searchParams.set("timezone", "GMT");
     url.searchParams.set("wind_speed_unit", "ms");

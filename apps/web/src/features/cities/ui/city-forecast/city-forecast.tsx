@@ -13,6 +13,7 @@ export async function CityForecast({ slug }: Readonly<{ slug: string }>) {
       freshness={forecast.freshness}
       hours={forecast.hourly}
       showMarine={false}
+      sunTimes={forecast.sunTimes}
       title="Прогноз на ближайшие часы"
     />
   );

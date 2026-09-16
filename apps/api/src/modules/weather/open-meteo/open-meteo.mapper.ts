@@ -23,10 +23,23 @@ export function mapOpenMeteoResponse(
     }
   }
 
+  const dayCount = response.daily.time.length;
+  if (
+    response.daily.sunrise.length !== dayCount ||
+    response.daily.sunset.length !== dayCount
+  ) {
+    throw new Error("Open-Meteo returned inconsistent daily sun times");
+  }
+
   return {
     location: { latitude: response.latitude, longitude: response.longitude },
     timezone: "UTC",
     generatedAt,
+    sunTimes: response.daily.time.map((date, index) => ({
+      date,
+      sunrise: response.daily.sunrise[index]!,
+      sunset: response.daily.sunset[index]!,
+    })),
     hourly: response.hourly.time.map((time, index) => ({
       time,
       temperatureCelsius: response.hourly.temperature_2m[index]!,

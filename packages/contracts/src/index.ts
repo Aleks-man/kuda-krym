@@ -53,6 +53,10 @@ export {
   type ForecastSourceFreshness,
 } from "./forecast/forecast-freshness.contract.js";
 export {
+  forecastSunTimesSchema,
+  type ForecastSunTimes,
+} from "./forecast/forecast-sun-times.contract.js";
+export {
   coastalLocationListResponseSchema,
   coastalLocationSchema,
   waterBodySchema,

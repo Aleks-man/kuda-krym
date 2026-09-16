@@ -6,6 +6,11 @@ const validResponse = {
   latitude: 44.65,
   longitude: 33.53,
   timezone: "GMT",
+  daily: {
+    time: ["2026-08-20", "2026-08-21"],
+    sunrise: ["2026-08-20T02:45", "2026-08-21T02:46"],
+    sunset: ["2026-08-20T16:42", "2026-08-21T16:40"],
+  },
   hourly: {
     time: ["2026-08-20T10:00", "2026-08-20T11:00"],
     temperature_2m: [27.1, 27.8],
@@ -39,11 +44,18 @@ describe("OpenMeteoWeatherClient", () => {
     const requestedUrl = fetchMock.mock.calls[0]?.[0] as URL;
     expect(requestedUrl.searchParams.get("forecast_days")).toBe("2");
     expect(requestedUrl.searchParams.get("wind_speed_unit")).toBe("ms");
+    expect(requestedUrl.searchParams.get("daily")).toBe("sunrise,sunset");
     expect(forecast.generatedAt).toBe("2026-08-20T08:00:00.000Z");
     expect(forecast.hourly[0]).toMatchObject({
       temperatureCelsius: 27.1,
       windSpeedMetersPerSecond: 3.2,
+      windGustMetersPerSecond: 5.1,
       cloudCoverPercent: 12,
+    });
+    expect(forecast.sunTimes?.[0]).toEqual({
+      date: "2026-08-20",
+      sunrise: "2026-08-20T02:45",
+      sunset: "2026-08-20T16:42",
     });
   });
 
@@ -65,6 +77,26 @@ describe("OpenMeteoWeatherClient", () => {
         days: 1,
       }),
     ).rejects.toThrow("inconsistent hourly field: cloud_cover");
+  });
+
+  it("rejects inconsistent daily sun times", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ...validResponse,
+          daily: { ...validResponse.daily, sunset: ["2026-08-20T16:42"] },
+        }),
+        { status: 200 },
+      ),
+    );
+    const client = new OpenMeteoWeatherClient({ fetch: fetchMock });
+
+    await expect(
+      client.getForecast({
+        location: { latitude: 44.65, longitude: 33.53 },
+        days: 2,
+      }),
+    ).rejects.toThrow("inconsistent daily sun times");
   });
 
   it("reports an upstream HTTP error", async () => {

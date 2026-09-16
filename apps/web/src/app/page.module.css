@@ -349,7 +349,7 @@
   }
 
   .main {
-    padding: var(--layout-page-start-gap) 16px var(--layout-footer-gap);
+    padding: var(--layout-page-start-gap) 12px var(--layout-footer-gap);
   }
 
   .title {

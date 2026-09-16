@@ -28,9 +28,15 @@ for (const signal of ["SIGINT", "SIGTERM"]) {
 
 function createWeatherResponse(url) {
   const time = createHourlyTimes();
+  const dailyTime = createDailyTimes(url);
   return {
     ...coordinates(url),
     timezone: "GMT",
+    daily: {
+      time: dailyTime,
+      sunrise: dailyTime.map((date) => `${date}T03:00`),
+      sunset: dailyTime.map((date) => `${date}T16:00`),
+    },
     hourly: {
       time,
       temperature_2m: values(time, 26),
@@ -46,6 +52,7 @@ function createWeatherResponse(url) {
 
 function createMarineResponse(url) {
   const time = createHourlyTimes();
+  const dailyTime = createDailyTimes(url);
   return {
     ...coordinates(url),
     timezone: "GMT",
@@ -72,6 +79,17 @@ function createHourlyTimes() {
     new Date(firstHour.getTime() + index * 3_600_000)
       .toISOString()
       .slice(0, 16),
+  );
+}
+
+function createDailyTimes(url) {
+  const dayCount = Number(url.searchParams.get("forecast_days") ?? 3);
+  const firstDay = new Date();
+  firstDay.setUTCHours(0, 0, 0, 0);
+  return Array.from({ length: dayCount }, (_, index) =>
+    new Date(firstDay.getTime() + index * 86_400_000)
+      .toISOString()
+      .slice(0, 10),
   );
 }
 
