@@ -6,7 +6,9 @@ import styles from "@/features/recommendations/ui/recommendation-preferences/rec
 
 export async function CoastalForecastFinderSection() {
   await connection();
-  const { data: locations } = await getCoastalLocations();
+  const locations = await loadCoastalLocations();
+
+  if (!locations) return null;
 
   return (
     <section
@@ -33,4 +35,13 @@ export async function CoastalForecastFinderSection() {
       </div>
     </section>
   );
+}
+
+async function loadCoastalLocations() {
+  try {
+    const { data } = await getCoastalLocations();
+    return data;
+  } catch {
+    return null;
+  }
 }

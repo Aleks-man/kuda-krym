@@ -68,7 +68,7 @@ export default defineConfig({
       },
       reuseExistingServer: false,
       timeout: 30_000,
-      url: webUrl,
+      url: `${webUrl}/robots.txt`,
     },
   ],
 });
