@@ -1,0 +1,52 @@
+name: Deploy VPS
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-vps-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy production
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+
+    steps:
+      - name: Configure SSH
+        env:
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/kuda-krym-deploy
+          chmod 600 ~/.ssh/kuda-krym-deploy
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy published commit
+        env:
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh \
+            -i ~/.ssh/kuda-krym-deploy \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "$VPS_USER@$VPS_HOST" \
+            "deploy $DEPLOY_SHA"
