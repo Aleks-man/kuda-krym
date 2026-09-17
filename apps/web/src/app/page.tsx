@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 
+import { CoastalForecastFinderSection } from "@/features/coastal-locations/ui/coastal-forecast-finder/coastal-forecast-finder-section";
 import { RecommendationPreferences } from "@/features/recommendations/ui/recommendation-preferences/recommendation-preferences";
 
 import styles from "./page.module.css";
@@ -86,6 +87,7 @@ export default function HomePage() {
           </p>
         </aside>
       </section>
+      <CoastalForecastFinderSection />
       <RecommendationPreferences />
     </main>
   );
