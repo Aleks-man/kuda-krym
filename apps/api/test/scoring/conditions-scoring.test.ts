@@ -52,6 +52,25 @@ describe("conditions scoring", () => {
     expect(result.coveragePercent).toBe(100);
   });
 
+  it("excludes cloud cover from nighttime weather comfort", () => {
+    const conditions = {
+      airTemperatureCelsius: 25,
+      precipitationProbabilityPercent: 5,
+      precipitationMillimeters: 0,
+      cloudCoverPercent: 100,
+    };
+    const daytime = scoreWeatherComfort(conditions);
+    const result = scoreWeatherComfort({
+      ...conditions,
+      includeCloudCover: false,
+    });
+
+    expect(result.score).toBeGreaterThan(daytime.score!);
+    expect(result.coveragePercent).toBe(100);
+    expect(result.factors).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: "cloudCover" })]),
+    );
+  });
   it("returns no score when every factor is missing", () => {
     const result = scoreWeatherComfort({
       airTemperatureCelsius: null,

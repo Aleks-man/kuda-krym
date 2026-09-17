@@ -8,6 +8,7 @@ export type WeatherComfortInput = Readonly<{
   precipitationProbabilityPercent: number | null;
   precipitationMillimeters: number | null;
   cloudCoverPercent: number | null;
+  includeCloudCover?: boolean;
 }>;
 
 export function scoreWeatherComfort(
@@ -20,8 +21,11 @@ export function scoreWeatherComfort(
       input.precipitationProbabilityPercent,
     ),
     createFactor("precipitationAmount", input.precipitationMillimeters),
-    createFactor("cloudCover", input.cloudCoverPercent),
   ];
+
+  if (input.includeCloudCover !== false) {
+    factors.push(createFactor("cloudCover", input.cloudCoverPercent));
+  }
 
   return aggregateScore(factors);
 }

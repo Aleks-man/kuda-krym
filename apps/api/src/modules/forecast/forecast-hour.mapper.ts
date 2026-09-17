@@ -11,6 +11,7 @@ import type {
   HourlyWeather,
   WeatherForecast,
 } from "../weather/weather-forecast.js";
+import { isCloudCoverRelevant } from "./is-cloud-cover-relevant.js";
 import type { ModelAgreementHour } from "./load-weather-model-agreements.js";
 
 type ForecastHour = BeachForecast["hourly"][number];
@@ -40,6 +41,8 @@ export function mapForecastHours(
       oldestGeneratedAt(weather.generatedAt, marine.generatedAt),
       evaluatedAt,
       agreementByTime.get(conditions.time),
+      true,
+      isCloudCoverRelevant(conditions.time, weather.sunTimes),
     ),
   );
 }
@@ -61,6 +64,7 @@ export function mapWeatherForecastHours(
       evaluatedAt,
       agreementByTime.get(conditions.time),
       false,
+      isCloudCoverRelevant(conditions.time, weather.sunTimes),
     ),
   );
 }
@@ -72,6 +76,7 @@ function mapForecastHour(
   evaluatedAt: Date,
   modelAgreementPercent: number | null | undefined,
   includeMarine = true,
+  includeCloudCover = true,
 ): ForecastHour {
   const seaSurfaceTemperatureCelsius =
     marine?.seaSurfaceTemperatureCelsius ?? null;
@@ -90,6 +95,7 @@ function mapForecastHour(
         weather.precipitationProbabilityPercent,
       precipitationMillimeters: weather.precipitationMillimeters,
       cloudCoverPercent: weather.cloudCoverPercent,
+      includeCloudCover,
     }),
   };
 
