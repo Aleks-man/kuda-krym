@@ -24,6 +24,6 @@ test("navigates between a coastal forecast and its beach", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Прогноз для Судак" }),
+    page.getByRole("link", { name: "Открыть прогноз по району Судак" }),
   ).toHaveAttribute("href", "/coast/sudak");
 });

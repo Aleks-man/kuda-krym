@@ -10,7 +10,10 @@ type ForecastConfidenceProps = Readonly<{
 export function ForecastConfidence({ confidence }: ForecastConfidenceProps) {
   return (
     <section className={styles.panel} aria-labelledby="confidence-title">
-      <h3 id="confidence-title">Надёжность прогноза</h3>
+      <div className={styles.copy}>
+        <h3 id="confidence-title">Надёжность прогноза</h3>
+        <p><b>По данным:</b> ECMWF IFS, DWD ICON и NOAA/NCEP GFS — через Open-Meteo</p>
+      </div>
       <div
         aria-label="Надёжность прогноза"
         aria-valuemax={100}

@@ -7,7 +7,7 @@ import { travelTimeOptions } from "../../model/preference-options";
 export function TravelTimeField() {
   return (
     <SelectField
-      initialValue="120"
+      initialValue="60"
       label="Максимум в дороге"
       name="maxTravelMinutes"
       options={travelTimeOptions}

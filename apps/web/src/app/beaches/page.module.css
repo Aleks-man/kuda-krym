@@ -31,8 +31,9 @@
 .description {
   max-width: 650px;
   margin: 24px 0 0;
-  color: var(--muted);
+  color: var(--text-on-background);
   font-size: clamp(18px, 3vw, 22px);
+  font-weight: 550;
   line-height: 1.55;
 }
 

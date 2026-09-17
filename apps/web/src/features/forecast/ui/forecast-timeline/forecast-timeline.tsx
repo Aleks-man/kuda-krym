@@ -65,7 +65,7 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true, sunTim
               <ForecastHourCard
                 dateKey={dateKey}
                 hour={hour}
-                isDayStart={index === 0 || timelineHours[index - 1]?.dateKey !== dateKey}
+                isDayStart={index > 0 && timelineHours[index - 1]?.dateKey !== dateKey}
                 key={`${dateKey}-${hour.time}`}
                 maximumTemperature={maximumTemperature}
                 minimumTemperature={minimumTemperature}
@@ -139,6 +139,8 @@ type CardProps = Readonly<{ dateKey: string; hour: ForecastHour; isDayStart: boo
 function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minimumTemperature, showMarine }: CardProps) {
   const weather = getWeatherPresentation(hour);
   const temperaturePosition = getTemperaturePosition(hour.weather.temperatureCelsius, minimumTemperature, maximumTemperature);
+  const isStrongWind = hour.weather.windSpeedMetersPerSecond >= 11;
+  const isStrongGust = hour.weather.windGustMetersPerSecond >= 14;
   return (
     <article className={styles.hour} data-date={dateKey} data-day-start={isDayStart || undefined}>
       <time dateTime={`${hour.time}Z`}>{formatForecastTime(hour.time)}</time>
@@ -168,9 +170,10 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
       <div
         aria-label={`Ветер с ${formatWindDirectionName(hour.weather.windDirectionDegrees)}`}
         className={styles.wind}
+        data-strong={isStrongWind || isStrongGust || undefined}
         title={`${formatWindDirection(hour.weather.windDirectionDegrees)} — ветер с ${formatWindDirectionName(hour.weather.windDirectionDegrees)}`}
       >
-        <div className={styles.windDirection}>
+        <div className={styles.windDirection} data-strong={isStrongWind || undefined}>
           <span
             aria-hidden="true"
             style={{ "--wind-direction": `${hour.weather.windDirectionDegrees + 180}deg` } as CSSProperties}
@@ -181,9 +184,9 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
         </div>
         <div className={styles.windDetails}>
           <small>Ветер</small>
-          <strong>{hour.weather.windSpeedMetersPerSecond.toFixed(1)} м/с</strong>
-          <small className={styles.windGust}>Порывы {hour.weather.windGustMetersPerSecond.toFixed(1)} м/с</small>
+          <strong className={styles.windSpeed} data-strong={isStrongWind || undefined}>{hour.weather.windSpeedMetersPerSecond.toFixed(1)} м/с</strong>
         </div>
+        <small className={styles.windGust} data-strong={isStrongGust || undefined}>Порывы {hour.weather.windGustMetersPerSecond.toFixed(1)} м/с</small>
       </div>
       <div className={styles.confidence}><span>Надёжность прогноза</span><strong>{hour.confidence.score}%</strong></div>
     </article>
