@@ -26,7 +26,8 @@
 }
 
 .section header span {
-  color: var(--muted);
+  color: var(--text-on-background);
+  font-weight: 600;
   line-height: 1.5;
 }
 

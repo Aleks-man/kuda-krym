@@ -17,19 +17,18 @@ export function BeachCoastalLink({
   return (
     <aside className={styles.card} aria-labelledby="coastal-context-title">
       <div>
-        <p className={styles.eyebrow}>Связь с побережьем</p>
-        <h2 id="coastal-context-title">Точный прогноз для пляжа</h2>
+        <p className={styles.eyebrow}>Прогноз по району</p>
+        <h2 id="coastal-context-title">Погода у моря — {coastalLocation.name}</h2>
         <p className={styles.description}>
-          Условия на этой странице рассчитаны для координат пляжа. Общую картину
-          погоды и моря в районе смотрите в прогнозе для {coastalLocation.name}.
+          Посмотрите прогноз погоды, ветра, волн и температуры моря для этого района.
         </p>
       </div>
       <Link
-        aria-label={`Открыть прогноз для ${coastalLocation.name}`}
+        aria-label={`Открыть прогноз по району ${coastalLocation.name}`}
         className={styles.cardLink}
         href={`/coast/${coastalLocation.slug}`}
       >
-        Прогноз для {coastalLocation.name} <span aria-hidden="true">→</span>
+        Открыть прогноз <span aria-hidden="true">→</span>
       </Link>
     </aside>
   );

@@ -36,7 +36,7 @@ export function ForecastProvenance({ generatedAt, showMarine = true }: ForecastP
           ))}
         </ul>
         <span className={styles.models}>
-          <b>Модели погоды:</b> ECMWF IFS, DWD ICON, NOAA GFS
+          <b>Модели погоды:</b> ECMWF IFS, DWD ICON и NOAA/NCEP GFS — через Open-Meteo
         </span>
       </div>
       <p>

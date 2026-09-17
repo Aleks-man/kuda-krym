@@ -46,7 +46,7 @@
 .weatherSymbol[data-weather="cloudy"] .sun, .weatherSymbol[data-weather="rain"] .sun, .weatherSymbol[data-weather="heavy-rain"] .sun { opacity: 0; }
 .weatherSymbol[data-weather="rain"] .rain, .weatherSymbol[data-weather="heavy-rain"] .rain { opacity: 1; }
 .weatherSymbol[data-weather="heavy-rain"] .rain { width: 5px; height: 12px; box-shadow: -13px 3px #247f99, 13px 2px #247f99; background: #247f99; }
-.weatherLabel { display: block; min-height: 28px; color: var(--muted); font-size: 10px; font-weight: 700; line-height: 1.3; text-align: center; }
+.weatherLabel { display: block; min-height: 28px; color: #385650; font-size: 10px; font-weight: 750; line-height: 1.3; text-align: center; }
 .precipitation { display: block; width: fit-content; min-height: 15px; margin: -2px auto 0; padding: 2px 7px; border-radius: 999px; background: rgb(43 158 177 / 11%); color: #247f99; font-size: 10px; font-weight: 850; text-align: center; }
 .weatherLabel:not(:has(+ .precipitation)) { margin-bottom: 15px; }
 .temperature { display: grid; gap: 7px; margin-top: 6px; }
@@ -55,14 +55,19 @@
 .temperatureScale i { display: block; height: 100%; border-right: 3px solid white; filter: drop-shadow(0 0 2px rgb(12 55 59 / 45%)); }
 .metrics { display: grid; gap: 6px; margin: 12px 0; }
 .metrics div { display: flex; justify-content: space-between; gap: 8px; }
-.metrics dt, .wind small, .confidence span { color: var(--muted); font-size: 10px; }
+.metrics dt, .wind small { color: #385650; font-size: 10px; font-weight: 700; }
+.confidence span { color: var(--muted); font-size: 10px; }
 .metrics dd { margin: 0; font-size: 11px; font-weight: 800; white-space: nowrap; }
-.wind { display: grid; min-height: 58px; padding: 7px 10px; align-items: center; border-radius: 12px; background: rgb(25 126 126 / 7%); grid-template-columns: 40px minmax(0, 1fr); gap: 10px; }
-.windDirection { display: grid; width: 40px; height: 44px; padding: 3px 0 4px; place-items: center; border-radius: 11px; background: var(--accent-soft); grid-template-rows: 24px 12px; }
+.wind { display: grid; min-height: 58px; padding: 7px 10px; align-items: center; border-radius: 12px; background: rgb(25 126 126 / 7%); grid-template-columns: 40px minmax(0, 1fr); gap: 3px 10px; }
+.wind[data-strong="true"] { background: rgb(184 63 52 / 9%); box-shadow: inset 0 0 0 1px rgb(184 63 52 / 10%); }
+.windDirection { display: grid; width: 40px; height: 44px; padding: 3px 0 4px; place-items: center; border-radius: 11px; background: var(--accent-soft); grid-row: 1 / span 2; grid-template-rows: 24px 12px; }
+.windDirection[data-strong="true"] { background: rgb(184 63 52 / 12%); }
+.windDirection[data-strong="true"] > span, .windDirection[data-strong="true"] > small { color: #a83c34; }
 .windDirection > span { display: grid; width: 24px; height: 24px; place-items: center; color: var(--accent-strong); font-size: 17px; font-weight: 900; transform: rotate(var(--wind-direction)); }
 .windDirection > small { color: var(--accent-strong); font-size: 9px; font-weight: 900; line-height: 1; }
 .windDetails { display: grid; min-width: 0; align-content: center; gap: 3px; }
-.windGust { font-size: 9px !important; white-space: nowrap; }
+.windGust { grid-column: 2; font-size: 10px !important; white-space: nowrap; }
+.windSpeed[data-strong="true"], .windGust[data-strong="true"] { color: #a83c34; }
 .wind small { display: block; }
 .wind strong { font-size: 11px; white-space: nowrap; }
 .confidence { display: flex; margin-top: 9px; padding-top: 8px; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); gap: 8px; }
@@ -82,20 +87,21 @@
   .timeline { grid-auto-columns: minmax(126px, 1fr); }
   .hour { min-width: 126px; padding: 11px 10px 10px; }
   .weatherSymbol { width: 46px; height: 37px; margin: 8px auto 3px; transform: scale(.82); transform-origin: center; }
-  .weatherLabel { min-height: 24px; font-size: 9px; }
+  .weatherLabel { min-height: 24px; font-size: 10px; }
   .precipitation { min-height: 14px; padding: 1px 5px; font-size: 8px; }
   .weatherLabel:not(:has(+ .precipitation)) { margin-bottom: 14px; }
   .temperature { margin-top: 5px; gap: 6px; }
   .temperature strong { font-size: 24px; }
   .temperatureScale { height: 4px; }
   .metrics { margin: 10px 0; gap: 5px; }
-  .metrics dt, .wind small { font-size: 9px; }
-  .metrics dd { font-size: 10px; }
-  .wind { min-height: 46px; padding: 5px 7px; grid-template-columns: 34px minmax(0, 1fr); gap: 7px; }
+  .metrics dt, .wind small { font-size: 10px; }
+  .metrics dd { font-size: 11px; }
+  .wind { min-height: 62px; padding: 6px 7px; grid-template-columns: 34px minmax(0, 1fr); gap: 5px 7px; }
   .windDirection { width: 34px; height: 36px; padding: 1px 0 2px; border-radius: 9px; grid-template-rows: 21px 10px; }
   .windDirection > span { width: 21px; height: 21px; font-size: 15px; }
   .windDirection > small { font-size: 8px; }
-  .wind strong { font-size: 10px; }
+  .wind strong { font-size: 11px; }
+  .windGust { grid-column: 1 / -1; padding-top: 5px; border-top: 1px solid rgb(82 105 100 / 12%); text-align: center; }
   .confidence { display: none; }
 }
 
@@ -106,8 +112,8 @@
   .sunTimes { min-height: 34px; padding: 6px 12px; justify-content: center; gap: 18px; }
   .sunTime { gap: 4px; }
   .sunTimeIcon { width: 18px; height: 18px; }
-  .sunTime small { font-size: 9px; }
-  .sunTime strong { font-size: 11px; }
+  .sunTime small { color: #385650; font-size: 10px; font-weight: 750; }
+  .sunTime strong { font-size: 12px; }
   .updated { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
   .timeline { grid-auto-columns: 118px; }
   .hour { min-width: 118px; padding-inline: 9px; }
@@ -118,7 +124,7 @@
     display: grid;
     align-content: start;
     grid-template-columns: minmax(0, 1fr) 60px;
-    grid-template-rows: auto auto auto auto auto auto;
+    grid-template-rows: auto 27px 18px auto auto auto;
     column-gap: 5px;
   }
   .hour > time {
@@ -142,12 +148,18 @@
     transform-origin: top right;
   }
   .weatherLabel {
+    display: grid;
     grid-column: 1 / -1;
     grid-row: 2;
     width: 100%;
-    min-height: 0;
-    margin-top: 7px;
-    font-size: 8px;
+    height: 27px;
+    min-height: 27px;
+    margin-top: 0;
+    padding-top: 7px;
+    align-items: center;
+    color: #385650;
+    font-size: 10px;
+    font-weight: 750;
     line-height: 1.2;
     text-align: center;
   }
@@ -170,6 +182,8 @@
   .temperature strong { font-size: 20px; text-align: center; }
   .metrics, .wind, .confidence { grid-column: 1 / -1; }
   .metrics { grid-row: 5; margin-top: 9px; }
+  .metrics dt, .windDetails small, .windGust { color: #385650; font-size: 10px !important; font-weight: 700; }
+  .metrics dd, .wind strong { font-size: 11px; }
   .wind { grid-row: 6; }
 }
 

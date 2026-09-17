@@ -17,6 +17,24 @@
   font-size: clamp(16px, 3vw, 20px);
 }
 
+.copy {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.copy p {
+  margin: 0;
+  color: #385650;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.copy b {
+  color: var(--foreground);
+}
+
 .score {
   display: grid;
   width: 66px;
@@ -41,6 +59,8 @@
 
 @media (max-width: 680px) {
   .panel { padding: 16px 18px; border-radius: 18px; gap: 16px; }
+  .copy { gap: 4px; }
+  .copy p { font-size: 13px; }
   .score { width: 58px; height: 58px; }
   .score strong { font-size: 18px; }
 }

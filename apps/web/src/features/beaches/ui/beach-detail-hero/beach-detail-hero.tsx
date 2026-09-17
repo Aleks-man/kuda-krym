@@ -23,7 +23,7 @@ export function BeachDetailHero({ beach }: BeachDetailHeroProps) {
         <p className={styles.locality}>{beach.locality ?? labels.region}</p>
         <p className={styles.description}>
           {beach.description ??
-            "Собираем и проверяем сведения об этом месте. Уже можно изучить расположение и подтверждённые источники."}
+            "Информация об этом месте дополняется. Уже сейчас доступен прогноз погоды и состояния моря."}
         </p>
       </div>
       <figure className={styles.visual}>
