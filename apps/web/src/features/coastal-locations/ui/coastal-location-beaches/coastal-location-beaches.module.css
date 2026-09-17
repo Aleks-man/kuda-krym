@@ -44,7 +44,8 @@
 
 .description {
   max-width: 720px;
-  color: var(--muted);
+  color: var(--text-on-background);
+  font-weight: 600;
   line-height: 1.65;
 }
 

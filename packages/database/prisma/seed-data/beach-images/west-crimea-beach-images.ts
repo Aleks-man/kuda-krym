@@ -4,7 +4,16 @@ import {
   popovkaSunsetImage,
 } from "../media/verified-image-assets.js";
 
+import { mezhvodnoeYarylgachBayImage } from "../media/west-crimea-supplement-image-assets.js";
+
 export const westCrimeaBeachImages = [
+  {
+    beachSlug: "mezhvodnoe-city-beach",
+    ...mezhvodnoeYarylgachBayImage,
+    alt: "Песчаный берег Ярылгачской бухты у Межводного",
+    isCover: true,
+    sortOrder: 0,
+  },
   {
     beachSlug: "popovka",
     ...popovkaSunsetImage,

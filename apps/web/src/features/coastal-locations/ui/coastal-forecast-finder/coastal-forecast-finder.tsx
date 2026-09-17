@@ -88,7 +88,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
           onKeyDown={handleKeyDown}
           placeholder="Например, Николаевка или Алушта"
           role="combobox"
-          style={{ fontSize: "14px", minHeight: "44px", padding: "0 14px" }}
+          style={{ fontSize: "16px", minHeight: "44px", padding: "0 14px" }}
           value={query}
         />
         <span
