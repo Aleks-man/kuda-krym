@@ -18,6 +18,7 @@ export function mapPhotonFeatures(
   return features
     .filter(isCrimeaFeature)
     .map(mapPhotonFeature)
+    .filter(hasRussianDisplayText)
     .slice(0, 8);
 }
 
@@ -56,4 +57,9 @@ function mapPhotonFeature(feature: PhotonFeature): DepartureLocation {
     latitude,
     longitude,
   };
+}
+
+function hasRussianDisplayText(location: DepartureLocation): boolean {
+  const displayText = `${location.name} ${location.context}`;
+  return !/[іїєґ]|ське|ський|ська/iu.test(displayText);
 }
