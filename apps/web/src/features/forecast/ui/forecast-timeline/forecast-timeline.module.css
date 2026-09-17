@@ -87,20 +87,17 @@
   .timeline { grid-auto-columns: minmax(126px, 1fr); }
   .hour { min-width: 126px; padding: 11px 10px 10px; }
   .weatherSymbol { width: 46px; height: 37px; margin: 8px auto 3px; transform: scale(.82); transform-origin: center; }
-  .weatherLabel { min-height: 24px; font-size: 10px; }
+  .weatherLabel { min-height: 24px; }
   .precipitation { min-height: 14px; padding: 1px 5px; font-size: 8px; }
   .weatherLabel:not(:has(+ .precipitation)) { margin-bottom: 14px; }
   .temperature { margin-top: 5px; gap: 6px; }
   .temperature strong { font-size: 24px; }
   .temperatureScale { height: 4px; }
   .metrics { margin: 10px 0; gap: 5px; }
-  .metrics dt, .wind small { font-size: 10px; }
-  .metrics dd { font-size: 11px; }
   .wind { min-height: 62px; padding: 6px 7px; grid-template-columns: 34px minmax(0, 1fr); gap: 5px 7px; }
   .windDirection { width: 34px; height: 36px; padding: 1px 0 2px; border-radius: 9px; grid-template-rows: 21px 10px; }
   .windDirection > span { width: 21px; height: 21px; font-size: 15px; }
   .windDirection > small { font-size: 8px; }
-  .wind strong { font-size: 11px; }
   .windGust { grid-column: 1 / -1; padding-top: 5px; border-top: 1px solid rgb(82 105 100 / 12%); text-align: center; }
   .confidence { display: none; }
 }
@@ -157,9 +154,6 @@
     margin-top: 0;
     padding-top: 7px;
     align-items: center;
-    color: #385650;
-    font-size: 10px;
-    font-weight: 750;
     line-height: 1.2;
     text-align: center;
   }
@@ -182,8 +176,6 @@
   .temperature strong { font-size: 20px; text-align: center; }
   .metrics, .wind, .confidence { grid-column: 1 / -1; }
   .metrics { grid-row: 5; margin-top: 9px; }
-  .metrics dt, .windDetails small, .windGust { color: #385650; font-size: 10px !important; font-weight: 700; }
-  .metrics dd, .wind strong { font-size: 11px; }
   .wind { grid-row: 6; }
 }
 

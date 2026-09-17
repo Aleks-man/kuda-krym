@@ -14,10 +14,10 @@ test("opens a coastal location from the catalog", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/coast\/yalta$/, { timeout: 20_000 });
 
-  const locationHero = page.locator("main > header").filter({
-    has: page.getByRole("heading", { level: 1, name: "Ялта" }),
-  });
-  await expect(locationHero).toBeVisible();
+  const locationHeading = page.getByRole("heading", { level: 1, name: "Ялта" });
+  const locationHero = locationHeading.locator("xpath=ancestor::header[1]");
+
+  await expect(locationHeading).toBeVisible();
   await expect(
     locationHero.getByText(
       "Актуальные условия у моря: температура воздуха и воды, ветер, осадки и волны.",
