@@ -9,6 +9,14 @@ export const mezhvodnoeSunsetImage = image(
   "https://creativecommons.org/licenses/by-sa/3.0/",
 );
 
+export const mezhvodnoeYarylgachBayImage = image(
+  "mezhvodnoe-yarylgach-bay-2009",
+  "%D0%AF%D1%80%D1%8B%D0%BB%D0%B3%D1%87%D0%B0%D1%81%D0%BA%D0%B0%D1%8F_%D0%B1%D1%83%D1%85%D1%82%D0%B0.jpg",
+  "Ярылгачская бухта у Межводного",
+  "Majuro",
+  "CC BY-SA 3.0",
+  "https://creativecommons.org/licenses/by-sa/3.0/",
+);
 export const steregushcheeCoastImage = image(
   "steregushchee-bakalskaya-spit-2020",
   "%D0%91%D0%B0%D0%BA%D0%B0%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%BA%D0%BE%D1%81%D0%B0.jpg",

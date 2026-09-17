@@ -28,8 +28,8 @@ export async function CoastalLocationBeaches({
         <Link href="/beaches">Весь каталог →</Link>
       </header>
       <p className={styles.description}>
-        Прогноз выше описывает условия у побережья. Выберите конкретный пляж,
-        чтобы посмотреть его расположение и подтверждённые сведения.
+        Прогноз выше относится ко всему побережью района. Выберите пляж, чтобы
+        посмотреть его расположение и доступные сведения о месте.
       </p>
       <BeachGrid beaches={result.data} />
     </section>
