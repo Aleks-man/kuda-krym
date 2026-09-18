@@ -16,7 +16,17 @@ describe("page metadata", () => {
       siteName: "Куда.Крым",
       title: "Пляжи Крыма",
       url: "/beaches",
+      images: [
+        expect.objectContaining({
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+        }),
+      ],
     });
-    expect(metadata.twitter).toMatchObject({ card: "summary" });
+    expect(metadata.twitter).toMatchObject({
+      card: "summary_large_image",
+      images: ["/opengraph-image"],
+    });
   });
 });

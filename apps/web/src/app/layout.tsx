@@ -6,6 +6,7 @@ import { SiteBackground } from "@/shared/ui/site-background/site-background";
 import { getSiteUrl } from "@/shared/config/site-url";
 import {
   defaultSiteDescription,
+  socialImage,
   siteName,
 } from "@/shared/seo/page-metadata";
 import { JsonLd } from "@/shared/seo/json-ld";
@@ -34,11 +35,13 @@ export const metadata: Metadata = {
     title: siteName,
     description: defaultSiteDescription,
     url: "/",
+    images: [socialImage],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteName,
     description: defaultSiteDescription,
+    images: [socialImage.url],
   },
   robots: { index: true, follow: true },
 };
