@@ -28,3 +28,7 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 packages/database/src/generated/
+
+# Responsive photographs generated before web build/dev/test/typecheck
+apps/web/public/images/generated/
+apps/web/src/generated/image-manifest.json

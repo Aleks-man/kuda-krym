@@ -12,6 +12,7 @@ const databaseUrl = getE2eDatabaseUrl();
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  testIgnore: "**/support/**",
   globalSetup: "./tests/e2e/support/global-setup.ts",
   outputDir: "./test-results/e2e-artifacts",
   fullyParallel: true,
@@ -29,6 +30,16 @@ export default defineConfig({
     video: "retain-on-failure",
   },
   projects: [
+    {
+      name: "tablet-chromium",
+      testMatch: "tablet-performance.spec.ts",
+      use: { ...devices["iPad (gen 7)"], defaultBrowserType: "chromium" },
+    },
+    {
+      name: "tablet-webkit",
+      testMatch: "tablet-performance.spec.ts",
+      use: { ...devices["iPad (gen 7)"] },
+    },
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },

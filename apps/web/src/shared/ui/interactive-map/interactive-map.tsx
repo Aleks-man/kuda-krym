@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import type { InteractiveMapProps } from "./interactive-map.types";
-import { useDeferredMap } from "./use-deferred-map";
 import styles from "./interactive-map.module.css";
 
 const InteractiveMapClient = dynamic(
@@ -17,16 +16,6 @@ const InteractiveMapClient = dynamic(
 );
 
 export function InteractiveMap(props: InteractiveMapProps) {
-  const { placeholderRef, shouldRender } = useDeferredMap();
-
-  if (!shouldRender) {
-    return (
-      <div className={styles.loading} ref={placeholderRef}>
-        Карта загрузится при прокрутке
-      </div>
-    );
-  }
-
   return <InteractiveMapClient {...props} />;
 }
 

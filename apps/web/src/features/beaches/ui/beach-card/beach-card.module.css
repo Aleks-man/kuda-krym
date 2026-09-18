@@ -1,8 +1,6 @@
 .card {
   position: relative;
   display: flex;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 420px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 22px;
@@ -12,9 +10,11 @@
   transition: box-shadow 200ms ease, transform 200ms ease;
 }
 
-.card:hover {
-  box-shadow: 0 22px 52px rgb(22 48 43 / 13%);
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: 0 22px 52px rgb(22 48 43 / 13%);
+    transform: translateY(-3px);
+  }
 }
 
 .card:focus-within {
@@ -40,8 +40,10 @@
   transition: transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.card:hover .image {
-  transform: scale(1.035);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .image {
+    transform: scale(1.035);
+  }
 }
 
 .fallback {

@@ -24,16 +24,17 @@
     "dev:web": "npm run dev --workspace @kuda-krym/web",
     "dev:api": "npm run dev --workspace @kuda-krym/api",
     "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present && npm run test:release",
+    "test": "npm run test --workspaces --if-present && npm run test:release && npm run test:e2e-config",
     "test:release-config": "node --test scripts/release/production-env.test.mjs",
     "test:deployment-check": "node --test scripts/release/deployment-check.test.mjs",
     "test:release": "node --test scripts/release/production-env.test.mjs scripts/release/deployment-check.test.mjs scripts/release/release-commands.test.mjs",
     "pretest:e2e": "node tests/e2e/support/clean-web-build.mjs",
     "test:e2e": "npm run build && playwright test",
-    "test:e2e:install": "playwright install chromium",
+    "test:e2e:install": "playwright install chromium webkit",
     "test:e2e:report": "playwright show-report",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:beach-images --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database && npm run validate:coastal-location-images --workspace @kuda-krym/database && npm run validate:place-image-files --workspace @kuda-krym/database"
+    "validate:data": "npm run generate --workspace @kuda-krym/database && npm run validate:beach-seed --workspace @kuda-krym/database && npm run validate:beach-images --workspace @kuda-krym/database && npm run validate:coastal-locations --workspace @kuda-krym/database && npm run validate:coastal-location-images --workspace @kuda-krym/database && npm run validate:place-image-files --workspace @kuda-krym/database",
+    "test:e2e-config": "npm exec --workspace @kuda-krym/database -- tsx --test ../../tests/e2e/support/e2e-database.test.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

@@ -5,35 +5,6 @@
   padding: var(--layout-page-start-gap) 20px var(--layout-footer-gap);
 }
 
-.main::before {
-  position: absolute;
-  top: 8%;
-  left: -10%;
-  width: 38vw;
-  min-width: 360px;
-  height: 38vw;
-  min-height: 360px;
-  border-radius: 50%;
-  background: rgb(242 216 158 / 12%);
-  filter: blur(90px);
-  content: "";
-  pointer-events: none;
-}
-
-.glow {
-  position: absolute;
-  right: -8%;
-  bottom: -22%;
-  width: 48vw;
-  min-width: 480px;
-  height: 48vw;
-  min-height: 480px;
-  border-radius: 50%;
-  background: rgb(50 184 177 / 17%);
-  filter: blur(110px);
-  pointer-events: none;
-}
-
 .hero {
   position: relative;
   z-index: 1;
@@ -63,7 +34,7 @@
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  backdrop-filter: blur(10px);
+  backdrop-filter: var(--panel-backdrop, blur(10px));
 }
 
 .liveDot {
@@ -190,7 +161,7 @@
   box-shadow:
     0 34px 90px rgb(19 77 80 / 15%),
     inset 0 1px rgb(255 255 255 / 85%);
-  backdrop-filter: blur(22px) saturate(130%);
+  backdrop-filter: var(--panel-backdrop, blur(22px) saturate(130%));
   transform: translateX(-14px) rotate(1.2deg);
 }
 
@@ -339,11 +310,6 @@
 }
 
 @media (max-width: 520px) {
-  .main::before,
-  .glow {
-    display: none;
-  }
-
   .eyebrow,
   .preview {
     backdrop-filter: none;

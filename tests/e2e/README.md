@@ -7,6 +7,8 @@ the production builds of the web application and API and a separate
 Do not point `E2E_DATABASE_URL` at a development or production database because
 the E2E setup applies migrations and replaces seed data.
 
+See docs/web-performance.md for image delivery and tablet regression coverage.
+
 ## Covered journeys
 
 - filtering the published beach catalog by region;
@@ -39,7 +41,9 @@ Set `E2E_DATABASE_URL` when the local credentials or port differ. The database
 name must end with `_e2e`; otherwise the safety check stops the run.
 
 Playwright builds both applications, applies migrations, replaces seed data,
-starts the production API and web servers, and runs Chromium. Open the latest
+starts the production API and web servers, and runs Chromium plus tablet regressions
+in Chromium and WebKit. Set NEXT_PUBLIC_YANDEX_MAPS_API_KEY=e2e-test-key before
+building to also verify provider initialization using the intercepted map fixture. Open the latest
 HTML report with:
 
 ```powershell
