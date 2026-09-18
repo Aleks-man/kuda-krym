@@ -24,3 +24,15 @@ export function getE2eDatabaseUrl(
 function isPostgreSqlProtocol(protocol: string): boolean {
   return protocol === "postgresql:" || protocol === "postgres:";
 }
+
+export function getE2eDatabaseEnvironment(
+  environment: NodeJS.ProcessEnv = process.env,
+): NodeJS.ProcessEnv {
+  const databaseUrl = getE2eDatabaseUrl(environment);
+  return {
+    ...environment,
+    DATABASE_URL: databaseUrl,
+    // Prisma migrations and seed prefer DIRECT_URL, including values from .env.
+    DIRECT_URL: databaseUrl,
+  };
+}

@@ -5,14 +5,21 @@ import type { CSSProperties } from "react";
 import { CoastalForecastFinderSection } from "@/features/coastal-locations/ui/coastal-forecast-finder/coastal-forecast-finder-section";
 import { RecommendationPreferences } from "@/features/recommendations/ui/recommendation-preferences/recommendation-preferences";
 
+import { createPageMetadata, defaultSiteDescription } from "@/shared/seo/page-metadata";
+
 import styles from "./page.module.css";
+
+export const metadata = createPageMetadata({
+  title: "Куда поехать к морю в Крыму",
+  description: defaultSiteDescription,
+  pathname: "/",
+});
 
 const previewScore = 84;
 
 export default function HomePage() {
   return (
     <main className={styles.main}>
-      <div className={styles.glow} aria-hidden="true" />
       <section className={styles.hero}>
         <div className={styles.content}>
           <p className={styles.eyebrow}>

@@ -86,6 +86,7 @@ jobs:
 
     env:
       CI: "true"
+      NEXT_PUBLIC_YANDEX_MAPS_API_KEY: e2e-test-key
       E2E_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/kuda_krym_e2e?schema=public
       NEXT_TELEMETRY_DISABLED: "1"
 
@@ -102,8 +103,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Chromium and WebKit
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Run E2E smoke tests
         run: npm run test:e2e

@@ -2,14 +2,10 @@ import { execFileSync } from "node:child_process";
 
 import type { FullConfig } from "@playwright/test";
 
-import { getE2eDatabaseUrl } from "./e2e-database";
+import { getE2eDatabaseEnvironment } from "./e2e-database";
 
 export default function globalSetup(_config: FullConfig): void {
-  const databaseUrl = getE2eDatabaseUrl();
-  const environment = {
-    ...process.env,
-    DATABASE_URL: databaseUrl,
-  };
+  const environment = getE2eDatabaseEnvironment();
 
   runDatabaseScript("migrate:deploy", environment);
   runDatabaseScript("seed", environment);

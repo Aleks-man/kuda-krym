@@ -10,7 +10,7 @@
     radial-gradient(circle at 50% 0%, rgb(178 228 222 / 36%), transparent 45%),
     rgb(255 255 255 / 68%);
   box-shadow: 0 28px 80px rgb(19 77 80 / 10%);
-  backdrop-filter: blur(18px);
+  backdrop-filter: var(--panel-backdrop, blur(18px));
   text-align: center;
 }
 

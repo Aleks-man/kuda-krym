@@ -19,7 +19,7 @@
     rgb(8 127 140 / 92%)
   );
   box-shadow: 0 20px 52px rgb(13 60 62 / 12%);
-  backdrop-filter: blur(16px);
+  backdrop-filter: var(--panel-backdrop, blur(16px));
   color: white;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px 28px;

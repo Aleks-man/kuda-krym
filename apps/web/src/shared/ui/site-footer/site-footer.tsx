@@ -13,6 +13,7 @@ export function SiteFooter() {
           target="_blank"
         >
           <Image
+            unoptimized
             alt=""
             aria-hidden="true"
             className={styles.mark}

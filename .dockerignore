@@ -24,3 +24,7 @@ next-env.d.ts
 docs
 tests
 README.md
+
+# Recreated by the web prebuild step
+apps/web/public/images/generated
+apps/web/src/generated/image-manifest.json

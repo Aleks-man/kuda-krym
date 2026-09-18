@@ -14,6 +14,7 @@ export function SiteHeader() {
           href="/"
         >
           <Image
+            unoptimized
             alt=""
             aria-hidden="true"
             className={styles.brandMark}
