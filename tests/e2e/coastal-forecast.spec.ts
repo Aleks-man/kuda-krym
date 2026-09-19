@@ -12,7 +12,7 @@ test("shows a three-day coastal forecast from all configured sources", async ({
       name: "Прогноз на ближайшие часы",
     }),
   ).toBeVisible();
-  await expect(forecast.getByText("Ялта", { exact: true })).toBeVisible();
+  await expect(forecast.getByText("Ялта", { exact: true }).first()).toBeVisible();
   await expect(forecast.getByText(/^Обновлено /).first()).toBeVisible();
   await expect(forecast.getByText("25 °C", { exact: true }).first()).toBeVisible();
   await expect(forecast.getByText("0.3 м", { exact: true }).first()).toBeVisible();

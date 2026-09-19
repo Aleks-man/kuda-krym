@@ -22,6 +22,7 @@ export async function CoastalLocationForecast({
   }
   return (
     <ForecastSummary
+      catalogHref="/coast"
       currentLabel={forecast.location.name}
       eyebrow="Условия у побережья"
       generatedAt={forecast.generatedAt}

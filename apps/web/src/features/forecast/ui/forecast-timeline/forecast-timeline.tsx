@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import type { ForecastHour, ForecastSunTimes } from "@kuda-krym/contracts";
 import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
@@ -7,10 +9,10 @@ import { selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
-type Props = Readonly<{ generatedAt: string; hours: ForecastHour[]; showMarine?: boolean; sunTimes: ForecastSunTimes[] }>;
+type Props = Readonly<{ locationName: string; catalogHref: "/beaches" | "/coast"; generatedAt: string; hours: ForecastHour[]; showMarine?: boolean; sunTimes: ForecastSunTimes[] }>;
 type DragState = { pointerId: number; startX: number; scrollLeft: number };
 
-export function ForecastTimeline({ generatedAt, hours, showMarine = true, sunTimes }: Props) {
+export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours, showMarine = true, sunTimes }: Props) {
   const days = selectForecastDays(hours);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState>({ pointerId: -1, startX: 0, scrollLeft: 0 });
@@ -41,9 +43,8 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true, sunTim
       <section aria-label={selectedDay.label} className={styles.day} id="forecast-days-timeline" role="tabpanel">
         <header>
           <strong>{selectedDay.label}</strong>
-          <div className={styles.dayActions}>
-            <p className={styles.updated}>Обновлено <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time></p>
-          </div>
+          <span className={styles.location}>{locationName}</span>
+          <p className={styles.updated}>Обновлено <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time></p>
         </header>
         {selectedSunTimes ? <SunTimes value={selectedSunTimes} /> : null}
         <div
@@ -74,6 +75,14 @@ export function ForecastTimeline({ generatedAt, hours, showMarine = true, sunTim
             ))}
           </div>
         </div>
+        <footer>
+          <Link className={styles.back} href={catalogHref}>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 4-5 5 5 5M4 9h10a6 6 0 0 1 0 12h-3" />
+            </svg>
+            {catalogHref === "/beaches" ? "Назад к выбору пляжа" : "Назад к выбору населённого пункта"}
+          </Link>
+        </footer>
       </section>
     </section>
   );

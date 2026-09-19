@@ -7,6 +7,7 @@ export async function CityForecast({ slug }: Readonly<{ slug: string }>) {
 
   return (
     <ForecastSummary
+      catalogHref="/coast"
       currentLabel={forecast.city.name}
       eyebrow="Погода сейчас"
       generatedAt={forecast.generatedAt}
