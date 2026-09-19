@@ -23,6 +23,14 @@ export function mapOpenMeteoResponse(
     }
   }
 
+  if (response.hourly.apparent_temperature && response.hourly.apparent_temperature.length !== pointCount) {
+    throw new Error("Open-Meteo returned inconsistent hourly field: apparent_temperature");
+  }
+
+  if (response.hourly.relative_humidity_2m && response.hourly.relative_humidity_2m.length !== pointCount) {
+    throw new Error("Open-Meteo returned inconsistent hourly field: relative_humidity_2m");
+  }
+
   const dayCount = response.daily.time.length;
   if (
     response.daily.sunrise.length !== dayCount ||
@@ -43,6 +51,8 @@ export function mapOpenMeteoResponse(
     hourly: response.hourly.time.map((time, index) => ({
       time,
       temperatureCelsius: response.hourly.temperature_2m[index]!,
+      relativeHumidityPercent: response.hourly.relative_humidity_2m?.[index] ?? null,
+      apparentTemperatureCelsius: response.hourly.apparent_temperature?.[index] ?? null,
       precipitationProbabilityPercent:
         response.hourly.precipitation_probability[index]!,
       precipitationMillimeters: response.hourly.precipitation[index]!,

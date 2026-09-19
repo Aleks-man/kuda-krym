@@ -15,6 +15,9 @@ export type WeatherForecastRequest = Readonly<{
 export type HourlyWeather = Readonly<{
   time: string;
   temperatureCelsius: number;
+  /** Optional for forecasts cached before apparent temperature was requested. */
+  apparentTemperatureCelsius?: number | null;
+  relativeHumidityPercent?: number | null;
   precipitationProbabilityPercent: number;
   precipitationMillimeters: number;
   windSpeedMetersPerSecond: number;

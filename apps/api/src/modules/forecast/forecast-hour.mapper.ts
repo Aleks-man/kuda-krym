@@ -103,6 +103,8 @@ function mapForecastHour(
     time: weather.time,
     weather: {
       temperatureCelsius: weather.temperatureCelsius,
+      relativeHumidityPercent: weather.relativeHumidityPercent ?? null,
+      apparentTemperatureCelsius: weather.apparentTemperatureCelsius ?? null,
       precipitationProbabilityPercent:
         weather.precipitationProbabilityPercent,
       precipitationMillimeters: weather.precipitationMillimeters,

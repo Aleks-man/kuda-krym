@@ -14,6 +14,8 @@ const validResponse = {
   hourly: {
     time: ["2026-08-20T10:00", "2026-08-20T11:00"],
     temperature_2m: [27.1, 27.8],
+    apparent_temperature: [29.3, 30.1],
+    relative_humidity_2m: [65, 70],
     precipitation_probability: [5, 10],
     precipitation: [0, 0.1],
     wind_speed_10m: [3.2, 3.8],
@@ -45,9 +47,13 @@ describe("OpenMeteoWeatherClient", () => {
     expect(requestedUrl.searchParams.get("forecast_days")).toBe("2");
     expect(requestedUrl.searchParams.get("wind_speed_unit")).toBe("ms");
     expect(requestedUrl.searchParams.get("daily")).toBe("sunrise,sunset");
+    expect(requestedUrl.searchParams.get("hourly")?.split(",")).toContain("apparent_temperature");
+    expect(requestedUrl.searchParams.get("hourly")?.split(",")).toContain("relative_humidity_2m");
     expect(forecast.generatedAt).toBe("2026-08-20T08:00:00.000Z");
     expect(forecast.hourly[0]).toMatchObject({
       temperatureCelsius: 27.1,
+      apparentTemperatureCelsius: 29.3,
+      relativeHumidityPercent: 65,
       windSpeedMetersPerSecond: 3.2,
       windGustMetersPerSecond: 5.1,
       cloudCoverPercent: 12,
@@ -57,6 +63,52 @@ describe("OpenMeteoWeatherClient", () => {
       sunrise: "2026-08-20T02:45",
       sunset: "2026-08-20T16:42",
     });
+  });
+
+  it.each([
+    { values: undefined, expected: [null, null] },
+    { values: [null, null], expected: [null, null] },
+    { values: [-7.2, 0], expected: [-7.2, 0] },
+  ])("maps apparent temperature without inventing missing values: $values", async ({ values, expected }) => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ...validResponse, hourly: { ...validResponse.hourly, apparent_temperature: values } })),
+    );
+    const forecast = await new OpenMeteoWeatherClient({ fetch: fetchMock }).getForecast({
+      location: { latitude: 44.65, longitude: 33.53 }, days: 2,
+    });
+    expect(forecast.hourly.map(hour => hour.apparentTemperatureCelsius)).toEqual(expected);
+  });
+
+  it("rejects inconsistent apparent temperature arrays", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ...validResponse, hourly: { ...validResponse.hourly, apparent_temperature: [29.3] } })),
+    );
+    await expect(new OpenMeteoWeatherClient({ fetch: fetchMock }).getForecast({
+      location: { latitude: 44.65, longitude: 33.53 }, days: 2,
+    })).rejects.toThrow("inconsistent hourly field: apparent_temperature");
+  });
+
+  it.each([
+    { values: undefined, expected: [null, null] },
+    { values: [null, null], expected: [null, null] },
+    { values: [0, 100], expected: [0, 100] },
+  ])("maps humidity and handles missing values: $values", async ({ values, expected }) => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ...validResponse, hourly: { ...validResponse.hourly, relative_humidity_2m: values } })),
+    );
+    const forecast = await new OpenMeteoWeatherClient({ fetch: fetchMock }).getForecast({
+      location: { latitude: 44.65, longitude: 33.53 }, days: 2,
+    });
+    expect(forecast.hourly.map(hour => hour.relativeHumidityPercent)).toEqual(expected);
+  });
+
+  it.each([[-1, 65], [101, 65], [65]])("rejects invalid humidity data: %j", async (...values) => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(JSON.stringify({ ...validResponse, hourly: { ...validResponse.hourly, relative_humidity_2m: values } })),
+    );
+    await expect(new OpenMeteoWeatherClient({ fetch: fetchMock }).getForecast({
+      location: { latitude: 44.65, longitude: 33.53 }, days: 2,
+    })).rejects.toThrow();
   });
 
   it("rejects inconsistent hourly arrays", async () => {

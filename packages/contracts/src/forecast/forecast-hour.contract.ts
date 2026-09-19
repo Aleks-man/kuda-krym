@@ -31,6 +31,9 @@ export const forecastHourSchema = z.object({
   time: z.string().min(1),
   weather: z.object({
     temperatureCelsius: z.number(),
+    // Older API responses may omit this field during a rolling deployment.
+    apparentTemperatureCelsius: z.number().nullable().optional(),
+    relativeHumidityPercent: z.number().min(0).max(100).nullable().optional(),
     precipitationProbabilityPercent: z.number().min(0).max(100),
     precipitationMillimeters: z.number().nonnegative(),
     windSpeedMetersPerSecond: z.number().nonnegative(),

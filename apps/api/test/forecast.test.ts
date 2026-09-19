@@ -28,6 +28,8 @@ describe("GET /api/forecast/:beachId", () => {
           {
             time: "2026-08-20T10:00",
             temperatureCelsius: 27.1,
+            apparentTemperatureCelsius: 29.3,
+            relativeHumidityPercent: 65,
             precipitationProbabilityPercent: 5,
             precipitationMillimeters: 0,
             windSpeedMetersPerSecond: 3.2,
@@ -91,6 +93,10 @@ describe("GET /api/forecast/:beachId", () => {
     const body = beachForecastSchema.parse(response.body);
 
     expect(response.status).toBe(200);
+    expect(body.hourly[0]?.weather.apparentTemperatureCelsius).toBe(29.3);
+    expect(body.hourly[1]?.weather.apparentTemperatureCelsius).toBeNull();
+    expect(body.hourly[0]?.weather.relativeHumidityPercent).toBe(65);
+    expect(body.hourly[1]?.weather.relativeHumidityPercent).toBeNull();
     expect(body.beach.slug).toBe("uchkuevka");
     expect(body.hourly[0]?.marine.waveHeightMeters).toBe(0.32);
     expect(body.hourly[0]?.scores.sea.score).toBeGreaterThan(90);
