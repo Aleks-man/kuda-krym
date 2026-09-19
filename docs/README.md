@@ -23,3 +23,9 @@
 - [Проверка релиза](./deployment/release-checklist.md) — порядок проверки
   production-переменных, миграций, первого seed, smoke-тестов и безопасного
   отката.
+
+## Обзор и эксплуатация
+
+- [Эксплуатация и источники данных](./reference/operations.md).
+- [Производительность веб-приложения](./development/web-performance.md).
+- [Проверка зависимостей](./development/dependency-security.md).
