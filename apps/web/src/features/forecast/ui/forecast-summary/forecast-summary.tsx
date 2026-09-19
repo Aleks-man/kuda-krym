@@ -19,6 +19,7 @@ import styles from "./forecast-summary.module.css";
 
 type ForecastSummaryProps = Readonly<{
   currentLabel: string;
+  catalogHref: "/beaches" | "/coast";
   eyebrow: string;
   generatedAt: string;
   freshness: ForecastFreshness;
@@ -30,6 +31,7 @@ type ForecastSummaryProps = Readonly<{
 
 export function ForecastSummary({
   currentLabel,
+  catalogHref,
   eyebrow,
   generatedAt,
   freshness,
@@ -93,7 +95,7 @@ export function ForecastSummary({
 
       {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
+      <ForecastTimeline locationName={currentLabel} catalogHref={catalogHref} generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
 
       <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
     </section>

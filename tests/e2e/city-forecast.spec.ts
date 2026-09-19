@@ -7,7 +7,7 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
   await expect(page.getByRole("img", { name: "Исторический центр Симферополя и городская пешеходная улица" })).toBeVisible();
 
   const forecast = page.locator('section[aria-labelledby="forecast-title"]');
-  await expect(forecast.getByText("Симферополь", { exact: true })).toBeVisible();
+  await expect(forecast.getByText("Симферополь", { exact: true }).first()).toBeVisible();
   await expect(forecast.getByText("Порывы", { exact: true })).toBeVisible();
   await expect(forecast.getByText("Облачность", { exact: true })).toBeVisible();
   await expect(forecast.getByText("Вода", { exact: true })).toHaveCount(0);

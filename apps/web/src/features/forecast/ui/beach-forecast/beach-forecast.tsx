@@ -13,6 +13,7 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
   }
   return (
     <ForecastSummary
+      catalogHref="/beaches"
       currentLabel={forecast.beach.name}
       eyebrow="Условия у воды"
       generatedAt={forecast.generatedAt}
