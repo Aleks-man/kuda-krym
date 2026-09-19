@@ -60,7 +60,7 @@ export function ForecastSummary({
         <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time>
       </p>
 
-      <div className={styles.now}>
+      <div className={styles.now} role="region" aria-label="Погода сейчас">
         <div>
           <span
             aria-label={sky.label}
@@ -76,12 +76,16 @@ export function ForecastSummary({
             <i className={styles.cloud} />
           </span>
           <span className={styles.currentMeta}>
+            <span className={styles.skyStatus}>Погода сейчас</span>
             <b>{currentLabel}</b>
             <span className={styles.skyStatus}>
               {sky.label} · облачность {current.weather.cloudCoverPercent}%
             </span>
           </span>
-          <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
+          <div className={styles.air} role="group" aria-label="Температура воздуха">
+            <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
+            <span>Ощущается как {formatMeasurement(current.weather.apparentTemperatureCelsius ?? null, "°C")}</span>
+          </div>
         </div>
         <dl className={styles.summary}>
           {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(current.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
@@ -90,6 +94,7 @@ export function ForecastSummary({
           <div><dt>Порывы</dt><dd>{formatMeasurement(current.weather.windGustMetersPerSecond, "м/с", 1)}</dd></div>
           <div><dt>Осадки</dt><dd>{current.weather.precipitationProbabilityPercent}%</dd></div>
           {!showMarine ? <div><dt>Облачность</dt><dd>{current.weather.cloudCoverPercent}%</dd></div> : null}
+          <div><dt>Влажность</dt><dd>{formatMeasurement(current.weather.relativeHumidityPercent ?? null, "%")}</dd></div>
         </dl>
       </div>
 

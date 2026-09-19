@@ -24,7 +24,8 @@
 .weatherIcon[data-sky="partly-cloudy"] .cloud, .weatherIcon[data-sky="partly-cloudy-night"] .cloud { opacity: 1; }
 .weatherIcon[data-sky="cloudy"] .sun, .weatherIcon[data-sky="cloudy-night"] .sun { opacity: 0; }
 .weatherIcon[data-sky="cloudy"] .cloud, .weatherIcon[data-sky="cloudy-night"] .cloud { width: 43px; height: 18px; opacity: 1; }
-.now > div:first-child > strong { font-size: 62px; letter-spacing: -.08em; line-height: .8; }
+.air { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; margin-top: 18px; gap: 14px; font-size: 12px; }
+.air > strong { font-size: 62px; letter-spacing: -.08em; line-height: .8; }
 .summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding: 14px 18px; }
 .summary div { padding: 12px 16px; border-bottom: 1px solid rgb(255 255 255 / 10%); }
 .summary dt { color: #a9cbc7; font-size: 13px; }
@@ -37,14 +38,14 @@
   .heading h2 { font-size: clamp(30px, 9vw, 40px); }
   .now { border-radius: 20px; }
   .now > div:first-child { min-height: 142px; padding: 18px 20px; }
-  .now > div:first-child > strong { font-size: 54px; }
+  .air > strong { font-size: 54px; }
   .summary div { padding: 10px 12px; }
   .summary dd { font-size: 17px; }
 }
 
 @media (max-width: 400px) {
   .now > div:first-child { min-height: 132px; padding: 16px 18px; }
-  .now > div:first-child > strong { font-size: 48px; }
+  .air > strong { font-size: 48px; }
   .currentMeta b { font-size: 16px; }
   .summary dt { font-size: 12px; }
   .summary dd { font-size: 16px; }

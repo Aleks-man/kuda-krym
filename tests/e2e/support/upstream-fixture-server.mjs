@@ -40,6 +40,12 @@ function createWeatherResponse(url) {
     hourly: {
       time,
       temperature_2m: values(time, 26),
+      ...(url.searchParams.get("hourly")?.split(",").includes("relative_humidity_2m")
+        ? { relative_humidity_2m: values(time, 65) }
+        : {}),
+      ...(url.searchParams.get("hourly")?.split(",").includes("apparent_temperature")
+        ? { apparent_temperature: values(time, 29.2) }
+        : {}),
       precipitation_probability: values(time, 8),
       precipitation: values(time, 0),
       wind_speed_10m: values(time, 3.2),
