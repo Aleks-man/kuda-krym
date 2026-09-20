@@ -8,9 +8,9 @@ const previewBots = [
 ];
 
 for (const userAgent of previewBots) {
-  test(`home and coast provide complete previews without JavaScript for ${userAgent}`, async ({ request, page }) => {
+  test(`all public page types provide complete previews without JavaScript for ${userAgent}`, async ({ request, page }) => {
     const images: string[] = [];
-    for (const pathname of ["/", "/coast"]) {
+    for (const pathname of ["/", "/coast", "/beaches", "/coast/yalta", "/beaches/popovka", "/cities/simferopol", "/compare"]) {
       const response = await request.get(pathname, { headers: { "user-agent": userAgent } });
       expect(response.status()).toBe(200);
       const html = await response.text();
@@ -48,9 +48,9 @@ for (const userAgent of previewBots) {
       }
       images.push(meta.image!);
     }
-    expect(images[0]).toBe(images[1]);
+    expect(new Set(images).size).toBe(1);
     const imageUrl = new URL(images[0]);
-    expect(imageUrl.pathname).toBe("/opengraph-image");
+    expect(imageUrl.pathname).toBe("/social/kuda-krym-preview-v2.png");
     expect(imageUrl.search).toBe("");
     const image = await request.get(imageUrl.pathname, { headers: { "user-agent": userAgent } });
     expect(image.status()).toBe(200);

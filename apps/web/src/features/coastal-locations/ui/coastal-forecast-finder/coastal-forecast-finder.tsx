@@ -63,7 +63,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
       <label
         className={fieldStyles.label}
         htmlFor={inputId}
-        style={{ fontSize: "10px", marginBottom: "6px" }}
+        style={{ lineHeight: "18px" }}
       >
         Населённый пункт
       </label>
@@ -86,9 +86,9 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
           }}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Например, Николаевка или Алушта"
+          placeholder="Например, Николаевка"
           role="combobox"
-          style={{ fontSize: "16px", minHeight: "44px", padding: "0 14px" }}
+          style={{ fontSize: "16px", padding: "0 16px" }}
           value={query}
         />
         <span
@@ -114,12 +114,11 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
               onMouseDown={(event) => event.preventDefault()}
               onMouseEnter={() => setActiveIndex(index)}
               role="option"
-              style={{ padding: "8px 10px" }}
               tabIndex={-1}
               type="button"
             >
-              <strong style={{ fontSize: "13px" }}>{location.name}</strong>
-              <small style={{ fontSize: "11px" }}>
+              <strong>{location.name}</strong>
+              <small>
                 {coastalRegionLabels[location.region]} ·{" "}
                 {waterBodyLabels[location.waterBody]}
               </small>
