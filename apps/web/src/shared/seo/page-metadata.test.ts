@@ -18,7 +18,7 @@ describe("page metadata", () => {
       url: "/beaches",
       images: [
         expect.objectContaining({
-          url: "/opengraph-image",
+          url: "/social/kuda-krym-preview-v2.png",
           width: 1200,
           height: 630,
         }),
@@ -26,7 +26,7 @@ describe("page metadata", () => {
     });
     expect(metadata.twitter).toMatchObject({
       card: "summary_large_image",
-      images: ["/opengraph-image"],
+      images: ["/social/kuda-krym-preview-v2.png"],
     });
   });
 });

@@ -5,7 +5,8 @@ export const defaultSiteDescription =
   "Подбор пляжей Крыма по погоде, состоянию моря и времени в пути.";
 
 export const socialImage = {
-  url: "/opengraph-image",
+  url: "/social/kuda-krym-preview-v2.png",
+  type: "image/png",
   width: 1200,
   height: 630,
   alt: "Куда.Крым — подбор пляжей по погоде и состоянию моря",
