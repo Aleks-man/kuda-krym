@@ -43,7 +43,7 @@
 .cloud::before, .cloud::after { position: absolute; border-radius: 50%; background: inherit; content: ""; }
 .cloud::before { bottom: 4px; left: 6px; width: 18px; height: 18px; }
 .cloud::after { right: 5px; bottom: 3px; width: 24px; height: 24px; }
-.rain { right: 10px; bottom: -1px; width: 4px; height: 8px; border-radius: 5px; background: #2b9eb1; box-shadow: -12px 2px #2b9eb1, 12px 1px #2b9eb1; opacity: 0; transform: rotate(14deg); }
+.rain { left: 50%; bottom: -1px; width: 4px; height: 8px; border-radius: 5px; background: #2b9eb1; box-shadow: -12px 2px #2b9eb1, 12px 1px #2b9eb1; opacity: 0; transform: translateX(-50%) rotate(14deg); }
 .weatherSymbol:is([data-weather="partly-cloudy"], [data-weather="partly-cloudy-night"], [data-weather="cloudy"], [data-weather="rain"], [data-weather="heavy-rain"]) .cloud { opacity: 1; }
 .weatherSymbol:is([data-weather="clear-night"], [data-weather="partly-cloudy-night"]) .sun { opacity: 0; }
 .weatherSymbol:is([data-weather="clear-night"], [data-weather="partly-cloudy-night"]) .moon { opacity: 1; }
@@ -126,7 +126,7 @@
     display: grid;
     align-content: start;
     grid-template-columns: minmax(0, 1fr) 60px;
-    grid-template-rows: auto 27px 18px auto auto auto;
+    grid-template-rows: auto 27px minmax(28px, auto) auto auto auto;
     column-gap: 5px;
   }
   .hour > time {
@@ -167,6 +167,10 @@
     grid-row: 3;
     max-width: 60px;
     margin-top: 2px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    align-self: start;
+    line-height: 1.3;
     justify-self: center;
     text-align: center;
     white-space: normal;
