@@ -11,6 +11,12 @@ const validResponse = {
     sunrise: ["2026-08-20T02:45", "2026-08-21T02:46"],
     sunset: ["2026-08-20T16:42", "2026-08-21T16:40"],
   },
+  current: {
+    time: "2026-08-20T10:15", interval: 900, temperature_2m: 21,
+    apparent_temperature: 19.2, relative_humidity_2m: 65, surface_pressure: 1013.25,
+    visibility: 24000, uv_index: 4.2, precipitation: 2.3, wind_speed_10m: 3.2,
+    wind_direction_10m: 225, wind_gusts_10m: 5.1, cloud_cover: 90, weather_code: 82, is_day: 1,
+  },
   hourly: {
     time: ["2026-08-20T10:00", "2026-08-20T11:00"],
     temperature_2m: [27.1, 27.8],
@@ -54,6 +60,11 @@ describe("OpenMeteoWeatherClient", () => {
     expect(requestedUrl.searchParams.get("hourly")?.split(",")).toContain("relative_humidity_2m");
     expect(requestedUrl.searchParams.get("hourly")?.split(",")).toContain("uv_index");
     expect(requestedUrl.searchParams.get("hourly")?.split(",")).toEqual(expect.arrayContaining(["surface_pressure", "visibility"]));
+    expect(requestedUrl.searchParams.get("current")?.split(",")).toEqual(expect.arrayContaining(["weather_code", "precipitation", "is_day"]));
+    expect(forecast.current).toMatchObject({
+      time: "2026-08-20T10:15", intervalSeconds: 900, temperatureCelsius: 21,
+      precipitationMillimeters: 2.3, weatherCode: 82, isDay: true,
+    });
     expect(forecast.generatedAt).toBe("2026-08-20T08:00:00.000Z");
     expect(forecast.hourly[0]).toMatchObject({
       temperatureCelsius: 27.1,
@@ -165,6 +176,15 @@ describe("OpenMeteoWeatherClient", () => {
         location: { latitude: 44.65, longitude: 33.53 }, days: 2,
       })).rejects.toThrow();
     }
+  });
+
+  it.each([undefined, null, { ...validResponse.current, temperature_2m: null }, { ...validResponse.current, interval: -1 }])("preserves hourly data when current data is absent or invalid: %j", async (current) => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ ...validResponse, current })));
+    const result = await new OpenMeteoWeatherClient({ fetch: fetchMock }).getForecast({
+      location: { latitude: 44.65, longitude: 33.53 }, days: 2,
+    });
+    expect(result.current).toBeNull();
+    expect(result.hourly).toHaveLength(2);
   });
 
   it("rejects inconsistent hourly arrays", async () => {

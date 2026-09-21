@@ -9,7 +9,7 @@ test.describe("marine provider outage", () => {
       await page.goto(path);
       await expect(page.getByText("Морские данные недоступны", { exact: true })).toBeVisible();
       const card = page.getByRole("region", { name: "Погода сейчас", exact: true });
-      await expect(card.getByRole("group", { name: "Температура воздуха" }).locator("strong")).toHaveText("26°");
+      await expect(card.getByRole("group", { name: "Температура воздуха" }).locator("strong")).toHaveText("21°");
       for (const label of ["Вода", "Волна"]) {
         await expect(card.locator("dl > div").filter({ has: page.getByText(label, { exact: true }) }).locator("dd")).toHaveText("—");
       }

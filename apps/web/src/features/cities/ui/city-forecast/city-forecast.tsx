@@ -12,6 +12,7 @@ export async function CityForecast({ slug }: Readonly<{ slug: string }>) {
       eyebrow="Погода сейчас"
       generatedAt={forecast.generatedAt}
       freshness={forecast.freshness}
+      currentWeather={forecast.currentWeather}
       hours={forecast.hourly}
       showMarine={false}
       sunTimes={forecast.sunTimes}

@@ -117,3 +117,5 @@ export {
   type WeatherModelComparisonResponse,
 } from "./weather/weather-model-comparison.contract.js";
 
+
+export { currentWeatherSchema, type CurrentWeather } from "./forecast/current-weather.contract.js";
