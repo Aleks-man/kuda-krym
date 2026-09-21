@@ -11,7 +11,7 @@ export async function getBeachForecast(
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(
     new URL(`/api/forecast/${encodeURIComponent(beachId)}?days=3`, apiUrl),
-    { next: { revalidate: 600 } },
+    { cache: "no-store" },
   );
 
   if (response.status === 404) return null;

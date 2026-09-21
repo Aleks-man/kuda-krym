@@ -4,6 +4,7 @@ import type {
   ForecastSunTimes,
 } from "@kuda-krym/contracts";
 
+import { ForecastAutoRefresh } from "../forecast-auto-refresh/forecast-auto-refresh";
 import { UvIndex } from "../uv-index/uv-index";
 import { formatPressure, formatVisibility } from "../../model/weather-details";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
@@ -48,6 +49,7 @@ export function ForecastSummary({
 
   return (
     <section className={styles.section} aria-labelledby="forecast-title">
+      <ForecastAutoRefresh generatedAt={generatedAt} />
       <div className={styles.heading}>
         <div>
           <p className={styles.eyebrow}>{eyebrow}</p>

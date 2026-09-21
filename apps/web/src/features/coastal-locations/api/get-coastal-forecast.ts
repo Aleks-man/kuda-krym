@@ -14,7 +14,7 @@ export async function getCoastalForecast(
       `/api/coastal-locations/${encodeURIComponent(slug)}/forecast?days=3`,
       apiUrl,
     ),
-    { next: { revalidate: 900 } },
+    { cache: "no-store" },
   );
 
   if (!response.ok) {
