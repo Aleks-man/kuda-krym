@@ -18,6 +18,7 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
       eyebrow="Условия у воды"
       generatedAt={forecast.generatedAt}
       freshness={forecast.freshness}
+      currentWeather={forecast.currentWeather}
       hours={forecast.hourly}
       sunTimes={forecast.sunTimes}
       title="Прогноз на ближайшие часы"

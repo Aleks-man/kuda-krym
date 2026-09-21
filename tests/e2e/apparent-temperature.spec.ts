@@ -21,9 +21,13 @@ for (const width of [1280, 320]) {
         await expect(warning).toHaveCount(1);
         await expect(warning).toHaveCSS("color", "rgb(180, 35, 24)");
       }
+      await expect(card.getByRole("img", { name: "Сильный ливень", exact: true })).toBeVisible();
+      await expect(card.getByText("Осадки за 15 мин", { exact: true })).toBeVisible();
+      await expect(card.getByText("2.3 мм", { exact: true })).toBeVisible();
+      await expect(page.getByRole("tabpanel").getByRole("article").first().getByText("26°", { exact: true })).toBeVisible();
       const air = card.getByRole("group", { name: "Температура воздуха" });
-      await expect(air.locator("strong")).toHaveText("26°");
-      await expect(air.getByText("Ощущается как 29 °C", { exact: true })).toBeVisible();
+      await expect(air.locator("strong")).toHaveText("21°");
+      await expect(air.getByText("Ощущается как 19 °C", { exact: true })).toBeVisible();
       await expect(card.locator("dl > div")).toHaveCount(path.startsWith("/cities/") ? 5 : 6);
       const humidity = card.locator("dl > div").filter({ has: page.getByText("Влажность", { exact: true }) });
       await expect(humidity.locator("dd")).toHaveText("65 %");

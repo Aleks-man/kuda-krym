@@ -43,6 +43,7 @@ export class CityForecastService {
       timezone: "UTC",
       generatedAt: generatedAt.toISOString(),
       freshness: mapWeatherForecastFreshness(weather, modelAgreementLoad.freshness),
+      currentWeather: weather.current ?? null,
       sunTimes: weather.sunTimes ?? [],
       hourly: mapWeatherForecastHours(weather, {
         evaluatedAt: generatedAt,

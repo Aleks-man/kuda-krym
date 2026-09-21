@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { currentWeatherSchema } from "./current-weather.contract.js";
 import {
   forecastCoordinatesSchema,
   forecastHourSchema,
@@ -17,6 +18,7 @@ export const beachForecastSchema = z.object({
   generatedAt: z.iso.datetime(),
   freshness: forecastFreshnessSchema,
   sunTimes: z.array(forecastSunTimesSchema).default([]),
+  currentWeather: currentWeatherSchema.nullable().optional(),
   hourly: z.array(forecastHourSchema),
 });
 

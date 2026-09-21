@@ -33,6 +33,13 @@ function createWeatherResponse(url) {
   return {
     ...coordinates(url),
     timezone: "GMT",
+    ...(url.searchParams.has("current") && process.env.E2E_CURRENT_UNAVAILABLE !== "1" ? { current: {
+      time: new Date(Math.floor(Date.now() / 900_000) * 900_000).toISOString().slice(0, 16),
+      interval: 900, temperature_2m: 21, apparent_temperature: 19.2,
+      relative_humidity_2m: 65, surface_pressure: 1013.25, visibility: 24000, uv_index: 4.2,
+      precipitation: 2.3, wind_speed_10m: 3.2, wind_direction_10m: 225, wind_gusts_10m: 5.1,
+      cloud_cover: 90, weather_code: 82, is_day: 1,
+    } } : {}),
     daily: {
       time: dailyTime,
       sunrise: dailyTime.map((date) => `${date}T03:00`),

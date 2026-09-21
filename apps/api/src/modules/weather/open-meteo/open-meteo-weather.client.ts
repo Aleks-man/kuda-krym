@@ -22,6 +22,12 @@ const hourlyVariables = [
   "cloud_cover",
 ];
 
+const currentVariables = [
+  ...hourlyVariables.filter((variable) => variable !== "precipitation_probability"),
+  "weather_code",
+  "is_day",
+];
+
 const dailyVariables = ["sunrise", "sunset"];
 
 type OpenMeteoWeatherClientOptions = Readonly<{
@@ -68,6 +74,7 @@ export class OpenMeteoWeatherClient implements WeatherForecastProvider {
     url.searchParams.set("latitude", request.location.latitude.toString());
     url.searchParams.set("longitude", request.location.longitude.toString());
     url.searchParams.set("hourly", hourlyVariables.join(","));
+    url.searchParams.set("current", currentVariables.join(","));
     url.searchParams.set("daily", dailyVariables.join(","));
     url.searchParams.set("forecast_days", request.days.toString());
     url.searchParams.set("timezone", "GMT");

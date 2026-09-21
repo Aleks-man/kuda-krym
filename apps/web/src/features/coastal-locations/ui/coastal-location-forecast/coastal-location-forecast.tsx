@@ -27,6 +27,7 @@ export async function CoastalLocationForecast({
       eyebrow="Условия у побережья"
       generatedAt={forecast.generatedAt}
       freshness={forecast.freshness}
+      currentWeather={forecast.currentWeather}
       hours={forecast.hourly}
       sunTimes={forecast.sunTimes}
       title="Прогноз на ближайшие часы"

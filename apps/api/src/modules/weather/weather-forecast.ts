@@ -1,4 +1,4 @@
-import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
+import type { CurrentWeather, ForecastSourceFreshness } from "@kuda-krym/contracts";
 
 import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
 
@@ -40,6 +40,7 @@ export type WeatherForecast = Readonly<{
   timezone: "UTC";
   generatedAt: string;
   sunTimes?: DailySunTimes[];
+  current?: CurrentWeather | null;
   hourly: HourlyWeather[];
   freshness?: ForecastSourceFreshness;
 }>;
