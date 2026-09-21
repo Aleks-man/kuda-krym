@@ -6,7 +6,7 @@ export async function getCityForecast(slug: string): Promise<CityForecast> {
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(
     new URL(`/api/cities/${encodeURIComponent(slug)}/forecast?days=3`, apiUrl),
-    { next: { revalidate: 900 } },
+    { cache: "no-store" },
   );
   if (!response.ok) {
     throw new Error(`City forecast API returned status ${response.status}`);
