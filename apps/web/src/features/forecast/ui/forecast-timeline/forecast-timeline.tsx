@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import type { ForecastHour, ForecastSunTimes } from "@kuda-krym/contracts";
 import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
+import { UvIndex } from "../uv-index/uv-index";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import { selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
@@ -174,6 +175,7 @@ function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minim
       <dl className={styles.metrics}>
         {showMarine ? <div><dt>Вода</dt><dd>{formatMeasurement(hour.marine.seaSurfaceTemperatureCelsius, "°C")}</dd></div> : null}
         {showMarine ? <div><dt>Волна</dt><dd>{formatMeasurement(hour.marine.waveHeightMeters, "м", 1)}</dd></div> : null}
+        <div><dt>УФ-индекс</dt><dd><UvIndex value={hour.weather.uvIndex} /></dd></div>
         <div><dt><span className={styles.fullMetricLabel}>Вероятность дождя</span><span className={styles.compactMetricLabel}>Дождь</span></dt><dd>{hour.weather.precipitationProbabilityPercent}%</dd></div>
       </dl>
       <div

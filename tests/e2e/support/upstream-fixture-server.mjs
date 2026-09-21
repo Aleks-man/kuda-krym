@@ -11,6 +11,7 @@ const server = createServer((request, response) => {
     return sendJson(response, createWeatherResponse(url));
   }
   if (url.pathname === "/v1/marine") {
+    if (process.env.E2E_MARINE_UNAVAILABLE === "1") return sendJson(response, { error: "Marine temporarily unavailable" }, 503);
     return sendJson(response, createMarineResponse(url));
   }
   if (forecastPaths.has(url.pathname)) {
@@ -40,6 +41,11 @@ function createWeatherResponse(url) {
     hourly: {
       time,
       temperature_2m: values(time, 26),
+      ...(url.searchParams.get("hourly")?.split(",").includes("surface_pressure") ? { surface_pressure: values(time, 1013.25) } : {}),
+      ...(url.searchParams.get("hourly")?.split(",").includes("visibility") ? { visibility: values(time, 24000) } : {}),
+      ...(url.searchParams.get("hourly")?.split(",").includes("uv_index")
+        ? { uv_index: time.map((_, index) => index === 3 ? 6 : index === 4 ? 8 : index === 5 ? 11 : 4.2) }
+        : {}),
       ...(url.searchParams.get("hourly")?.split(",").includes("relative_humidity_2m")
         ? { relative_humidity_2m: values(time, 65) }
         : {}),

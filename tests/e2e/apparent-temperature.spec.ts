@@ -8,6 +8,19 @@ for (const width of [1280, 320]) {
       await page.goto(path);
       const card = page.getByRole("region", { name: "Погода сейчас", exact: true });
       await expect(card.getByText("Погода сейчас", { exact: true })).toBeVisible();
+      await expect(card.getByText("УФ-индекс 4.2", { exact: true })).toBeVisible();
+      await expect(card.getByText("Давление 760 мм рт. ст.", { exact: true })).toBeVisible();
+      await expect(card.getByText("Видимость 24 км", { exact: true })).toBeVisible();
+      const uv = page.getByRole("tabpanel").getByRole("article").first().locator("dl > div").filter({ has: page.getByText("УФ-индекс", { exact: true }) });
+      await expect(uv.locator("dd")).toHaveText("4.2");
+      if (!path.startsWith("/cities/")) await expect(uv.locator("xpath=preceding-sibling::div[1]/dt")).toHaveText("Волна");
+      await expect(page.getByRole("tabpanel")).not.toContainText("Давление");
+      await expect(page.getByRole("tabpanel")).not.toContainText("Видимость");
+      for (const value of ["6.0", "8.0", "11.0"]) {
+        const warning = page.getByRole("tabpanel").locator("dd > span[data-warning]").filter({ hasText: value });
+        await expect(warning).toHaveCount(1);
+        await expect(warning).toHaveCSS("color", "rgb(180, 35, 24)");
+      }
       const air = card.getByRole("group", { name: "Температура воздуха" });
       await expect(air.locator("strong")).toHaveText("26°");
       await expect(air.getByText("Ощущается как 29 °C", { exact: true })).toBeVisible();

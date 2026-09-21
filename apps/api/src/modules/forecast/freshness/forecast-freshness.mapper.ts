@@ -9,12 +9,12 @@ import { getDataFreshness } from "../../../shared/cache/cache-freshness.js";
 
 export function mapForecastFreshness(
   weather: WeatherForecast,
-  marine: MarineForecast,
+  marine: MarineForecast | null,
   weatherModels: ForecastSourceFreshness | null,
 ): ForecastFreshness {
   const sources = {
     weather: getDataFreshness(weather),
-    marine: getDataFreshness(marine),
+    marine: marine ? getDataFreshness(marine) : null,
     weatherModels,
   };
   const availableSources = [

@@ -12,6 +12,9 @@ export const openMeteoResponseSchema = z.object({
   hourly: z.object({
     time: z.array(z.string()),
     temperature_2m: z.array(z.number()),
+    surface_pressure: z.array(z.number().positive().nullable()).optional(),
+    visibility: z.array(z.number().nonnegative().nullable()).optional(),
+    uv_index: z.array(z.number().nonnegative().nullable()).optional(),
     relative_humidity_2m: z.array(z.number().min(0).max(100).nullable()).optional(),
     apparent_temperature: z.array(z.number().nullable()).optional(),
     precipitation_probability: z.array(z.number().min(0).max(100)),

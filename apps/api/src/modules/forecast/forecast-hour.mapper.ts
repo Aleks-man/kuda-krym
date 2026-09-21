@@ -23,11 +23,11 @@ type ForecastHourMappingOptions = Readonly<{
 
 export function mapForecastHours(
   weather: WeatherForecast,
-  marine: MarineForecast,
+  marine: MarineForecast | null,
   options: ForecastHourMappingOptions = {},
 ): ForecastHour[] {
   const marineByTime = new Map(
-    marine.hourly.map((conditions) => [conditions.time, conditions]),
+    marine?.hourly.map((conditions) => [conditions.time, conditions]),
   );
   const agreementByTime = new Map(
     options.modelAgreements?.map((agreement) => [agreement.time, agreement.score]),
@@ -38,7 +38,7 @@ export function mapForecastHours(
     mapForecastHour(
       conditions,
       marineByTime.get(conditions.time),
-      oldestGeneratedAt(weather.generatedAt, marine.generatedAt),
+      oldestGeneratedAt(weather.generatedAt, marine?.generatedAt ?? weather.generatedAt),
       evaluatedAt,
       agreementByTime.get(conditions.time),
       true,
@@ -103,6 +103,9 @@ function mapForecastHour(
     time: weather.time,
     weather: {
       temperatureCelsius: weather.temperatureCelsius,
+      surfacePressureHpa: weather.surfacePressureHpa ?? null,
+      visibilityMeters: weather.visibilityMeters ?? null,
+      uvIndex: weather.uvIndex ?? null,
       relativeHumidityPercent: weather.relativeHumidityPercent ?? null,
       apparentTemperatureCelsius: weather.apparentTemperatureCelsius ?? null,
       precipitationProbabilityPercent:
