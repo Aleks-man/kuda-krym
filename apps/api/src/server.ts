@@ -111,6 +111,7 @@ const weatherModelComparisonService = new WeatherModelComparisonService({
   ),
 });
 const coastalForecastService = new CoastalForecastService({
+  onMarineError: (error) => logger.warn("forecast.marine.unavailable", { error }),
   locationRepository: coastalLocationRepository,
   weatherProvider,
   marineProvider,
@@ -137,6 +138,7 @@ const departureLocationProvider = new CachedDepartureLocationProvider({
   },
 });
 const beachForecastService = new BeachForecastService({
+  onMarineError: (error) => logger.warn("forecast.marine.unavailable", { error }),
   beachRepository: new PrismaForecastBeachRepository(prisma),
   weatherProvider,
   marineProvider,

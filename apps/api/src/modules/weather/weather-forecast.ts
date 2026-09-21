@@ -18,6 +18,9 @@ export type HourlyWeather = Readonly<{
   /** Optional for forecasts cached before apparent temperature was requested. */
   apparentTemperatureCelsius?: number | null;
   relativeHumidityPercent?: number | null;
+  surfacePressureHpa?: number | null;
+  visibilityMeters?: number | null;
+  uvIndex?: number | null;
   precipitationProbabilityPercent: number;
   precipitationMillimeters: number;
   windSpeedMetersPerSecond: number;

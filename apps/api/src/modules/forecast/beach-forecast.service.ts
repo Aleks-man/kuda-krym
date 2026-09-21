@@ -15,6 +15,7 @@ type BeachForecastServiceDependencies = Readonly<{
   weatherProvider: WeatherForecastProvider;
   marineProvider: MarineForecastProvider;
   modelComparisonService: Pick<WeatherModelComparisonService, "compare">;
+  onMarineError?: (error: unknown) => void;
   now?: () => Date;
 }>;
 
@@ -42,7 +43,10 @@ export class BeachForecastService {
     } as const;
     const [weather, marine, modelAgreementLoad] = await Promise.all([
       this.dependencies.weatherProvider.getForecast(request),
-      this.dependencies.marineProvider.getForecast(request),
+      this.dependencies.marineProvider.getForecast(request).catch((error: unknown) => {
+        this.dependencies.onMarineError?.(error);
+        return null;
+      }),
       loadWeatherModelAgreements(
         this.dependencies.modelComparisonService,
         request.location,

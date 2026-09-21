@@ -32,6 +32,9 @@ export const forecastHourSchema = z.object({
   weather: z.object({
     temperatureCelsius: z.number(),
     // Older API responses may omit this field during a rolling deployment.
+    surfacePressureHpa: z.number().positive().nullable().optional(),
+    visibilityMeters: z.number().nonnegative().nullable().optional(),
+    uvIndex: z.number().nonnegative().nullable().optional(),
     apparentTemperatureCelsius: z.number().nullable().optional(),
     relativeHumidityPercent: z.number().min(0).max(100).nullable().optional(),
     precipitationProbabilityPercent: z.number().min(0).max(100),

@@ -15,6 +15,7 @@ type CoastalForecastServiceDependencies = Readonly<{
   weatherProvider: WeatherForecastProvider;
   marineProvider: MarineForecastProvider;
   modelComparisonService: Pick<WeatherModelComparisonService, "compare">;
+  onMarineError?: (error: unknown) => void;
   now?: () => Date;
 }>;
 
@@ -43,6 +44,9 @@ export class CoastalForecastService {
       this.dependencies.marineProvider.getForecast({
         location: location.marineCoordinates,
         days,
+      }).catch((error: unknown) => {
+        this.dependencies.onMarineError?.(error);
+        return null;
       }),
       loadWeatherModelAgreements(
         this.dependencies.modelComparisonService,

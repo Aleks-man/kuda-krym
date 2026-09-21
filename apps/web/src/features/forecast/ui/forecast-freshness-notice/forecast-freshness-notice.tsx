@@ -33,3 +33,16 @@ export function ForecastFreshnessNotice({
     </aside>
   );
 }
+
+export function MarineUnavailableNotice() {
+  return (
+    <aside className={styles.notice} role="status">
+      <div className={styles.icon} aria-hidden="true">!</div>
+      <div>
+        <p>Морские данные недоступны</p>
+        <h3>Показываем прогноз погоды</h3>
+        <span>Сервис морского прогноза временно не отвечает. Температура воды и волны появятся после восстановления данных.</span>
+      </div>
+    </aside>
+  );
+}

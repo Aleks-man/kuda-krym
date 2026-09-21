@@ -4,6 +4,8 @@ import type {
   ForecastSunTimes,
 } from "@kuda-krym/contracts";
 
+import { UvIndex } from "../uv-index/uv-index";
+import { formatPressure, formatVisibility } from "../../model/weather-details";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import {
   formatForecastUpdatedAt,
@@ -13,7 +15,7 @@ import {
 import { ConditionScores } from "../condition-scores/condition-scores";
 import { ForecastConfidence } from "../forecast-confidence/forecast-confidence";
 import { ForecastProvenance } from "../forecast-provenance/forecast-provenance";
-import { ForecastFreshnessNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
+import { ForecastFreshnessNotice, MarineUnavailableNotice } from "../forecast-freshness-notice/forecast-freshness-notice";
 import { ForecastTimeline } from "../forecast-timeline/forecast-timeline";
 import styles from "./forecast-summary.module.css";
 
@@ -54,6 +56,7 @@ export function ForecastSummary({
       </div>
 
       <ForecastFreshnessNotice freshness={freshness} />
+      {showMarine && freshness.sources.marine === null ? <MarineUnavailableNotice /> : null}
 
       <p className={styles.updated}>
         Обновлено{" "}
@@ -82,9 +85,16 @@ export function ForecastSummary({
               {sky.label} · облачность {current.weather.cloudCoverPercent}%
             </span>
           </span>
-          <div className={styles.air} role="group" aria-label="Температура воздуха">
-            <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
-            <span>Ощущается как {formatMeasurement(current.weather.apparentTemperatureCelsius ?? null, "°C")}</span>
+          <div className={styles.details}>
+            <span>УФ-индекс <UvIndex value={current.weather.uvIndex} inverse /></span>
+            <span>Давление {formatPressure(current.weather.surfacePressureHpa)}</span>
+            <span>Видимость {formatVisibility(current.weather.visibilityMeters)}</span>
+          </div>
+          <div>
+            <div className={styles.air} role="group" aria-label="Температура воздуха">
+              <strong>{Math.round(current.weather.temperatureCelsius)}°</strong>
+              <span>Ощущается как {formatMeasurement(current.weather.apparentTemperatureCelsius ?? null, "°C")}</span>
+            </div>
           </div>
         </div>
         <dl className={styles.summary}>
