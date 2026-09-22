@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { YandexMetrika } from "@/shared/analytics/yandex-metrika";
 
 import { SiteHeader } from "@/shared/ui/site-header/site-header";
 import { SiteFooter } from "@/shared/ui/site-footer/site-footer";
@@ -62,6 +64,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           {children}
         </div>
         <SiteFooter />
+        <Suspense fallback={null}><YandexMetrika /></Suspense>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
 
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { trackGoal } from "@/shared/analytics/metrika";
 import { submitRecommendations } from "../../api/submit-recommendations";
 import { DepartureLocationField } from "@/features/departure-locations/ui/departure-location-field/departure-location-field";
 import { createRecommendationRequest } from "../../model/recommendation-form";
@@ -59,8 +60,12 @@ export function RecommendationPreferences() {
 
     try {
       const request = createRecommendationRequest(new FormData(event.currentTarget));
-      setResult(await submitRecommendations(request));
+      trackGoal("recommendation_submit");
+      const response = await submitRecommendations(request);
+      setResult(response);
+      trackGoal(response.data.length > 0 ? "recommendation_results" : "recommendation_empty");
     } catch (cause) {
+      trackGoal("recommendation_error");
       setResult(null);
       setError(cause instanceof Error ? cause.message : "Не удалось подобрать пляжи");
     } finally {
