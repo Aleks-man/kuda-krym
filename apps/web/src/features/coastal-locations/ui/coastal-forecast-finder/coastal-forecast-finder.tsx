@@ -6,11 +6,7 @@ import { useId, useMemo, useState, type KeyboardEvent } from "react";
 
 import fieldStyles from "@/features/departure-locations/ui/departure-location-field/departure-location-field.module.css";
 
-import { filterCoastalLocations } from "../../model/filter-coastal-locations";
-import {
-  coastalRegionLabels,
-  waterBodyLabels,
-} from "../../model/coastal-location-labels";
+import { getForecastPlaceOptions, type ForecastPlaceOption } from "../../model/forecast-place-options";
 
 type CoastalForecastFinderProps = Readonly<{
   locations: readonly CoastalLocation[];
@@ -24,15 +20,15 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const options = useMemo(
-    () => filterCoastalLocations(locations, query),
+    () => getForecastPlaceOptions(locations, query),
     [locations, query],
   );
   const activeOption = options[activeIndex];
 
-  function openLocation(location: CoastalLocation) {
+  function openLocation(location: ForecastPlaceOption) {
     setQuery(location.name);
     setIsOpen(false);
-    router.push(`/coast/${location.slug}`);
+    router.push(location.href);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -119,8 +115,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
             >
               <strong>{location.name}</strong>
               <small>
-                {coastalRegionLabels[location.region]} ·{" "}
-                {waterBodyLabels[location.waterBody]}
+                {location.detail}
               </small>
             </button>
           ))}

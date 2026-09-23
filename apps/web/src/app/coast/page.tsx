@@ -3,6 +3,8 @@ import { connection } from "next/server";
 import { getCoastalLocations } from "@/features/coastal-locations/api/get-coastal-locations";
 import { CoastalLocationGroups } from "@/features/coastal-locations/ui/coastal-location-groups/coastal-location-groups";
 import { CoastalLocationMap } from "@/features/coastal-locations/ui/coastal-location-map/coastal-location-map";
+import { CoastalForecastFinder } from "@/features/coastal-locations/ui/coastal-forecast-finder/coastal-forecast-finder";
+import filterStyles from "@/features/beaches/ui/beach-catalog-filters/beach-catalog-filters.module.css";
 import { createPageMetadata } from "@/shared/seo/page-metadata";
 
 import styles from "./page.module.css";
@@ -31,6 +33,15 @@ export default async function CoastPage() {
       </header>
 
       <CoastalLocationMap locations={locations} />
+      <section className={filterStyles.panel} aria-labelledby="coast-finder-title">
+        <div className={filterStyles.heading}>
+          <div>
+            <p className={filterStyles.eyebrow}>Поиск прогноза</p>
+            <h2 id="coast-finder-title">Выберите населённый пункт</h2>
+          </div>
+        </div>
+        <CoastalForecastFinder locations={locations} />
+      </section>
       <CoastalLocationGroups locations={locations} />
     </main>
   );
