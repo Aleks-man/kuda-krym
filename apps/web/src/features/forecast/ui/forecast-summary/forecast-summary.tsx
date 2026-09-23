@@ -134,7 +134,7 @@ function ConditionsIcon({ variant }: Readonly<{ variant: string }>) {
       {variant === "thunder" ? <path d="m25 24-7 11h7l-4 8 13-13h-8l4-6Z" fill="#ffe99a" /> :
         variant === "snow" ? <path d="M17 30v10m-4-8 8 6m-8 0 8-6m13-2v10m-4-8 8 6m-8 0 8-6" stroke="white" strokeWidth="2" /> :
         variant === "fog" ? <path d="M6 31h35M10 37h28" stroke="#c6dedf" strokeWidth="2" strokeLinecap="round" /> :
-        <path d={variant === "heavy-rain" ? "m14 30-3 7m12-7-3 7m12-7-3 7m-12 3-1 3m12-3-1 3" : "m16 30-3 7m13-7-3 7m13-7-3 7"} stroke="#b7eaff" strokeWidth="2.5" strokeLinecap="round" />}
+        <path d={variant === "heavy-rain" ? "m14 30-3 7m12-7-3 7m12-7-3 7m-12 3-1 3m12-3-1 3" : "m13 30-3 7m13-7-3 7m13-7-3 7"} stroke="#b7eaff" strokeWidth="2.5" strokeLinecap="round" />}
     </svg>
   );
 }
