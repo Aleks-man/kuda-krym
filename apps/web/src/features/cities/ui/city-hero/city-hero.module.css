@@ -19,3 +19,7 @@
   .visual { min-height: 280px; }
   .caption { right: 18px; bottom: 16px; left: 18px; }
 }
+
+.hero[data-without-image] { grid-template-columns: 1fr; }
+
+.area { margin: 12px 0 0; color: var(--muted); font-size: 15px; line-height: 1.4; }

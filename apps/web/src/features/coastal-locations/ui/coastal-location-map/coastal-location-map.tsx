@@ -1,4 +1,4 @@
-import type { CoastalLocation } from "@kuda-krym/contracts";
+import { inlandForecastLocations, type CoastalLocation } from "@kuda-krym/contracts";
 
 import {
   InteractiveMap,
@@ -26,15 +26,15 @@ export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
       location.weatherCoordinates.longitude,
     ],
   }));
-  const points: MapPoint[] = [...coastalPoints, {
-    id: "city-simferopol",
-    label: "Симферополь",
-    description: "Городской прогноз без морских показателей",
-    href: "/cities/simferopol",
+  const points: MapPoint[] = [...coastalPoints, ...inlandForecastLocations.map((city): MapPoint => ({
+    id: `city-${city.slug}`,
+    label: city.name,
+    description: city.areaLabel,
+    href: `/cities/${city.slug}`,
     actionLabel: "Смотреть погоду",
-    position: [44.952117, 34.102417],
+    position: [city.coordinates.latitude, city.coordinates.longitude],
     variant: "city",
-  }];
+  }))];
 
   return (
     <section className={styles.section} aria-labelledby="coast-map-title">
@@ -42,11 +42,11 @@ export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
         <p>Весь полуостров</p>
         <h2 id="coast-map-title">Населённые пункты Крыма на карте</h2>
         <span>
-          Каждая точка — отдельная зона прогноза погоды, ветра, волн и состояния моря.
+          Прогноз погоды для городов и посёлков. На побережье — также волны и температура моря.
         </span>
       </header>
       <InteractiveMap
-        ariaLabel="Карта прибрежных локаций Крыма"
+        ariaLabel="Карта населённых пунктов Крыма"
         center={[...crimeaCenter]}
         points={points}
         zoom={8}

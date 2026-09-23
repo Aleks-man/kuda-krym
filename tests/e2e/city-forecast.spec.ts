@@ -17,3 +17,15 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
   await expect(forecast.getByRole("option")).toHaveCount(7);
   await forecast.getByRole("combobox", { name: "День прогноза" }).press("Escape");
 });
+
+for (const place of [{ slug: "bakhchisaray", name: "Бахчисарай" }, { slug: "krasnogvardeyskoye", name: "Красногвардейское" }]) {
+  test(`shows a weather-only page for ${place.name}`, async ({ page }) => {
+    await page.goto(`/cities/${place.slug}`);
+    await expect(page.getByRole("heading", { level: 1, name: place.name, exact: true })).toBeVisible();
+    const forecast = page.getByRole("region", { name: "Погода сейчас", exact: true });
+    await expect(forecast).toBeVisible();
+    await expect(forecast.getByText(place.name, { exact: true }).first()).toBeVisible();
+    await expect(page.locator("#forecast-days-timeline")).not.toContainText("Волна");
+    await expect(page.locator("#forecast-days-timeline")).not.toContainText("Вода");
+  });
+}

@@ -1,4 +1,4 @@
-import type { CityForecast } from "@kuda-krym/contracts";
+import { getInlandForecastLocation, type CityForecast } from "@kuda-krym/contracts";
 
 import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
 import { mapWeatherForecastFreshness } from "../forecast/freshness/forecast-freshness.mapper.js";
@@ -6,14 +6,6 @@ import { mapWeatherForecastHours } from "../forecast/forecast-hour.mapper.js";
 import { loadWeatherModelAgreements } from "../forecast/load-weather-model-agreements.js";
 import type { WeatherForecastProvider } from "../weather/weather-forecast.js";
 import type { WeatherModelComparisonService } from "../weather/models/comparison/weather-model-comparison.service.js";
-
-const cities = {
-  simferopol: {
-    slug: "simferopol",
-    name: "Симферополь",
-    coordinates: { latitude: 44.952117, longitude: 34.102417 },
-  },
-} as const;
 
 type Dependencies = Readonly<{
   weatherProvider: WeatherForecastProvider;
@@ -29,7 +21,7 @@ export class CityForecastService {
   }
 
   public async getForecast(slug: string, days: ForecastDays): Promise<CityForecast | null> {
-    const city = cities[slug as keyof typeof cities];
+    const city = getInlandForecastLocation(slug);
     if (!city) return null;
 
     const [weather, modelAgreementLoad] = await Promise.all([

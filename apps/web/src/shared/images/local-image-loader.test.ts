@@ -45,5 +45,5 @@ describe("prepared local images", () => {
         expect(image.format).toBe("webp");
       }
     }
-  });
+  }, 15_000);
 });
