@@ -1,5 +1,7 @@
 import type { RecommendationRequest } from "@kuda-krym/contracts";
 
+import { forecastDaysSchema } from "../../../shared/forecast/forecast-days.js";
+
 import type { RecommendationContext } from "./recommendation-context.js";
 import { UnsupportedRecommendationDateError } from "./recommendation-context.error.js";
 import { normalizeRecommendationOrigin } from "./normalize-recommendation-origin.js";
@@ -19,16 +21,10 @@ export function normalizeRecommendationRequest(
   now = new Date(),
 ): RecommendationContext {
   const today = getCrimeaDate(now);
-  const tomorrow = getCrimeaDate(new Date(now.getTime() + dayMilliseconds));
-  const dayAfterTomorrow = getCrimeaDate(
-    new Date(now.getTime() + 2 * dayMilliseconds),
-  );
+  const dayOffset = (Date.parse(request.date) - Date.parse(today)) / dayMilliseconds;
+  const forecastDays = forecastDaysSchema.safeParse(dayOffset + 1);
 
-  if (
-    request.date !== today &&
-    request.date !== tomorrow &&
-    request.date !== dayAfterTomorrow
-  ) {
+  if (!forecastDays.success) {
     throw new UnsupportedRecommendationDateError(request.date);
   }
 
@@ -37,8 +33,7 @@ export function normalizeRecommendationRequest(
   return {
     origin: normalizeRecommendationOrigin(request.origin),
     date: request.date,
-    forecastDays:
-      request.date === today ? 1 : request.date === tomorrow ? 2 : 3,
+    forecastDays: forecastDays.data,
     visitWindow: {
       startsAt: toUtc(request.date, window.startsAt),
       endsAt: toUtc(request.date, window.endsAt),

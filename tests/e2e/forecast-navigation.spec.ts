@@ -13,26 +13,27 @@ for (const width of [1280, 390]) {
       await page.emulateMedia({ reducedMotion: "reduce" });
       await page.route("https://api-maps.yandex.ru/**", route => route.abort());
       await page.goto(destination.path);
-      const card = page.getByRole("tabpanel");
+      const card = page.locator("#forecast-days-timeline");
       const heading = card.locator("header");
       const place = heading.getByText(destination.name, { exact: true });
       await expect(place).toBeVisible();
-      const date = heading.locator("strong");
+      await expect(heading.locator("strong")).toHaveCount(0);
       const updated = heading.locator("p");
       const placeBox = (await place.boundingBox())!;
-      const dateBox = (await date.boundingBox())!;
       const updatedBox = (await updated.boundingBox())!;
-      expect(placeBox.x).toBeGreaterThanOrEqual(dateBox.x + dateBox.width);
       if (width < 680) {
-        expect(updatedBox.y).toBeGreaterThanOrEqual(dateBox.y + dateBox.height);
         expect(updatedBox.x).toBeLessThan(placeBox.x);
       } else {
         expect(updatedBox.x).toBeGreaterThan(placeBox.x);
       }
 
       // Changing the forecast day must keep the location context.
-      await page.getByRole("tab").nth(1).click();
-      await expect(page.getByRole("tab").nth(1)).toHaveAttribute("aria-selected", "true");
+      const datePicker = page.getByRole("combobox", { name: "День прогноза" });
+      await datePicker.click();
+      const lastDate = page.getByRole("option").last();
+      const dateLabel = (await lastDate.textContent())!.trim();
+      await lastDate.click();
+      await expect(datePicker).toContainText(dateLabel);
       await expect(place).toHaveText(destination.name);
       const back = card.getByRole("link", { name: destination.label, exact: true });
       await expect(back).toHaveAttribute("href", destination.href);
@@ -48,7 +49,7 @@ test("long beach names fit the forecast header on narrow phones", async ({ page 
   await page.setViewportSize({ width: 320, height: 800 });
   await page.route("https://api-maps.yandex.ru/**", route => route.abort());
   await page.goto("/beaches/sudak-central");
-  const card = page.getByRole("tabpanel");
+  const card = page.locator("#forecast-days-timeline");
   const place = card.locator("header").getByText("Центральный городской пляж Судака", { exact: true });
   await expect(place).toBeVisible();
   expect(await place.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);

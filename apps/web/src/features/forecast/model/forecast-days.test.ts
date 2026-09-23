@@ -1,7 +1,7 @@
 import type { ForecastHour } from "@kuda-krym/contracts";
 import { describe, expect, it } from "vitest";
 
-import { selectForecastDays } from "./forecast-days";
+import { formatForecastDateOption, selectForecastDays } from "./forecast-days";
 
 describe("selectForecastDays", () => {
   it("groups upcoming hours by calendar day in Crimea", () => {
@@ -18,14 +18,14 @@ describe("selectForecastDays", () => {
     expect(result).toHaveLength(2);
     expect(result[0]).toMatchObject({
       dateKey: "2026-08-28",
-      label: "Сегодня, 28 августа",
+      label: "Сегодня, 28 августа (пятница)",
     });
     expect(result[0]?.hours.map(({ time }) => time)).toEqual([
       "2026-08-28T20:00",
     ]);
     expect(result[1]).toMatchObject({
       dateKey: "2026-08-29",
-      label: "Завтра, 29 августа",
+      label: "Завтра, 29 августа (суббота)",
     });
   });
 
@@ -97,3 +97,15 @@ function dayHours(date: string): string[] {
     (_, hour) => `${date}T${hour.toString().padStart(2, "0")}:00`,
   );
 }
+
+it("includes the seventh local day and excludes the UTC spill into the eighth", () => {
+  const now = new Date("2026-09-23T06:00:00Z");
+  const hourly = hours(...Array.from({ length: 168 }, (_, i) => new Date(Date.parse("2026-09-23T00:00:00Z") + i * 3_600_000).toISOString().slice(0, 16)));
+  const days = selectForecastDays(hourly, now);
+  expect(days.map(day => day.dateKey)).toEqual(["2026-09-23", "2026-09-24", "2026-09-25", "2026-09-26", "2026-09-27", "2026-09-28", "2026-09-29"]);
+  expect(days[6]!.hours.at(-1)!.time).toBe("2026-09-29T19:00");
+});
+
+it("formats a forecast date with its weekday", () => {
+  expect(formatForecastDateOption("2026-09-23")).toBe("23 сентября (среда)");
+});

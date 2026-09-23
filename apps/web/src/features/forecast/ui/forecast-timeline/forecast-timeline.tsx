@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { SelectField } from "@/shared/ui/select-field/select-field";
 
 import type { ForecastHour, ForecastSunTimes } from "@kuda-krym/contracts";
-import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
+import { memo, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { UvIndex } from "../uv-index/uv-index";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
-import { selectForecastDays } from "../../model/forecast-days";
+import { formatForecastDateOption, selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
@@ -14,8 +15,9 @@ type Props = Readonly<{ locationName: string; catalogHref: "/beaches" | "/coast"
 type DragState = { pointerId: number; startX: number; scrollLeft: number };
 
 export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours, showMarine = true, sunTimes }: Props) {
-  const days = selectForecastDays(hours);
+  const days = useMemo(() => selectForecastDays(hours), [hours]);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const scrollTargetRef = useRef<number | null>(null);
   const dragRef = useRef<DragState>({ pointerId: -1, startX: 0, scrollLeft: 0 });
   const [selectedDate, setSelectedDate] = useState(days[0]?.dateKey ?? "");
   const selectedDay = days.find((day) => day.dateKey === selectedDate) ?? days[0];
@@ -31,19 +33,23 @@ export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours
     <section className={styles.section} aria-labelledby="forecast-timeline-title">
       <div className={styles.heading}>
         <p className={styles.eyebrow}>Почасовой прогноз</p>
-        <h3 id="forecast-timeline-title">Ближайшие три дня</h3>
+        <h3 id="forecast-timeline-title">Прогноз на неделю</h3>
       </div>
-      <div aria-label="День прогноза" className={styles.tabs} role="tablist">
-        {days.map((day) => (
-          <button aria-controls="forecast-days-timeline" aria-selected={day.dateKey === selectedDay.dateKey} key={day.dateKey} onClick={() => scrollToDay(scrollerRef.current, day.dateKey)} role="tab" type="button">
-            <span className={styles.fullDayLabel}>{day.label}</span>
-            <span className={styles.compactDayLabel}>{day.label.split(",")[0]}</span>
-          </button>
-        ))}
+      <div className={styles.datePicker}>
+        <SelectField
+          hideLabel
+          label="День прогноза"
+          name="forecastDate"
+          value={selectedDay.dateKey}
+          onChange={(dateKey) => {
+            setSelectedDate(dateKey);
+            scrollTargetRef.current = scrollToDay(scrollerRef.current, dateKey);
+          }}
+          options={days.map((day) => ({ value: day.dateKey, label: formatForecastDateOption(day.dateKey) }))}
+        />
       </div>
-      <section aria-label={selectedDay.label} className={styles.day} id="forecast-days-timeline" role="tabpanel">
+      <section aria-label={selectedDay.label} className={styles.day} id="forecast-days-timeline">
         <header>
-          <strong>{selectedDay.label}</strong>
           <span className={styles.location}>{locationName}</span>
           <p className={styles.updated}>Обновлено <time dateTime={generatedAt}>{formatForecastUpdatedAt(generatedAt)}</time></p>
         </header>
@@ -52,19 +58,33 @@ export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours
           aria-label="Почасовой прогноз: прокрутка по времени"
           className={styles.scroller}
           onPointerCancel={(event) => endDragging(event, dragRef)}
-          onPointerDown={(event) => startDragging(event, dragRef)}
+          onPointerDown={(event) => {
+            scrollTargetRef.current = null;
+            startDragging(event, dragRef);
+          }}
+          onWheel={() => { scrollTargetRef.current = null; }}
+          onKeyDown={() => { scrollTargetRef.current = null; }}
           onPointerMove={(event) => moveTimeline(event, dragRef)}
           onPointerUp={(event) => endDragging(event, dragRef)}
           onScroll={(event) => {
+            if (scrollTargetRef.current !== null) {
+              if (Math.abs(event.currentTarget.scrollLeft - scrollTargetRef.current) > 1) return;
+              scrollTargetRef.current = null;
+            }
             const dateKey = getVisibleDate(event.currentTarget);
             if (dateKey && dateKey !== selectedDate) setSelectedDate(dateKey);
+          }}
+          onScrollEnd={(event) => {
+            scrollTargetRef.current = null;
+            const dateKey = getVisibleDate(event.currentTarget);
+            if (dateKey) setSelectedDate(dateKey);
           }}
           ref={scrollerRef}
           tabIndex={0}
         >
           <div className={styles.timeline}>
             {timelineHours.map(({ dateKey, hour }, index) => (
-              <ForecastHourCard
+              <MemoForecastHourCard
                 dateKey={dateKey}
                 hour={hour}
                 isDayStart={index > 0 && timelineHours[index - 1]?.dateKey !== dateKey}
@@ -116,7 +136,10 @@ function SunTimeEvent({
 
 function scrollToDay(scroller: HTMLDivElement | null, dateKey: string) {
   const target = scroller?.querySelector<HTMLElement>(`[data-date="${dateKey}"]`);
-  scroller?.scrollTo({ behavior: "smooth", left: target?.offsetLeft ?? 0 });
+  if (!scroller || !target) return null;
+  const left = Math.min(target.offsetLeft + target.clientLeft, scroller.scrollWidth - scroller.clientWidth);
+  scroller.scrollTo({ behavior: "smooth", left });
+  return left;
 }
 
 function getVisibleDate(scroller: HTMLDivElement) {
@@ -145,6 +168,8 @@ function endDragging(event: ReactPointerEvent<HTMLDivElement>, dragRef: RefObjec
 }
 
 type CardProps = Readonly<{ dateKey: string; hour: ForecastHour; isDayStart: boolean; maximumTemperature: number; minimumTemperature: number; showMarine: boolean }>;
+
+const MemoForecastHourCard = memo(ForecastHourCard);
 
 function ForecastHourCard({ dateKey, hour, isDayStart, maximumTemperature, minimumTemperature, showMarine }: CardProps) {
   const weather = getWeatherPresentation(hour);

@@ -17,12 +17,6 @@ export const originOptions = [
   { value: "shchelkino", label: "Щёлкино" },
 ] as const;
 
-export const dateOptions = [
-  { value: "today", label: "Сегодня" },
-  { value: "tomorrow", label: "Завтра" },
-  { value: "dayAfterTomorrow", label: "Послезавтра" },
-] as const;
-
 export const travelTimeOptions = [
   { value: "60", label: "До 1 часа" },
   { value: "90", label: "До 1,5 часов" },

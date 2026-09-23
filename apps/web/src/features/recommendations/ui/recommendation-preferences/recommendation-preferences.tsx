@@ -2,12 +2,14 @@
 
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { SelectField } from "@/shared/ui/select-field/select-field";
 import { trackGoal } from "@/shared/analytics/metrika";
 import { submitRecommendations } from "../../api/submit-recommendations";
 import { DepartureLocationField } from "@/features/departure-locations/ui/departure-location-field/departure-location-field";
 import { createRecommendationRequest } from "../../model/recommendation-form";
 import {
-  formatRecommendationDate,
+  getRecommendationDateOptions,
+  parseRelativeRecommendationDate,
   type RelativeRecommendationDate,
 } from "../../model/crimea-date";
 import {
@@ -17,7 +19,6 @@ import {
   type RecommendationTime,
 } from "../../model/recommendation-time-availability";
 import {
-  dateOptions,
   priorityOptions,
   timeOptions,
 } from "../../model/preference-options";
@@ -97,24 +98,16 @@ export function RecommendationPreferences() {
 
         <fieldset className={styles.fieldset}>
           <legend>Когда</legend>
-          <div className={styles.threeColumns}>
-            {dateOptions.map((option) => (
-              <PreferenceChoice
-                checked={effectiveDate === option.value}
-                detail={
-                  currentDate
-                    ? formatRecommendationDate(option.value, currentDate)
-                    : undefined
-                }
-                key={option.value}
-                label={option.label}
-                name="date"
-                disabled={option.value === "today" && todayIsUnavailable}
-                onChange={() => setSelectedDate(option.value)}
-                value={option.value}
-              />
-            ))}
-          </div>
+          {currentDate ? (
+            <SelectField
+              hideLabel
+              label="Дата поездки"
+              name="date"
+              value={effectiveDate}
+              onChange={(value) => setSelectedDate(parseRelativeRecommendationDate(value))}
+              options={getRecommendationDateOptions(currentDate).filter((option) => option.value !== "today" || !todayIsUnavailable)}
+            />
+          ) : <input type="hidden" name="date" value={effectiveDate} />}
         </fieldset>
 
         <fieldset className={styles.fieldset}>

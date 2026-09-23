@@ -11,20 +11,20 @@ for (const width of [1280, 320]) {
       await expect(card.getByText("УФ-индекс 4.2", { exact: true })).toBeVisible();
       await expect(card.getByText("Давление 760 мм рт. ст.", { exact: true })).toBeVisible();
       await expect(card.getByText("Видимость 24 км", { exact: true })).toBeVisible();
-      const uv = page.getByRole("tabpanel").getByRole("article").first().locator("dl > div").filter({ has: page.getByText("УФ-индекс", { exact: true }) });
+      const uv = page.locator("#forecast-days-timeline").getByRole("article").first().locator("dl > div").filter({ has: page.getByText("УФ-индекс", { exact: true }) });
       await expect(uv.locator("dd")).toHaveText("4.2");
       if (!path.startsWith("/cities/")) await expect(uv.locator("xpath=preceding-sibling::div[1]/dt")).toHaveText("Волна");
-      await expect(page.getByRole("tabpanel")).not.toContainText("Давление");
-      await expect(page.getByRole("tabpanel")).not.toContainText("Видимость");
+      await expect(page.locator("#forecast-days-timeline")).not.toContainText("Давление");
+      await expect(page.locator("#forecast-days-timeline")).not.toContainText("Видимость");
       for (const value of ["6.0", "8.0", "11.0"]) {
-        const warning = page.getByRole("tabpanel").locator("dd > span[data-warning]").filter({ hasText: value });
+        const warning = page.locator("#forecast-days-timeline").locator("dd > span[data-warning]").filter({ hasText: value });
         await expect(warning).toHaveCount(1);
         await expect(warning).toHaveCSS("color", "rgb(180, 35, 24)");
       }
       await expect(card.getByRole("img", { name: "Сильный ливень", exact: true })).toBeVisible();
       await expect(card.getByText("Осадки за 15 мин", { exact: true })).toBeVisible();
       await expect(card.getByText("2.3 мм", { exact: true })).toBeVisible();
-      await expect(page.getByRole("tabpanel").getByRole("article").first().getByText("26°", { exact: true })).toBeVisible();
+      await expect(page.locator("#forecast-days-timeline").getByRole("article").first().getByText("26°", { exact: true })).toBeVisible();
       const air = card.getByRole("group", { name: "Температура воздуха" });
       await expect(air.locator("strong")).toHaveText("21°");
       await expect(air.getByText("Ощущается как 19 °C", { exact: true })).toBeVisible();

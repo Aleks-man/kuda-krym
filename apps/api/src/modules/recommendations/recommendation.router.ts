@@ -52,7 +52,7 @@ export function createRecommendationRouter(
       throw new HttpError({
         status: 400,
         code: "UNSUPPORTED_RECOMMENDATION_DATE",
-        message: "Подбор доступен только на ближайшие три дня",
+        message: "Подбор доступен на ближайшие семь дней, включая сегодня",
         cause: error,
       });
     }

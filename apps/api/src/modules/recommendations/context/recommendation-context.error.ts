@@ -1,7 +1,7 @@
 export class UnsupportedRecommendationDateError extends Error {
   public constructor(public readonly date: string) {
     super(
-      `Recommendation date ${date} must be today, tomorrow or the day after tomorrow in Crimea`,
+      `Recommendation date ${date} must be within the next seven calendar days, including today, in Crimea`,
     );
     this.name = "UnsupportedRecommendationDateError";
   }

@@ -20,7 +20,7 @@ export async function CoastalForecastFinderSection() {
       style={{ zIndex: 3, alignItems: "start", padding: "clamp(20px, 3vw, 32px)", gap: "20px", gridTemplateColumns: "minmax(0, 1fr)" }}
     >
       <div className={styles.intro} style={{ position: "static" }}>
-        <p className={fieldStyles.label} style={{ marginBottom: "10px", fontSize: "12px", letterSpacing: ".04em", lineHeight: "18px" }}>Погода и море · на три дня</p>
+        <p className={fieldStyles.label} style={{ marginBottom: "10px", fontSize: "12px", letterSpacing: ".04em", lineHeight: "18px" }}>Погода и море · на неделю</p>
         <h2 id="forecast-finder-title" style={{ fontSize: "30px", lineHeight: 1.1 }}>Прогноз по побережью</h2>
         <span style={{ marginTop: "12px", fontSize: "14px", lineHeight: 1.5 }}>
           Узнайте температуру воды, силу ветра и высоту волн там, куда собираетесь.

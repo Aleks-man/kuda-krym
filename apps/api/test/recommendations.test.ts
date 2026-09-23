@@ -30,11 +30,11 @@ describe("POST /api/recommendations", () => {
     });
   });
 
-  it("rejects a date outside today and tomorrow", async () => {
+  it("rejects a date outside the seven-day window", async () => {
     const response = await request(
       createTestApp({
         recommendationError: new UnsupportedRecommendationDateError(
-          "2026-08-22",
+          "2026-08-27",
         ),
       }),
     )

@@ -13,5 +13,7 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
   await expect(forecast.getByText("Вода", { exact: true })).toHaveCount(0);
   await expect(forecast.getByText("Волна", { exact: true })).toHaveCount(0);
   await expect(forecast.getByText("Море — Open-Meteo Marine API")).toHaveCount(0);
-  await expect(forecast.getByRole("tab")).toHaveCount(3);
+  await forecast.getByRole("combobox", { name: "День прогноза" }).click();
+  await expect(forecast.getByRole("option")).toHaveCount(7);
+  await forecast.getByRole("combobox", { name: "День прогноза" }).press("Escape");
 });

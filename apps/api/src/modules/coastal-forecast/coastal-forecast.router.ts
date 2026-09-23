@@ -11,7 +11,7 @@ const querySchema = z.object({
   days: z.coerce
     .number()
     .pipe(forecastDaysSchema)
-    .default(3),
+    .default(7),
 });
 
 export function createCoastalForecastRouter(
