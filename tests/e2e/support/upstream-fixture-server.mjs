@@ -28,7 +28,7 @@ for (const signal of ["SIGINT", "SIGTERM"]) {
 }
 
 function createWeatherResponse(url) {
-  const time = createHourlyTimes();
+  const time = createHourlyTimes(url);
   const dailyTime = createDailyTimes(url);
   return {
     ...coordinates(url),
@@ -70,7 +70,7 @@ function createWeatherResponse(url) {
 }
 
 function createMarineResponse(url) {
-  const time = createHourlyTimes();
+  const time = createHourlyTimes(url);
   const dailyTime = createDailyTimes(url);
   return {
     ...coordinates(url),
@@ -91,10 +91,10 @@ function createModelResponse(url) {
   return { ...weather, hourly };
 }
 
-function createHourlyTimes() {
+function createHourlyTimes(url) {
   const firstHour = new Date();
   firstHour.setUTCMinutes(0, 0, 0);
-  return Array.from({ length: 72 }, (_, index) =>
+  return Array.from({ length: Number(url.searchParams.get("forecast_days") ?? 7) * 24 }, (_, index) =>
     new Date(firstHour.getTime() + index * 3_600_000)
       .toISOString()
       .slice(0, 16),
@@ -102,7 +102,7 @@ function createHourlyTimes() {
 }
 
 function createDailyTimes(url) {
-  const dayCount = Number(url.searchParams.get("forecast_days") ?? 3);
+  const dayCount = Number(url.searchParams.get("forecast_days") ?? 7);
   const firstDay = new Date();
   firstDay.setUTCHours(0, 0, 0, 0);
   return Array.from({ length: dayCount }, (_, index) =>

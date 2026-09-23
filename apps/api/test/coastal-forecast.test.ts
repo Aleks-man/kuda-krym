@@ -52,7 +52,7 @@ describe("GET /api/coastal-locations/:slug/forecast", () => {
           ],
         },
       }),
-    ).get("/api/coastal-locations/yalta/forecast?days=3");
+    ).get("/api/coastal-locations/yalta/forecast?days=7");
 
     const body = coastalForecastSchema.parse(response.body);
     expect(response.status).toBe(200);
@@ -74,7 +74,7 @@ describe("GET /api/coastal-locations/:slug/forecast", () => {
   it("returns 400 for invalid forecast days", async () => {
     const response = await request(
       createTestApp({ coastalLocations: [yalta] }),
-    ).get("/api/coastal-locations/yalta/forecast?days=7");
+    ).get("/api/coastal-locations/yalta/forecast?days=8");
 
     expect(response.status).toBe(400);
     expect(response.body.error.code).toBe(

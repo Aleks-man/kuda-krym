@@ -15,7 +15,10 @@ export type SelectFieldOption = Readonly<{
 }>;
 
 type SelectFieldProps = Readonly<{
-  initialValue: string;
+  initialValue?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  hideLabel?: boolean;
   label: string;
   name: string;
   options: readonly SelectFieldOption[];
@@ -23,7 +26,10 @@ type SelectFieldProps = Readonly<{
 }>;
 
 export function SelectField({
-  initialValue,
+  initialValue = "",
+  value: controlledValue,
+  onChange,
+  hideLabel = false,
   label,
   name,
   options,
@@ -32,16 +38,18 @@ export function SelectField({
   const labelId = useId();
   const listboxId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState(initialValue);
+  const [internalValue, setValue] = useState(initialValue);
+  const value = controlledValue ?? internalValue;
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(() =>
-    Math.max(0, options.findIndex((option) => option.value === initialValue)),
+    Math.max(0, options.findIndex((option) => option.value === (controlledValue ?? initialValue))),
   );
   const selectedOption =
     options.find((option) => option.value === value) ?? options[0];
 
   function selectOption(optionValue: string) {
     setValue(optionValue);
+    onChange?.(optionValue);
     setIsOpen(false);
     setActiveIndex(
       Math.max(0, options.findIndex((option) => option.value === optionValue)),
@@ -79,7 +87,7 @@ export function SelectField({
         if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
       }}
     >
-      <span className={styles.label} id={labelId}>
+      <span className={hideLabel ? styles.visuallyHidden : styles.label} id={labelId}>
         {label}
       </span>
       <div className={styles.control}>
@@ -94,7 +102,10 @@ export function SelectField({
           aria-haspopup="listbox"
           aria-labelledby={labelId}
           className={styles.trigger}
-          onClick={() => setIsOpen((open) => !open)}
+          onClick={() => {
+            setActiveIndex(Math.max(0, options.findIndex((option) => option.value === value)));
+            setIsOpen((open) => !open);
+          }}
           onKeyDown={handleKeyDown}
           role="combobox"
           type="button"

@@ -8,7 +8,7 @@ import type { BeachForecastService } from "./beach-forecast.service.js";
 
 const paramsSchema = z.object({ beachId: z.uuid() });
 const querySchema = z.object({
-  days: z.coerce.number().pipe(forecastDaysSchema).default(3),
+  days: z.coerce.number().pipe(forecastDaysSchema).default(7),
 });
 
 export function createBeachForecastRouter(service: BeachForecastService): Router {

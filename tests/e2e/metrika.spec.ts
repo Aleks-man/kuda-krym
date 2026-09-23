@@ -30,7 +30,8 @@ test("tracks production page transitions once and recommendation goals without c
   expect((await calls()).filter(call => call[1] === "init")).toHaveLength(1);
   await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
   await page.getByRole("option", { name: /^Ялта/ }).first().click();
-  await page.locator("#preferences").getByText("Завтра", { exact: true }).click();
+  await page.getByRole("combobox", { name: "Дата поездки" }).click();
+  await page.getByRole("option", { name: /^Завтра,/ }).click();
   await page.getByRole("button", { name: "Подобрать пляж" }).click();
   await expect(page.getByRole("heading", { level: 4, name: "Ялта" })).toBeVisible();
   const goals = (await calls()).filter(call => call[1] === "reachGoal").map(call => call[2]);

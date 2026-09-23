@@ -12,9 +12,12 @@ export type ForecastDay = Readonly<{
 export function selectForecastDays(
   hourly: ForecastHour[],
   now = new Date(),
-  dayLimit = 3,
+  dayLimit = 7,
 ): ForecastDay[] {
-  const upcoming = hourly.filter((hour) => asUtcDate(hour.time) >= now);
+  const lastDateKey = getCrimeaDateKey(new Date(now.getTime() + (dayLimit - 1) * millisecondsPerDay));
+  const upcoming = hourly.filter((hour) =>
+    asUtcDate(hour.time) >= now && getCrimeaDateKey(asUtcDate(hour.time)) <= lastDateKey,
+  );
   const hasUpcomingHours = upcoming.length > 0;
   const available = hasUpcomingHours ? upcoming : hourly;
   const selectedHours = hasUpcomingHours
@@ -67,9 +70,9 @@ function formatDayLabel(dateKey: string, now: Date): string {
     ? "Сегодня"
     : dateKey === tomorrowKey
       ? "Завтра"
-      : capitalize(formatWeekday(dateKey));
+      : "";
 
-  return `${prefix}, ${formatDate(dateKey)}`;
+  return `${prefix ? prefix + ", " : ""}${formatForecastDateOption(dateKey)}`;
 }
 
 function getCrimeaDateKey(date: Date): string {
@@ -115,6 +118,7 @@ function asUtcDate(time: string): Date {
   return new Date(`${time}Z`);
 }
 
-function capitalize(value: string): string {
-  return `${value.charAt(0).toLocaleUpperCase("ru-RU")}${value.slice(1)}`;
+export function formatForecastDateOption(dateKey: string): string {
+  const weekday = formatWeekday(dateKey);
+  return `${formatDate(dateKey)} (${weekday})`;
 }

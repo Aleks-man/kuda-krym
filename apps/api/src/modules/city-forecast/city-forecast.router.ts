@@ -8,7 +8,7 @@ import type { CityForecastService } from "./city-forecast.service.js";
 
 const paramsSchema = z.object({ slug: z.string().trim().min(1) });
 const querySchema = z.object({
-  days: z.coerce.number().pipe(forecastDaysSchema).default(3),
+  days: z.coerce.number().pipe(forecastDaysSchema).default(7),
 });
 
 export function createCityForecastRouter(

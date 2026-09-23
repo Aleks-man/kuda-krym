@@ -9,5 +9,5 @@ test("labels hourly fallback honestly when current conditions are unavailable", 
   await expect(card.getByText("Погода сейчас", { exact: true })).toHaveCount(0);
   await expect(card.getByRole("group", { name: "Температура воздуха" }).locator("strong")).toHaveText("26°");
   await expect(card.getByText("Осадки за час", { exact: true })).toBeVisible();
-  await expect(page.getByRole("tabpanel")).toBeVisible();
+  await expect(page.locator("#forecast-days-timeline")).toBeVisible();
 });

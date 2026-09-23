@@ -13,7 +13,7 @@ export function CityHero() {
         <p className={styles.eyebrow}>Погода в городе</p>
         <h1>{simferopol.name}</h1>
         <p className={styles.description}>
-          Температура, облачность, осадки и ветер на ближайшие три дня.
+          Температура, облачность, осадки и ветер на ближайшие семь дней.
         </p>
       </div>
       <figure className={styles.visual}>

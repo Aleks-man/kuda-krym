@@ -5,7 +5,7 @@ const defaultApiUrl = "http://127.0.0.1:4000";
 export async function getCityForecast(slug: string): Promise<CityForecast> {
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(
-    new URL(`/api/cities/${encodeURIComponent(slug)}/forecast?days=3`, apiUrl),
+    new URL(`/api/cities/${encodeURIComponent(slug)}/forecast?days=7`, apiUrl),
     { cache: "no-store" },
   );
   if (!response.ok) {

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("shows verified beach media and a three-day forecast", async ({ page }) => {
+test("shows verified beach media and a seven-day forecast", async ({ page }) => {
   await page.goto("/beaches/popovka");
 
   await expect(
@@ -26,8 +26,10 @@ test("shows verified beach media and a three-day forecast", async ({ page }) => 
   await expect(forecast.getByText("25 °C", { exact: true }).first()).toBeVisible();
   await expect(forecast.getByText("0.3 м", { exact: true }).first()).toBeVisible();
   await expect(
-    forecast.getByRole("heading", { level: 3, name: "Ближайшие три дня" }),
+    forecast.getByRole("heading", { level: 3, name: "Прогноз на неделю" }),
   ).toBeVisible();
-  await expect(forecast.getByRole("tab")).toHaveCount(3);
-  await expect(forecast.getByRole("tabpanel")).toBeVisible();
+  await forecast.getByRole("combobox", { name: "День прогноза" }).click();
+  await expect(forecast.getByRole("option")).toHaveCount(7);
+  await forecast.getByRole("combobox", { name: "День прогноза" }).press("Escape");
+  await expect(forecast.locator("#forecast-days-timeline")).toBeVisible();
 });

@@ -7,8 +7,7 @@
 .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
 .fieldset legend { display: block; margin-bottom: 10px; color: #405b56; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
-.twoColumns, .threeColumns, .fourColumns { display: grid; gap: 9px; }
-.twoColumns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.threeColumns, .fourColumns { display: grid; gap: 9px; }
 .threeColumns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .fourColumns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .footer { display: flex; align-items: center; gap: 18px; padding-top: 4px; }

@@ -22,7 +22,7 @@ describe("GET /api/cities/:slug/forecast", () => {
           cloudCoverPercent: 12,
         }],
       },
-    })).get("/api/cities/simferopol/forecast?days=3");
+    })).get("/api/cities/simferopol/forecast?days=7");
 
     const body = cityForecastSchema.parse(response.body);
     expect(response.status).toBe(200);
