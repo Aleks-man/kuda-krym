@@ -21,7 +21,7 @@ export async function CoastalForecastFinderSection() {
     >
       <div className={styles.intro} style={{ position: "static" }}>
         <p className={fieldStyles.label} style={{ marginBottom: "10px", fontSize: "12px", letterSpacing: ".04em", lineHeight: "18px" }}>Погода и море · на неделю</p>
-        <h2 id="forecast-finder-title" style={{ fontSize: "30px", lineHeight: 1.1 }}>Прогноз по побережью</h2>
+        <h2 id="forecast-finder-title" style={{ fontSize: "30px", lineHeight: 1.1 }}>Прогноз погоды</h2>
         <span style={{ marginTop: "12px", fontSize: "14px", lineHeight: 1.5 }}>
           Узнайте температуру воды, силу ветра и высоту волн там, куда собираетесь.
         </span>
@@ -30,7 +30,7 @@ export async function CoastalForecastFinderSection() {
         <CoastalForecastFinder locations={locations} />
         <div className={styles.footer}>
           <Link className={homeStyles.action} href="/coast" style={{ padding: "12px 18px", fontSize: "13px" }}>
-            Все населённые пункты <span aria-hidden="true">→</span>
+            Все прибрежные населённые пункты <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>

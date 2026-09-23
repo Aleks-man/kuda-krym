@@ -49,13 +49,12 @@ export default async function BeachesPage({ searchParams }: BeachesPageProps) {
         )}
       </header>
 
+      {beaches.length > 0 ? <BeachMap beaches={beaches} /> : null}
+
       <BeachCatalogFilters options={filterOptions} query={query} />
 
       {beaches.length > 0 ? (
-        <>
-          <BeachMap beaches={beaches} />
-          <BeachGrid beaches={beaches} />
-        </>
+        <BeachGrid beaches={beaches} />
       ) : (
         <BeachEmptyState filtered={hasActiveFilters} />
       )}

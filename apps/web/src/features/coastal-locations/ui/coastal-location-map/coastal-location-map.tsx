@@ -40,7 +40,7 @@ export function CoastalLocationMap({ locations }: CoastalLocationMapProps) {
     <section className={styles.section} aria-labelledby="coast-map-title">
       <header>
         <p>Весь полуостров</p>
-        <h2 id="coast-map-title">Прибрежные города на карте</h2>
+        <h2 id="coast-map-title">Населённые пункты Крыма на карте</h2>
         <span>
           Каждая точка — отдельная зона прогноза погоды, ветра, волн и состояния моря.
         </span>

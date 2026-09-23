@@ -16,7 +16,7 @@ for (const width of [1280, 320]) {
   test(`forecast card supports keyboard selection and catalog navigation at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    const card = page.getByRole("region", { name: "Прогноз по побережью", exact: true });
+    const card = page.getByRole("region", { name: "Прогноз погоды", exact: true });
     await expect(card).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     const search = card.getByRole("combobox", { name: "Населённый пункт" });
@@ -28,7 +28,18 @@ for (const width of [1280, 320]) {
     await search.press("Enter");
     await expect(page).toHaveURL(/\/coast\/yalta$/);
     await page.goto("/");
-    await card.getByRole("link", { name: "Все населённые пункты" }).click();
+    await card.getByRole("link", { name: "Все прибрежные населённые пункты" }).click();
     await expect(page).toHaveURL(/\/coast$/);
+  });
+}
+
+for (const path of ["/", "/coast"]) {
+  test(`opens Simferopol weather from ${path} search`, async ({ page }) => {
+    await page.route("https://api-maps.yandex.ru/**", route => route.abort());
+    await page.goto(path);
+    await page.getByRole("combobox", { name: "Населённый пункт" }).fill("Симфер");
+    await page.getByRole("option", { name: /Симферополь/ }).click();
+    await expect(page).toHaveURL(/\/cities\/simferopol$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Симферополь" })).toBeVisible();
   });
 }
