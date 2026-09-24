@@ -4,17 +4,22 @@ type SitemapSource = Readonly<{
   siteUrl: URL;
   beachSlugs: readonly string[];
   coastalLocationSlugs: readonly string[];
+  citySlugs?: readonly string[];
 }>;
 
 export function createSitemap({
   siteUrl,
   beachSlugs,
   coastalLocationSlugs,
+  citySlugs = [],
 }: SitemapSource): MetadataRoute.Sitemap {
   return [
     entry(siteUrl, "/", "weekly", 1),
     entry(siteUrl, "/beaches", "daily", 0.9),
     entry(siteUrl, "/coast", "daily", 0.9),
+    ...citySlugs.map((slug) =>
+      entry(siteUrl, `/cities/${encodeURIComponent(slug)}`, "daily", 0.8),
+    ),
     ...beachSlugs.map((slug) =>
       entry(siteUrl, `/beaches/${encodeURIComponent(slug)}`, "daily", 0.8),
     ),

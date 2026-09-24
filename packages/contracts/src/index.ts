@@ -119,3 +119,5 @@ export {
 
 
 export { currentWeatherSchema, type CurrentWeather } from "./forecast/current-weather.contract.js";
+
+export { inlandForecastLocations, getInlandForecastLocation, type InlandForecastLocation } from "./cities/inland-forecast-locations.js";

@@ -1,3 +1,4 @@
+import { inlandForecastLocations } from "@kuda-krym/contracts";
 import type { MetadataRoute } from "next";
 
 import { getBeaches } from "@/features/beaches/api/get-beaches";
@@ -15,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return createSitemap({
     siteUrl: getSiteUrl(),
+    citySlugs: inlandForecastLocations.map(({ slug }) => slug),
     beachSlugs: beaches.map(({ slug }) => slug),
     coastalLocationSlugs: coastalLocations.map(({ slug }) => slug),
   });

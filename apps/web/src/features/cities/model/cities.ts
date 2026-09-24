@@ -1,4 +1,5 @@
-import type { PlaceImage } from "@kuda-krym/contracts";
+import { inlandForecastLocations, type InlandForecastLocation, type PlaceImage } from "@kuda-krym/contracts";
+import { cityCoverImages } from "./city-images";
 
 export const simferopol = {
   slug: "simferopol",
@@ -15,6 +16,13 @@ export const simferopol = {
   } satisfies PlaceImage,
 } as const;
 
+export type WeatherCity = InlandForecastLocation & Readonly<{ coverImage?: PlaceImage }>;
+
+export const cities: readonly WeatherCity[] = inlandForecastLocations.map((city) => {
+  const coverImage = city.slug === "simferopol" ? simferopol.coverImage : cityCoverImages[city.slug];
+  return { ...city, ...(coverImage ? { coverImage } : {}) };
+});
+
 export function getCity(slug: string) {
-  return slug === simferopol.slug ? simferopol : null;
+  return cities.find((city) => city.slug === slug) ?? null;
 }

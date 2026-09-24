@@ -13,10 +13,10 @@ type Props = Readonly<{ params: Promise<{ slug: string }> }>;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const city = getCity((await params).slug);
-  if (!city) return { title: "Город не найден", robots: { index: false, follow: false } };
+  if (!city) return { title: "Населённый пункт не найден", robots: { index: false, follow: false } };
   return createPageMetadata({
     title: `Погода — ${city.name}`,
-    description: `Погода в ${city.name}: температура, осадки, облачность и ветер.`,
+    description: `Прогноз погоды: ${city.name}. Температура, осадки, облачность и ветер на семь дней.`,
     pathname: `/cities/${city.slug}`,
   });
 }
@@ -26,7 +26,7 @@ export default async function CityPage({ params }: Props) {
   if (!city) notFound();
   return (
     <main className={styles.main}>
-      <CityHero />
+      <CityHero city={city} />
       <Suspense fallback={<BeachForecastSkeleton />}>
         <CityForecast slug={city.slug} />
       </Suspense>
