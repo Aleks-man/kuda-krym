@@ -38,7 +38,9 @@ for (const path of ["/", "/coast"]) {
     await page.route("https://api-maps.yandex.ru/**", route => route.abort());
     await page.goto(path);
     await page.getByRole("combobox", { name: "Населённый пункт" }).fill("Симфер");
-    await page.getByRole("option", { name: /Симферополь/ }).click();
+    await page.getByRole("option")
+      .filter({ has: page.getByText("Симферополь", { exact: true }) })
+      .click();
     await expect(page).toHaveURL(/\/cities\/simferopol$/);
     await expect(page.getByRole("heading", { level: 1, name: "Симферополь" })).toBeVisible();
   });
