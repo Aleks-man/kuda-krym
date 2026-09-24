@@ -57,3 +57,5 @@
   .card:hover { box-shadow: 0 22px 48px rgb(19 77 80 / 16%); transform: translateY(-3px); }
   .card:hover .image { transform: scale(1.035); }
 }
+
+.results, .empty { scroll-margin-top: 100px; }

@@ -1,7 +1,7 @@
 "use client";
 
 import type { RecommendationResponse } from "@kuda-krym/contracts";
-import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { SelectField } from "@/shared/ui/select-field/select-field";
 import { trackGoal } from "@/shared/analytics/metrika";
 import { submitRecommendations } from "../../api/submit-recommendations";
@@ -29,6 +29,16 @@ import styles from "./recommendation-preferences.module.css";
 
 export function RecommendationPreferences() {
   const [result, setResult] = useState<RecommendationResponse | null>(null);
+  const resultsRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!result) return;
+    resultsRef.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      block: "start",
+    });
+  }, [result]);
+
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] =
@@ -163,7 +173,7 @@ export function RecommendationPreferences() {
           </div>
         ) : null}
       </form>
-      {result ? <RecommendationResults result={result} /> : null}
+      {result ? <RecommendationResults ref={resultsRef} result={result} /> : null}
     </section>
   );
 }
