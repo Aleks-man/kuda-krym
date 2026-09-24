@@ -1,7 +1,7 @@
 import type { RecommendationResponse } from "@kuda-krym/contracts";
 import Image from "next/image";
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import type { CSSProperties, Ref } from "react";
 import { formatMeasurement } from "../../model/recommendation-labels";
 import {
   formatTravelDistance,
@@ -12,6 +12,7 @@ import styles from "./recommendation-results.module.css";
 
 type RecommendationResultsProps = {
   result: RecommendationResponse;
+  ref?: Ref<HTMLElement>;
 };
 
 type RecommendationItem = RecommendationResponse["data"][number];
@@ -22,12 +23,12 @@ const weakConditionLabels = {
   WARM_WATER: "Вода прохладнее",
 } as const;
 
-export function RecommendationResults({ result }: RecommendationResultsProps) {
+export function RecommendationResults({ result, ref }: RecommendationResultsProps) {
   if (result.data.length === 0) {
     return (
-      <div className={styles.empty} role="status">
+      <section ref={ref} className={styles.empty} role="status">
         Для этих условий подходящих пляжей пока нет. Попробуйте изменить параметры.
-      </div>
+      </section>
     );
   }
 
@@ -36,6 +37,7 @@ export function RecommendationResults({ result }: RecommendationResultsProps) {
 
   return (
     <section
+      ref={ref}
       aria-labelledby="recommendation-results-title"
       aria-live="polite"
       className={styles.results}
