@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
+  output: "standalone",
 };
 
 export default nextConfig;
