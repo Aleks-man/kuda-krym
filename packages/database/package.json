@@ -30,9 +30,12 @@
     "validate:beach-images": "tsx scripts/validate-beach-images.ts",
     "validate:coastal-location-images": "tsx scripts/validate-coastal-location-images.ts",
     "validate:coastal-locations": "tsx scripts/validate-coastal-locations.ts",
-    "validate:place-image-files": "tsx scripts/validate-place-image-files.ts"
+    "validate:place-image-files": "tsx scripts/validate-place-image-files.ts",
+    "prevalidate:place-image-files": "npm run build --workspace @kuda-krym/contracts",
+    "preimages:download": "npm run build --workspace @kuda-krym/contracts"
   },
   "dependencies": {
+    "@kuda-krym/contracts": "^0.1.0",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "dotenv": "^17.4.2",
