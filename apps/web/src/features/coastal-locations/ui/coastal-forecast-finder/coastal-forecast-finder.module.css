@@ -1,0 +1,4 @@
+.finder label { font-size: 13px; }
+.finder input[role="combobox"] { font-size: 18px; }
+.finder [role="option"] { font-family: inherit; font-size: 16px; line-height: 1.4; }
+.finder [role="option"] small { font-size: 14px; }

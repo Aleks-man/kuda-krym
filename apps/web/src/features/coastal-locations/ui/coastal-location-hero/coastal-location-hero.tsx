@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ForecastBackLink } from "@/shared/ui/forecast-back-link/forecast-back-link";
 import type { CoastalLocation } from "@kuda-krym/contracts";
 import Image from "next/image";
 
@@ -18,9 +18,7 @@ export function CoastalLocationHero({ location }: CoastalLocationHeroProps) {
   return (
     <header className={styles.hero}>
       <div className={styles.copy}>
-        <Link className={styles.back} href="/coast">
-          ← Всё побережье
-        </Link>
+        <ForecastBackLink className={styles.back} />
         <p className={styles.eyebrow}>
           {coastalRegionLabels[location.region]} ·{" "}
           {waterBodyLabels[location.waterBody]}
