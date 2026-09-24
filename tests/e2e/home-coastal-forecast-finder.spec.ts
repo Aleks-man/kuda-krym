@@ -7,10 +7,12 @@ test("opens a coastal forecast from the home page search", async ({ page }) => {
   await search.fill("Николаевка");
   await page.getByRole("option", { name: /Николаевка/ }).click();
 
-  await expect(page).toHaveURL(/\/coast\/nikolaevka$/);
+  await expect(page).toHaveURL(/\/coast\/nikolaevka\?from=home$/);
   await expect(
     page.getByRole("heading", { level: 1, name: "Николаевка" }),
   ).toBeVisible();
+  await page.getByRole("link", { name: "← На главную", exact: true }).click();
+  await expect(page).toHaveURL(/\/$/);
 });
 for (const width of [1280, 320]) {
   test(`forecast card supports keyboard selection and catalog navigation at ${width}px`, async ({ page }) => {
@@ -26,7 +28,7 @@ for (const width of [1280, 320]) {
     await expect(search).toHaveAttribute("aria-expanded", "false");
     await search.fill("Ялта");
     await search.press("Enter");
-    await expect(page).toHaveURL(/\/coast\/yalta$/);
+    await expect(page).toHaveURL(/\/coast\/yalta\?from=home$/);
     await page.goto("/");
     await card.getByRole("link", { name: "Все прибрежные населённые пункты" }).click();
     await expect(page).toHaveURL(/\/coast$/);
@@ -41,7 +43,9 @@ for (const path of ["/", "/coast"]) {
     await page.getByRole("option")
       .filter({ has: page.getByText("Симферополь", { exact: true }) })
       .click();
-    await expect(page).toHaveURL(/\/cities\/simferopol$/);
+    await expect(page).toHaveURL(path === "/" ? /\/cities\/simferopol\?from=home$/ : /\/cities\/simferopol$/);
     await expect(page.getByRole("heading", { level: 1, name: "Симферополь" })).toBeVisible();
+    await page.getByRole("link", { name: path === "/" ? "← На главную" : "← К населённым пунктам", exact: true }).click();
+    await expect(page).toHaveURL(path === "/" ? /\/$/ : /\/coast$/);
   });
 }

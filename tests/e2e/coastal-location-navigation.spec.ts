@@ -25,6 +25,6 @@ test("opens a coastal location from the catalog", async ({ page }) => {
   ).toBeVisible();
   await expect(locationHero.getByRole("img", { name: /Ялт/ })).toBeVisible();
   await expect(
-    locationHero.getByRole("link", { name: "← Всё побережье" }),
+    locationHero.getByRole("link", { name: "← К населённым пунктам" }),
   ).toHaveAttribute("href", "/coast");
 });

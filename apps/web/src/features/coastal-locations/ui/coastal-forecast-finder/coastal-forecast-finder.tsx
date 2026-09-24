@@ -1,12 +1,14 @@
 "use client";
 
 import type { CoastalLocation } from "@kuda-krym/contracts";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useId, useMemo, useState, type KeyboardEvent } from "react";
 
 import fieldStyles from "@/features/departure-locations/ui/departure-location-field/departure-location-field.module.css";
 
 import { getForecastPlaceOptions, type ForecastPlaceOption } from "../../model/forecast-place-options";
+
+import styles from "./coastal-forecast-finder.module.css";
 
 type CoastalForecastFinderProps = Readonly<{
   locations: readonly CoastalLocation[];
@@ -14,6 +16,7 @@ type CoastalForecastFinderProps = Readonly<{
 
 export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const inputId = useId();
   const listboxId = useId();
   const [query, setQuery] = useState("");
@@ -28,7 +31,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
   function openLocation(location: ForecastPlaceOption) {
     setQuery(location.name);
     setIsOpen(false);
-    router.push(location.href);
+    router.push(pathname === "/" ? `${location.href}?from=home` : location.href);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -51,7 +54,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
 
   return (
     <div
-      className={fieldStyles.field}
+      className={`${fieldStyles.field} ${styles.finder}`}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
       }}
@@ -84,7 +87,7 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
           onKeyDown={handleKeyDown}
           placeholder="Например, Николаевка"
           role="combobox"
-          style={{ fontSize: "16px", padding: "0 16px" }}
+          style={{ padding: "0 16px" }}
           value={query}
         />
         <span
