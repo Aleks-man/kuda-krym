@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { prepareForecastCalendar } from "./support/forecast-calendar";
 
 test("shows verified beach media and a seven-day forecast", async ({ page }) => {
+  const expectedDays = await prepareForecastCalendar(page);
   await page.goto("/beaches/popovka");
 
   await expect(
@@ -29,7 +31,7 @@ test("shows verified beach media and a seven-day forecast", async ({ page }) => 
     forecast.getByRole("heading", { level: 3, name: "Прогноз на неделю" }),
   ).toBeVisible();
   await forecast.getByRole("combobox", { name: "День прогноза" }).click();
-  await expect(forecast.getByRole("option")).toHaveCount(7);
+  await expect(forecast.getByRole("option")).toHaveText(expectedDays);
   await forecast.getByRole("combobox", { name: "День прогноза" }).press("Escape");
   await expect(forecast.locator("#forecast-days-timeline")).toBeVisible();
 });

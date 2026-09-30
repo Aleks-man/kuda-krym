@@ -109,3 +109,18 @@ it("includes the seventh local day and excludes the UTC spill into the eighth", 
 it("formats a forecast date with its weekday", () => {
   expect(formatForecastDateOption("2026-09-23")).toBe("23 сентября (среда)");
 });
+
+it("omits today after its last forecast hour without extending the seven-day window", () => {
+  const now = new Date("2026-09-30T20:01:00Z");
+  const hourly = hours(...Array.from({ length: 168 }, (_, index) =>
+    new Date(Date.parse("2026-09-30T20:00:00Z") + index * 3_600_000).toISOString().slice(0, 16),
+  ));
+
+  const days = selectForecastDays(hourly, now);
+
+  expect(days.map(day => day.dateKey)).toEqual([
+    "2026-10-01", "2026-10-02", "2026-10-03",
+    "2026-10-04", "2026-10-05", "2026-10-06",
+  ]);
+  expect(days[0]!.hours[0]!.time).toBe("2026-09-30T21:00");
+});

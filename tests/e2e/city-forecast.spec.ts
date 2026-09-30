@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { prepareForecastCalendar } from "./support/forecast-calendar";
 
 test("opens the Simferopol weather forecast without marine conditions", async ({ page }) => {
+  const expectedDays = await prepareForecastCalendar(page);
   await page.goto("/cities/simferopol");
 
   await expect(page.getByRole("heading", { level: 1, name: "Симферополь" })).toBeVisible();
@@ -14,7 +16,7 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
   await expect(forecast.getByText("Волна", { exact: true })).toHaveCount(0);
   await expect(forecast.getByText("Море — Open-Meteo Marine API")).toHaveCount(0);
   await forecast.getByRole("combobox", { name: "День прогноза" }).click();
-  await expect(forecast.getByRole("option")).toHaveCount(7);
+  await expect(forecast.getByRole("option")).toHaveText(expectedDays);
   await forecast.getByRole("combobox", { name: "День прогноза" }).press("Escape");
 });
 
