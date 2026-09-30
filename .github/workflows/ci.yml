@@ -64,6 +64,22 @@ jobs:
       - name: Build production containers
         run: docker compose --env-file compose.env.example build
 
+      - name: Validate isolated migration image
+        run: |
+          docker compose --env-file compose.env.example run --rm --no-deps migrate npm run validate --workspace @kuda-krym/database
+          docker compose --env-file compose.env.example run --rm --no-deps migrate node -e "require.resolve('tsx'); try { require.resolve('next'); process.exit(1); } catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; }"
+
+      - name: Check migration and seed against disposable PostgreSQL
+        run: |
+          docker compose --env-file compose.env.example up -d --wait postgres
+          docker compose --env-file compose.env.example run --rm --no-deps migrate
+          docker compose --env-file compose.env.example --profile tools run --rm --no-deps seed
+          docker compose --env-file compose.env.example run --rm --no-deps migrate
+
+      - name: Remove disposable CI containers and data
+        if: always()
+        run: docker compose --env-file compose.env.example --profile tools down --volumes
+
   e2e:
     name: E2E smoke tests
     runs-on: ubuntu-latest
