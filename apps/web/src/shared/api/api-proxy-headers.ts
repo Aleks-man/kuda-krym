@@ -10,15 +10,8 @@ export function createApiProxyHeaders(requestHeaders: Headers): Headers {
 }
 
 function getClientIp(headers: Headers): string | null {
-  const candidates = [
-    headers.get("x-real-ip"),
-    headers.get("x-forwarded-for")?.split(",", 1)[0],
-  ];
-
-  for (const candidate of candidates) {
-    const normalized = candidate?.trim();
-    if (normalized && isIP(normalized)) return normalized;
-  }
-
-  return null;
+  // The public proxy must sanitize X-Forwarded-For; web must not be exposed directly.
+  // X-Real-IP is client-controlled and must never override that trusted address.
+  const address = headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim();
+  return address && isIP(address) ? address : null;
 }

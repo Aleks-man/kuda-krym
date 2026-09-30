@@ -13,5 +13,8 @@ kudakrym.ru {
     -Server
   }
 
-  reverse_proxy web:3000
+  reverse_proxy web:3000 {
+    # Caddy supplies X-Forwarded-For from the connection; discard client X-Real-IP.
+    header_up -X-Real-IP
+  }
 }
