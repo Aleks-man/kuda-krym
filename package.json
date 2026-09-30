@@ -27,7 +27,7 @@
     "test": "npm run test --workspaces --if-present && npm run test:release && npm run test:e2e-config",
     "test:release-config": "node --test scripts/release/production-env.test.mjs",
     "test:deployment-check": "node --test scripts/release/deployment-check.test.mjs",
-    "test:release": "node --test scripts/release/production-env.test.mjs scripts/release/deployment-check.test.mjs scripts/release/release-commands.test.mjs scripts/release/image-cleanup.test.mjs",
+    "test:release": "node --test scripts/release/production-env.test.mjs scripts/release/deployment-check.test.mjs scripts/release/release-commands.test.mjs scripts/release/image-cleanup.test.mjs scripts/release/automatic-cleanup.test.mjs",
     "pretest:e2e": "node tests/e2e/support/clean-web-build.mjs",
     "test:e2e": "npm run build && playwright test",
     "test:e2e:install": "playwright install chromium webkit",
@@ -39,6 +39,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "1.62.1",
-    "next": "^16.3.3"
+    "next": "^16.3.8"
   }
 }

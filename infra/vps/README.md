@@ -173,7 +173,43 @@ df -h
 не сразу или не на полный размер образа: слои могут использоваться другими тегами.
 
 После успешного деплоя сохраняйте его SHA и предыдущий рабочий SHA для следующей
-очистки. Серверная команда `deploy`, вызываемая GitHub Actions, находится вне
-репозитория: автоматическая очистка в неё этой задачей не устанавливается.
+очистки. Автоматическая очистка подключается однократной установкой серверного скрипта,
+описанной ниже.
 Ротация контейнерных логов уже ограничена в Compose: до трёх файлов по 10 МБ
 на сервис. Резервные копии PostgreSQL обслуживаются отдельно.
+
+## Автоматическая очистка после деплоя
+
+В репозитории хранится `infra/vps/deploy.sh`, соответствующий серверной команде
+`/usr/local/sbin/kuda-krym-deploy`. После успешной проверки контейнеров, API и
+публичного сайта он вызывает `/usr/local/sbin/kuda-krym-cleanup-images`.
+Новая и предыдущая здоровая версии сохраняются; предыдущий SHA записывается
+в `/opt/kuda-krym/.rollback-image-tag`. Повторный деплой того же SHA сохраняет
+этот SHA отката. Если предыдущая версия неизвестна или не была healthy,
+очистка пропускается. Ошибка очистки выдаёт предупреждение, не отменяя успешный
+деплой. Блокировка `.deploy.lock` предотвращает параллельные запуски этого
+скрипта. Ручную очистку и ручные Docker-обновления не запускайте во время деплоя.
+
+Однократная установка после мержа, вне выполняющегося деплоя:
+
+1. Передайте локальные файлы на сервер (PowerShell из корня проекта;
+   замените SERVER_IP адресом VPS):
+
+```powershell
+scp infra/vps/deploy.sh alexandr@SERVER_IP:/tmp/kuda-krym-deploy-new.sh
+scp infra/vps/cleanup-images.sh alexandr@SERVER_IP:/tmp/kuda-krym-cleanup-new.sh
+```
+
+2. На сервере проверьте синтаксис и установите файлы:
+
+```bash
+bash -n /tmp/kuda-krym-deploy-new.sh &&
+bash -n /tmp/kuda-krym-cleanup-new.sh &&
+sudo cp /usr/local/sbin/kuda-krym-deploy /usr/local/sbin/kuda-krym-deploy.backup-$(date +%Y%m%d-%H%M%S) &&
+sudo install -o root -g root -m 750 /tmp/kuda-krym-cleanup-new.sh /usr/local/sbin/kuda-krym-cleanup-images &&
+sudo install -o root -g root -m 750 /tmp/kuda-krym-deploy-new.sh /usr/local/sbin/kuda-krym-deploy
+```
+
+SSH-обёртку, sudoers и GitHub Secrets менять не нужно. Установка не запускает
+деплой и ничего не удаляет; автоматическая очистка начнёт работать со следующего
+успешного деплоя. В его логе появятся `Removing ...` либо причина пропуска.
