@@ -31,6 +31,7 @@ body {
     "Segoe UI Variable Display", "Segoe UI Variable Text", "Segoe UI", Inter,
     Arial, sans-serif;
   text-rendering: optimizeLegibility;
+  cursor: default;
 }
 
 a {
@@ -41,6 +42,14 @@ a {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+:where(a[href], button, select, summary, input[type="checkbox"], input[type="radio"]) {
+  cursor: pointer;
+}
+
+:where(input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="tel"], input[type="url"], input[type="password"], input[type="number"], textarea, [contenteditable="true"]) {
+  cursor: text;
 }
 
 :where(a, button, input, select, textarea):focus-visible {
