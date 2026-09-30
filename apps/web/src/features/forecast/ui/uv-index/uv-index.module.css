@@ -1,0 +1,2 @@
+.value[data-warning="true"] { color: #b42318; font-weight: 800; }
+.value[data-warning="true"][data-inverse="true"] { color: #8c1710; background: #ffe8e5; border-radius: 4px; padding: 1px 4px; }

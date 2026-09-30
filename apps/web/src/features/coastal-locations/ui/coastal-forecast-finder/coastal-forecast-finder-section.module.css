@@ -1,0 +1,7 @@
+.section.section { z-index: 3; align-items: start; padding: clamp(20px, 3vw, 32px); gap: 20px; grid-template-columns: minmax(0, 1fr); }
+.section .intro { position: static; }
+.section .intro > p { margin-bottom: 10px; font-size: 12px; letter-spacing: .04em; line-height: 18px; }
+.section .intro h2 { font-size: 30px; line-height: 1.1; }
+.section .intro > span { margin-top: 12px; font-size: 14px; line-height: 1.5; }
+.section .form { gap: 12px; }
+.section .action { padding: 12px 18px; font-size: 13px; }
