@@ -1,4 +1,5 @@
-.finder label { font-size: 13px; }
-.finder input[role="combobox"] { font-size: 18px; }
+.finder label { font-size: 13px; line-height: 18px; }
+.finder input[role="combobox"] { padding: 0 16px; font-size: 18px; }
 .finder [role="option"] { font-family: inherit; font-size: 16px; line-height: 1.4; }
 .finder [role="option"] small { font-size: 14px; }
+.finder [role="listbox"] { z-index: 50; max-height: 220px; padding: 5px; border-radius: 12px; overscroll-behavior: contain; }

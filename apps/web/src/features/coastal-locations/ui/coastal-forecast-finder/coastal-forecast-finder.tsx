@@ -62,7 +62,6 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
       <label
         className={fieldStyles.label}
         htmlFor={inputId}
-        style={{ lineHeight: "18px" }}
       >
         Населённый пункт
       </label>
@@ -87,7 +86,6 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
           onKeyDown={handleKeyDown}
           placeholder="Например, Николаевка"
           role="combobox"
-          style={{ padding: "0 16px" }}
           value={query}
         />
         <span
@@ -95,13 +93,6 @@ export function CoastalForecastFinder({ locations }: CoastalForecastFinderProps)
           className={`${fieldStyles.dropdown} ${isOpen ? fieldStyles.dropdownOpen : ""}`}
           id={listboxId}
           role="listbox"
-          style={{
-            borderRadius: "12px",
-            maxHeight: "220px",
-            overscrollBehavior: "contain",
-            padding: "5px",
-            zIndex: 50,
-          }}
         >
           {options.map((location, index) => (
             <button
