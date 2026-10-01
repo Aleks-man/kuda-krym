@@ -11,7 +11,7 @@ export function createRateLimitMiddleware(
     identifier: policy.identifier,
     legacyHeaders: false,
     limit: policy.maxRequests,
-    passOnStoreError: true,
+    passOnStoreError: false,
     skip: (request) => request.method === "OPTIONS",
     standardHeaders: "draft-8",
     windowMs: policy.windowMs,

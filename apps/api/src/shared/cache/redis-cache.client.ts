@@ -2,6 +2,7 @@ import { createClient } from "redis";
 
 export interface RedisCacheClient {
   readonly isOpen: boolean;
+  readonly isReady: boolean;
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   get(key: string): Promise<string | null>;
@@ -25,7 +26,11 @@ export function createRedisCacheClient(
   const client = createClient({
     url,
     disableOfflineQueue: true,
-    socket: { connectTimeout: 2_000, reconnectStrategy: false },
+    socket: {
+      connectTimeout: 2_000,
+      reconnectStrategy: (retries) =>
+        Math.min(250 * 2 ** Math.min(retries, 5), 5_000) + Math.floor(Math.random() * 250),
+    },
   });
   client.on("error", onError);
 
@@ -33,11 +38,15 @@ export function createRedisCacheClient(
     get isOpen() {
       return client.isOpen;
     },
+    get isReady() {
+      return client.isReady;
+    },
     async connect() {
       await client.connect();
     },
     async disconnect() {
-      await client.quit();
+      // Also stop retries when shutting down while Redis is unavailable.
+      if (client.isOpen) client.destroy();
     },
     async get(key) {
       return client.get(key);

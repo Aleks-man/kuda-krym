@@ -60,16 +60,10 @@ const redisClient = createRedisCacheClient(env.REDIS_URL, (error) => {
 });
 const redisCache = new RedisCacheStore(redisClient);
 const requestCoalescer = new InMemoryRequestCoalescer();
-const redisConnected = await redisCache
-  .connect()
-  .then(() => true)
-  .catch((error: unknown) => {
-    logger.warn("redis.connection.failed", { error, cacheEnabled: false });
-    return false;
-  });
-const rateLimitStores = redisConnected
-  ? createRedisRateLimitStores(redisClient)
-  : undefined;
+void redisCache.connect().catch((error: unknown) => {
+  logger.warn("redis.connection.failed", { error });
+});
+const rateLimitStores = createRedisRateLimitStores(redisClient);
 const weatherProvider = new CachedWeatherForecastProvider({
   cache: redisCache,
   coalescer: requestCoalescer,
@@ -165,7 +159,7 @@ const routingService = new RoutingService({
 const app = createApp({
   env,
   logger,
-  ...(rateLimitStores ? { rateLimitStores } : {}),
+  rateLimitStores,
   dependencies: {
     healthService,
     beachService,

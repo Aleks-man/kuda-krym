@@ -17,6 +17,7 @@ function createClientMock(initiallyOpen = false) {
   const sendCommand = vi.fn<RedisCacheClient["sendCommand"]>();
 
   const client: RedisCacheClient = {
+    get isReady() { return isOpen; },
     get isOpen() {
       return isOpen;
     },
