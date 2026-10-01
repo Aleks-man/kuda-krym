@@ -10,6 +10,9 @@ export const recommendationRankingWeights: Record<
   COMFORT: { SEA: 0.35, WEATHER: 0.65 },
 };
 
+// A fallback from expired cache must not receive full confidence even if recently fetched.
+export const staleRecommendationFreshnessCap = 80;
+
 export const confidencePenalty = {
   minimumMultiplier: 0.7,
   coverageMultiplier: 0.3,

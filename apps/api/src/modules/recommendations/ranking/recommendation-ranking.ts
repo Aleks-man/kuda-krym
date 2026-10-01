@@ -21,6 +21,7 @@ export type RankedRecommendation = Readonly<{
   score: number;
   rawScore: number;
   confidencePercent: number;
+  freshness: CandidateWindowSummary["freshness"];
   priority: RecommendationContext["priority"];
   components: RankingComponent[];
   averages: CandidateWindowSummary["averages"];

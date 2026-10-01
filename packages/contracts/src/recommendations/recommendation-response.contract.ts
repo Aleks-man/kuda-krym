@@ -1,9 +1,12 @@
 import { z } from "zod";
+import { forecastFreshnessSchema } from "../forecast/forecast-freshness.contract.js";
 import { placeImageSchema } from "../media/place-image.contract.js";
 
 const nullableMeasurement = z.number().nullable();
 
 const recommendationItemSchema = z.object({
+  // Optional so web can still read responses from the previous API during rollout.
+  freshness: forecastFreshnessSchema.optional(),
   position: z.number().int().min(1).max(10),
   beach: z.object({
     id: z.uuid(),

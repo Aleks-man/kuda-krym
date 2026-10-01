@@ -24,6 +24,7 @@ export function mapRecommendationResponse(
       score: recommendation.score,
       rawScore: recommendation.rawScore,
       confidencePercent: recommendation.confidencePercent,
+      freshness: recommendation.freshness,
       hourCount: recommendation.hourCount,
       travel: mapRecommendationTravel(
         recommendation.candidate.id,
