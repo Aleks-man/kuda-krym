@@ -59,3 +59,6 @@
 }
 
 .results, .empty { scroll-margin-top: 100px; }
+
+.freshness { display: grid; margin-top: 10px; gap: 4px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.stale { color: #965039; font-weight: 700; }

@@ -82,3 +82,51 @@ test("explains partial and empty timeout results without claiming no beaches mat
   await expect(page.getByText("Не успели завершить проверку пляжей. Попробуйте повторить подбор.")).toBeVisible();
   await expect(page.getByText(/Для этих условий подходящих пляжей пока нет/)).toHaveCount(0);
 });
+
+test("shows stale data warnings and source timestamps in cards and alternatives", async ({ page }) => {
+  const weatherTime = "2026-10-01T06:00:00.000Z";
+  const marineTime = "2026-09-30T18:00:00.000Z";
+  await page.route("**/api/recommendations", route => route.fulfill({
+    json: {
+      ...recommendationResponseFixture,
+      data: Array.from({ length: 4 }, (_, index) => ({
+        ...recommendationResponseFixture.data[0],
+        position: index + 1,
+        beach: {
+          ...recommendationResponseFixture.data[0]!.beach,
+          id: "f1f7c831-965f-46bb-9d34-2265ea080c7" + index,
+        },
+        confidencePercent: index === 0 || index === 3 ? 55 : 100,
+        freshness: {
+          status: index === 0 || index === 3 ? "STALE" : "FRESH",
+          sources: {
+            weather: { status: "FRESH", generatedAt: weatherTime },
+            marine: {
+              status: index === 0 || index === 3 ? "STALE" : "FRESH",
+              generatedAt: index === 0 || index === 3 ? marineTime : weatherTime,
+            },
+            weatherModels: null,
+          },
+        },
+      })),
+      meta: { ...recommendationResponseFixture.meta, recommendationCount: 4 },
+    },
+  }));
+  await page.goto("/");
+  await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
+  await page.getByRole("option", { name: /^Ялта/ }).first().click();
+  await page.getByRole("combobox", { name: "Дата поездки" }).click();
+  await page.getByRole("option", { name: /^Завтра,/ }).click();
+  await page.getByRole("button", { name: "Подобрать пляж" }).click();
+  const notes = page.getByRole("note", { name: "Свежесть прогноза" });
+  await expect(notes).toHaveCount(3);
+  await expect(notes.first()).toContainText("Прогноз устарел");
+  await expect(notes.first()).toContainText("Уверенность оценки: 55%");
+  await expect(notes.first().locator("time")).toHaveText([
+    "1 октября в 09:00", "30 сентября в 21:00",
+  ]);
+  await expect(notes.nth(1)).not.toContainText("Прогноз устарел");
+  await page.getByText("Показать остальные варианты", { exact: false }).click();
+  await expect(notes).toHaveCount(4);
+  await expect(notes.last()).toContainText("Прогноз устарел");
+});

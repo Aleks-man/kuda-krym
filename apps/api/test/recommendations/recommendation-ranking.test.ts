@@ -147,6 +147,15 @@ function createSummary(
       endsAt: "2026-08-24T14:00:00.000Z",
     },
     hourCount: 6,
+    freshnessPercent: 100,
+    freshness: {
+      status: "FRESH",
+      sources: {
+        weather: { status: "FRESH", generatedAt: "2026-08-24T06:00:00.000Z" },
+        marine: { status: "FRESH", generatedAt: "2026-08-24T06:00:00.000Z" },
+        weatherModels: null,
+      },
+    },
     scores: {
       sea,
       weather,

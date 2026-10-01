@@ -2,6 +2,7 @@ import type { RecommendationResponse } from "@kuda-krym/contracts";
 import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties, Ref } from "react";
+import { formatForecastUpdatedAt } from "@/features/forecast/model/forecast-view";
 import { formatMeasurement } from "../../model/recommendation-labels";
 import {
   formatTravelDistance,
@@ -84,6 +85,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
             <h4>{item.beach.coastalLocation?.name ?? item.beach.name}</h4>
             <p>{item.beach.name}</p>
             <RecommendationTravel travel={item.travel} />
+            <RecommendationFreshness item={item} />
             <dl>
               <div><dt>Море</dt><dd>{formatMeasurement(item.conditions.seaSurfaceTemperatureCelsius, "°C")}</dd></div>
               <div><dt>Волна</dt><dd>{formatMeasurement(item.conditions.waveHeightMeters, "м", 1)}</dd></div>
@@ -126,6 +128,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
                     <span className={styles.alternativeName}>
                       <strong>{locationName}</strong>
                       <small>{item.beach.name}</small>
+                      <RecommendationFreshness item={item} />
                     </span>
                     <span className={styles.alternativeTravel}>
                       <strong>{formatTravelDuration(item.travel.durationMinutes)}</strong>
@@ -173,4 +176,33 @@ function getWeakConditions(item: RecommendationItem) {
   return item.components
     .filter((component) => component.score !== null && component.score < 60)
     .map((component) => weakConditionLabels[component.name]);
+}
+
+function RecommendationFreshness({ item }: { item: RecommendationItem }) {
+  const freshness = item.freshness;
+  if (!freshness) {
+    return <span className={styles.freshness}>Время обновления прогноза неизвестно.</span>;
+  }
+  return (
+    <span className={styles.freshness} role="note" aria-label="Свежесть прогноза">
+      {freshness.status === "STALE" ? (
+        <span className={styles.stale}>Прогноз устарел — уверенность снижена. Проверьте обновления перед поездкой.</span>
+      ) : null}
+      <span>Уверенность оценки: {item.confidencePercent}%</span>
+      <span>
+        Погода обновлена:{" "}
+        <time dateTime={freshness.sources.weather.generatedAt}>
+          {formatForecastUpdatedAt(freshness.sources.weather.generatedAt)}
+        </time>
+      </span>
+      {freshness.sources.marine ? (
+        <span>
+          Данные моря обновлены:{" "}
+          <time dateTime={freshness.sources.marine.generatedAt}>
+            {formatForecastUpdatedAt(freshness.sources.marine.generatedAt)}
+          </time>
+        </span>
+      ) : null}
+    </span>
+  );
 }

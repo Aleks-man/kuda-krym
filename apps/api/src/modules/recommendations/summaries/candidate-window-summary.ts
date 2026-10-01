@@ -1,3 +1,4 @@
+import type { ForecastFreshness } from "@kuda-krym/contracts";
 import type { RecommendationCandidate } from "../candidates/recommendation-candidate.js";
 import type { RecommendationContext } from "../context/recommendation-context.js";
 import type { CandidateForecastFailure } from "../forecasts/candidate-forecast.js";
@@ -6,6 +7,8 @@ export type CandidateWindowSummary = Readonly<{
   candidate: RecommendationCandidate;
   visitWindow: RecommendationContext["visitWindow"];
   hourCount: number;
+  freshness: ForecastFreshness;
+  freshnessPercent: number;
   scores: Readonly<{
     sea: number | null;
     weather: number | null;

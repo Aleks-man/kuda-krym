@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { scoreRecommendationCandidate } from "../../src/modules/recommendations/ranking/score-recommendation-candidate.js";
 
 import type { RecommendationContext } from "../../src/modules/recommendations/context/recommendation-context.js";
 import type { CandidateForecastBatch } from "../../src/modules/recommendations/forecasts/candidate-forecast.js";
@@ -146,3 +147,34 @@ function createWeatherHour(
     cloudCoverPercent: 20,
   };
 }
+
+it.each([
+  { source: "weather" as const, ageHours: 12, status: "STALE" as const, expected: 55 },
+  { source: "marine" as const, ageHours: 12, status: "STALE" as const, expected: 55 },
+  { source: "weather" as const, ageHours: 12, status: "FRESH" as const, expected: 55 },
+  { source: "marine" as const, ageHours: 0.5, status: "STALE" as const, expected: 80 },
+])("accounts for $source aged $ageHours hours with $status status", ({ source, ageHours, status, expected }) => {
+  const evaluatedAt = new Date("2026-08-24T06:00:00.000Z");
+  const batch = createBatch([createWeatherHour("2026-08-24T10:00", 25, 10, 3)]);
+  const fresh = summarizeCandidateWindows(batch, context, evaluatedAt).available[0]!;
+  const generatedAt = new Date(evaluatedAt.getTime() - ageHours * 3_600_000).toISOString();
+  const forecast = batch.available[0]!;
+  const agedBatch = {
+    ...batch,
+    available: [{
+      ...forecast,
+      [source]: { ...forecast[source], generatedAt, freshness: { status, generatedAt } },
+    }],
+  };
+
+  const aged = summarizeCandidateWindows(agedBatch, context, evaluatedAt).available[0]!;
+  expect(aged.freshness.sources[source]).toEqual({ status, generatedAt });
+  expect(aged.freshness.status).toBe(status);
+  expect(aged.freshnessPercent).toBe(expected);
+  const freshScore = scoreRecommendationCandidate(fresh, context.priority)!;
+  const agedScore = scoreRecommendationCandidate(aged, context.priority)!;
+  expect(agedScore.freshness).toEqual(aged.freshness);
+  expect(agedScore.rawScore).toBe(freshScore.rawScore);
+  expect(agedScore.confidencePercent).toBeLessThan(freshScore.confidencePercent);
+  expect(agedScore.score).toBeLessThan(freshScore.score);
+});

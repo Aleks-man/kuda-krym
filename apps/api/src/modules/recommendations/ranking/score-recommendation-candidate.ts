@@ -36,7 +36,7 @@ export function scoreRecommendationCandidate(
     ) / availableWeight,
   );
   const confidencePercent = Math.round(
-    components.reduce(
+    (summary.freshnessPercent / 100) * components.reduce(
       (sum, component) =>
         sum + component.weight * component.coveragePercent,
       0,
@@ -53,6 +53,7 @@ export function scoreRecommendationCandidate(
     score: Math.round(rawScore * confidenceFactor),
     rawScore,
     confidencePercent,
+    freshness: summary.freshness,
     priority,
     components,
     averages: summary.averages,

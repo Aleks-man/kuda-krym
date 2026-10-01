@@ -52,7 +52,7 @@ export class RecommendationService {
         deadline.signal,
       );
       signal?.throwIfAborted();
-      const summaries = summarizeCandidateWindows(forecasts, context);
+      const summaries = summarizeCandidateWindows(forecasts, context, this.now());
       const ranking = rankRecommendationCandidates(summaries, context.priority, 10);
       const failures = [...routes.failures, ...routeSelection.excluded, ...ranking.failures];
 
