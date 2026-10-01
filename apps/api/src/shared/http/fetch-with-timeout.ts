@@ -23,6 +23,8 @@ export function createFetchWithTimeout(
   return (input, init) =>
     fetch(input, {
       ...init,
-      signal: createTimeoutSignal(timeoutMs),
+      signal: init?.signal
+        ? AbortSignal.any([init.signal, createTimeoutSignal(timeoutMs)])
+        : createTimeoutSignal(timeoutMs),
     });
 }

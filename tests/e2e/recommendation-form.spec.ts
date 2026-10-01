@@ -58,3 +58,27 @@ test("submits the seventh day selected from the date dropdown", async ({ page })
   await expect.poll(() => submitted?.date).toBe("2026-10-06");
   await page.unrouteAll({ behavior: "wait" });
 });
+
+test("explains partial and empty timeout results without claiming no beaches match", async ({ page }) => {
+  let empty = false;
+  await page.route("**/api/recommendations", route => route.fulfill({
+    json: {
+      ...recommendationResponseFixture,
+      data: empty ? [] : recommendationResponseFixture.data,
+      meta: { ...recommendationResponseFixture.meta, timedOut: true, recommendationCount: empty ? 0 : 1 },
+    },
+  }));
+  await page.goto("/");
+  await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
+  await page.getByRole("option", { name: /^Ялта/ }).first().click();
+  await page.getByRole("combobox", { name: "Дата поездки" }).click();
+  await page.getByRole("option", { name: /^Завтра,/ }).click();
+  await page.getByRole("button", { name: "Подобрать пляж" }).click();
+  await expect(page.getByText(/Не успели проверить все пляжи/)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 4, name: "Ялта" })).toBeVisible();
+
+  empty = true;
+  await page.getByRole("button", { name: "Подобрать пляж" }).click();
+  await expect(page.getByText("Не успели завершить проверку пляжей. Попробуйте повторить подбор.")).toBeVisible();
+  await expect(page.getByText(/Для этих условий подходящих пляжей пока нет/)).toHaveCount(0);
+});

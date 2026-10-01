@@ -12,10 +12,14 @@ const defaultApiUrl = "http://127.0.0.1:4000";
 export async function requestRecommendations(
   request: RecommendationRequest,
   headers: HeadersInit,
+  signal?: AbortSignal,
 ) {
   const payload = recommendationRequestSchema.parse(request);
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(`${apiUrl}/api/recommendations`, {
+    signal: signal
+      ? AbortSignal.any([signal, AbortSignal.timeout(25_000)])
+      : AbortSignal.timeout(25_000),
     method: "POST",
     headers,
     body: JSON.stringify(payload),

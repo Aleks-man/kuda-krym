@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       await requestRecommendations(
         parsed.data,
         createApiProxyHeaders(request.headers),
+        request.signal,
       ),
     );
   } catch (error) {

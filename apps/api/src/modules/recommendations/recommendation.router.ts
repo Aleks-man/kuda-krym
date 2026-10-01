@@ -28,8 +28,11 @@ export function createRecommendationRouter(
       });
     }
 
+    const controller = new AbortController();
+    const onClose = () => { if (!response.writableEnded) controller.abort(); };
+    response.on("close", onClose);
     try {
-      const calculation = await service.calculate(parsedRequest.data);
+      const calculation = await service.calculate(parsedRequest.data, controller.signal);
       response
         .status(200)
         .json(
@@ -38,6 +41,7 @@ export function createRecommendationRouter(
           ),
         );
     } catch (error) {
+      if (controller.signal.aborted) return;
       if (error instanceof UnsupportedRecommendationOriginError) {
         throw new HttpError({
           status: 400,
@@ -55,6 +59,8 @@ export function createRecommendationRouter(
         message: "Подбор доступен на ближайшие семь дней, включая сегодня",
         cause: error,
       });
+    } finally {
+      response.off("close", onClose);
     }
   });
 

@@ -205,3 +205,83 @@ function createMarineForecast(
     })),
   };
 }
+
+it.each(["routes", "forecasts"] as const)(
+  "returns completed recommendations and stops queued %s at the deadline",
+  async (slowStage) => {
+    vi.useFakeTimers();
+    try {
+      const candidates = Array.from({ length: 5 }, (_, index) => createCandidate("beach-" + index, 44.5 + index));
+      const normalRoutes = createRouteLoader();
+      const routeCalls = vi.fn<RoutingProvider["getDrivingRoute"]>(async (routeRequest) => {
+        if (slowStage === "routes" && routeRequest.destination.latitude !== 44.5) {
+          return new Promise(() => {});
+        }
+        return (await normalRoutes.load(
+          [candidates.find(candidate => candidate.latitude === routeRequest.destination.latitude)!],
+          routeRequest.origin,
+        )).available[0]!.route;
+      });
+      const forecastSignals: AbortSignal[] = [];
+      const weather = vi.fn(async (forecastRequest: import("../../src/modules/weather/weather-forecast.js").WeatherForecastRequest) => {
+        if (forecastRequest.signal) forecastSignals.push(forecastRequest.signal);
+        if (slowStage === "forecasts" && forecastRequest.location.latitude !== 44.5) {
+          return new Promise<WeatherForecast>(() => {});
+        }
+        return createWeatherForecast(forecastRequest.location);
+      });
+      const service = new RecommendationService({
+        candidateService: { listEligible: async () => candidates },
+        routeLoader: new CandidateRouteLoader({ routingProvider: { getDrivingRoute: routeCalls }, concurrency: 1 }),
+        forecastLoader: new CandidateForecastLoader({
+          weatherProvider: { getForecast: weather },
+          marineProvider: { getForecast: async ({ location }) => createMarineForecast(location, 0.2) },
+          concurrency: 1,
+        }),
+        now: () => now,
+        timeoutMs: 60,
+        routeTimeoutMs: 30,
+      });
+      const pending = service.calculate(request);
+      await vi.advanceTimersByTimeAsync(100);
+      const result = await pending;
+
+      expect(result.meta).toMatchObject({ timedOut: true, recommendationCount: 1, failureCount: 4 });
+      expect(result.recommendations[0]?.candidate.slug).toBe("beach-0");
+      if (slowStage === "routes") {
+        expect(routeCalls).toHaveBeenCalledTimes(2);
+        expect(routeCalls.mock.calls[1]![0].signal?.aborted).toBe(true);
+        expect(weather).toHaveBeenCalledOnce();
+      } else {
+        expect(weather).toHaveBeenCalledTimes(2);
+        expect(forecastSignals[1]?.aborted).toBe(true);
+      }
+    } finally {
+      vi.useRealTimers();
+    }
+  },
+);
+
+it("bounds catalog waiting and never starts providers after the deadline", async () => {
+  vi.useFakeTimers();
+  try {
+    const routes = { load: vi.fn() };
+    const forecasts = { load: vi.fn() };
+    const service = new RecommendationService({
+      candidateService: { listEligible: () => new Promise(() => {}) },
+      routeLoader: routes,
+      forecastLoader: forecasts,
+      now: () => now,
+      timeoutMs: 20,
+    });
+    const rejected = expect(service.calculate(request)).rejects.toMatchObject({
+      status: 504, code: "RECOMMENDATIONS_TIMEOUT",
+    });
+    await vi.advanceTimersByTimeAsync(25);
+    await rejected;
+    expect(routes.load).not.toHaveBeenCalled();
+    expect(forecasts.load).not.toHaveBeenCalled();
+  } finally {
+    vi.useRealTimers();
+  }
+});

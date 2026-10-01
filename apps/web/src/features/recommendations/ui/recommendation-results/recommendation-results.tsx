@@ -27,7 +27,9 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
   if (result.data.length === 0) {
     return (
       <section ref={ref} className={styles.empty} role="status">
-        Для этих условий подходящих пляжей пока нет. Попробуйте изменить параметры.
+        {result.meta.timedOut
+          ? "Не успели завершить проверку пляжей. Попробуйте повторить подбор."
+          : "Для этих условий подходящих пляжей пока нет. Попробуйте изменить параметры."}
       </section>
     );
   }
@@ -45,7 +47,11 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
       <header>
         <p>Результат подбора</p>
         <h3 id="recommendation-results-title">Куда лучше поехать к морю</h3>
-        <span>Проверили {result.meta.candidateCount} вариантов по дороге, погоде и морю.</span>
+        {result.meta.timedOut ? (
+          <p role="status">Не успели проверить все пляжи. Показаны варианты, для которых проверены дорога, погода и море. Можно повторить подбор.</p>
+        ) : (
+          <span>Проверили {result.meta.candidateCount} вариантов по дороге, погоде и морю.</span>
+        )}
       </header>
       <div className={styles.grid}>
         {featured.map((item) => (

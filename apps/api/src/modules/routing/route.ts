@@ -4,6 +4,7 @@ export type RoutePoint = Readonly<{
 }>;
 
 export type RouteRequest = Readonly<{
+  signal?: AbortSignal;
   origin: RoutePoint;
   destination: RoutePoint;
 }>;

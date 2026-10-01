@@ -23,5 +23,6 @@ export type RecommendationCalculation = Readonly<{
     candidateCount: number;
     recommendationCount: number;
     failureCount: number;
+    timedOut?: boolean;
   }>;
 }>;

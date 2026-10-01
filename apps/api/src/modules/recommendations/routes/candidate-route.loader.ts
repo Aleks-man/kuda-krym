@@ -1,3 +1,4 @@
+import { waitForSignal } from "../../../shared/async/abort.js";
 import { mapWithConcurrency } from "../../../shared/async/map-with-concurrency.js";
 import type { RoutePoint, RoutingProvider } from "../../routing/route.js";
 import type { RecommendationCandidate } from "../candidates/recommendation-candidate.js";
@@ -28,11 +29,12 @@ export class CandidateRouteLoader {
   public async load(
     candidates: readonly RecommendationCandidate[],
     origin: RoutePoint,
+    signal?: AbortSignal,
   ): Promise<CandidateRouteBatch> {
     const results = await mapWithConcurrency(
       candidates,
       this.concurrency,
-      (candidate) => this.loadCandidate(candidate, origin),
+      (candidate) => this.loadCandidate(candidate, origin, signal),
     );
 
     return results.reduce<CandidateRouteBatch>(
@@ -51,15 +53,18 @@ export class CandidateRouteLoader {
   private async loadCandidate(
     candidate: RecommendationCandidate,
     origin: RoutePoint,
+    signal?: AbortSignal,
   ): Promise<CandidateRouteResult> {
     try {
-      const route = await this.dependencies.routingProvider.getDrivingRoute({
+      signal?.throwIfAborted();
+      const route = await waitForSignal(this.dependencies.routingProvider.getDrivingRoute({
+        ...(signal ? { signal } : {}),
         origin,
         destination: {
           latitude: candidate.latitude,
           longitude: candidate.longitude,
         },
-      });
+      }), signal);
 
       return { status: "available", candidateRoute: { candidate, route } };
     } catch {

@@ -43,6 +43,7 @@ export class OpenMeteoMarineClient implements MarineForecastProvider {
   ): Promise<MarineForecast> {
     const response = await this.fetch(this.createUrl(request), {
       headers: { accept: "application/json" },
+      ...(request.signal ? { signal: request.signal } : {}),
     });
 
     if (!response.ok) {

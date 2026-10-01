@@ -65,3 +65,34 @@ describe("InMemoryRequestCoalescer", () => {
     expect(task).toHaveBeenCalledTimes(2);
   });
 });
+
+it("cancels a shared operation only after every subscriber has cancelled", async () => {
+  const coalescer = new InMemoryRequestCoalescer();
+  const first = new AbortController();
+  const second = new AbortController();
+  let upstream!: AbortSignal;
+  let complete!: (value: string) => void;
+  const task = vi.fn((signal: AbortSignal) => {
+    upstream = signal;
+    return new Promise<string>(resolve => { complete = resolve; });
+  });
+  const a = coalescer.run("shared", task, first.signal);
+  const b = coalescer.run("shared", task, second.signal);
+  const rejected = expect(a).rejects.toThrow();
+  await Promise.resolve();
+  first.abort();
+  await rejected;
+  expect(upstream.aborted).toBe(false);
+  complete("forecast");
+  await expect(b).resolves.toBe("forecast");
+  expect(task).toHaveBeenCalledOnce();
+
+  const last = new AbortController();
+  const pending = coalescer.run("shared", task, last.signal);
+  const lastRejected = expect(pending).rejects.toThrow();
+  await Promise.resolve();
+  last.abort();
+  await lastRejected;
+  expect(upstream.aborted).toBe(true);
+  await expect(coalescer.run("shared", async () => "new")).resolves.toBe("new");
+});
