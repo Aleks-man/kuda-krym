@@ -25,14 +25,17 @@ export class CachedRoutingProvider implements RoutingProvider {
 
   async getDrivingRoute(request: RouteRequest): Promise<DrivingRoute> {
     const key = createRouteCacheKey(request.origin, request.destination);
-    return this.coalescer.run(key, async () => {
+    return this.coalescer.run(key, async (signal) => {
       const cached = await this.readCache(key);
+      signal.throwIfAborted();
       if (cached) return { ...cached, cached: true };
 
-      const route = await this.options.provider.getDrivingRoute(request);
+      const route = await this.options.provider.getDrivingRoute(
+        request.signal ? { ...request, signal } : request,
+      );
       await this.writeCache(key, route);
       return { ...route, cached: false };
-    });
+    }, request.signal);
   }
 
   private async readCache(key: string): Promise<DrivingRoute | null> {

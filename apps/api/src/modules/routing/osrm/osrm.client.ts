@@ -3,6 +3,8 @@ import type {
   RouteRequest,
   RoutingProvider,
 } from "../route.js";
+import { createDeadline } from "../../../shared/async/abort.js";
+import { ConcurrencyLimiter } from "../../../shared/async/concurrency-limiter.js";
 import { createFetchWithTimeout } from "../../../shared/http/fetch-with-timeout.js";
 import { mapOsrmResponse } from "./osrm.mapper.js";
 import { osrmResponseSchema } from "./osrm-response.schema.js";
@@ -14,10 +16,14 @@ type OsrmClientOptions = Readonly<{
   timeoutMs?: number;
 }>;
 
+// Shared across route requests and recommendation requests in this API process.
+const upstreamRequests = new ConcurrencyLimiter(4);
+
 export class OsrmClient implements RoutingProvider {
   private readonly fetch: typeof globalThis.fetch;
   private readonly baseUrl: string;
   private readonly now: () => Date;
+  private readonly timeoutMs: number;
 
   public constructor(options: OsrmClientOptions = {}) {
     this.fetch = createFetchWithTimeout({
@@ -28,11 +34,24 @@ export class OsrmClient implements RoutingProvider {
     });
     this.baseUrl = options.baseUrl ?? "https://router.project-osrm.org/";
     this.now = options.now ?? (() => new Date());
+    this.timeoutMs = options.timeoutMs ?? 8_000;
   }
 
   public async getDrivingRoute(request: RouteRequest): Promise<DrivingRoute> {
+    const deadline = createDeadline(this.timeoutMs, request.signal);
+    try {
+      return await upstreamRequests.run(
+        () => this.fetchRoute({ ...request, signal: deadline.signal }), deadline.signal,
+      );
+    } finally {
+      deadline.dispose();
+    }
+  }
+
+  private async fetchRoute(request: RouteRequest): Promise<DrivingRoute> {
     const response = await this.fetch(this.createUrl(request), {
       headers: { accept: "application/json" },
+      ...(request.signal ? { signal: request.signal } : {}),
     });
 
     if (!response.ok) {

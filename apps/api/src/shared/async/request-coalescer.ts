@@ -1,24 +1,43 @@
-type AsyncTask<T> = () => Promise<T>;
+import { waitForSignal } from "./abort.js";
+
+type AsyncTask<T> = (signal: AbortSignal) => Promise<T>;
 
 export interface RequestCoalescer {
-  run<T>(key: string, task: AsyncTask<T>): Promise<T>;
+  run<T>(key: string, task: AsyncTask<T>, signal?: AbortSignal): Promise<T>;
 }
 
+type SharedOperation = {
+  controller: AbortController;
+  promise: Promise<unknown>;
+  subscribers: number;
+};
+
 export class InMemoryRequestCoalescer implements RequestCoalescer {
-  private readonly inFlight = new Map<string, Promise<unknown>>();
+  private readonly inFlight = new Map<string, SharedOperation>();
 
-  async run<T>(key: string, task: AsyncTask<T>): Promise<T> {
-    const existing = this.inFlight.get(key) as Promise<T> | undefined;
-    if (existing) return existing;
-
-    const operation = Promise.resolve().then(task);
-    this.inFlight.set(key, operation);
-
+  async run<T>(key: string, task: AsyncTask<T>, signal?: AbortSignal): Promise<T> {
+    signal?.throwIfAborted();
+    let operation = this.inFlight.get(key);
+    if (!operation) {
+      const controller = new AbortController();
+      operation = {
+        controller,
+        subscribers: 0,
+        promise: Promise.resolve().then(() => {
+          controller.signal.throwIfAborted();
+          return task(controller.signal);
+        }),
+      };
+      this.inFlight.set(key, operation);
+    }
+    operation.subscribers += 1;
     try {
-      return await operation;
+      return await waitForSignal(operation.promise as Promise<T>, signal);
     } finally {
-      if (this.inFlight.get(key) === operation) {
-        this.inFlight.delete(key);
+      operation.subscribers -= 1;
+      if (operation.subscribers === 0) {
+        operation.controller.abort();
+        if (this.inFlight.get(key) === operation) this.inFlight.delete(key);
       }
     }
   }

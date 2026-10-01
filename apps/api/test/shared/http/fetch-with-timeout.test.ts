@@ -50,3 +50,13 @@ describe("createFetchWithTimeout", () => {
     );
   });
 });
+
+it("preserves caller cancellation alongside the per-request timeout", async () => {
+  const caller = new AbortController();
+  const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(new Response());
+  await createFetchWithTimeout({ fetch })("https://example.test", { signal: caller.signal });
+  const combined = fetch.mock.calls[0]?.[1]?.signal;
+  caller.abort(new Error("Recommendation deadline"));
+  expect(combined?.aborted).toBe(true);
+  expect(combined?.reason.message).toBe("Recommendation deadline");
+});

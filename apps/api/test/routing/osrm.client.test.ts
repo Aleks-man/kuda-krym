@@ -71,3 +71,27 @@ describe("OsrmClient", () => {
     ).rejects.toThrow("OSRM returned status 503");
   });
 });
+
+it("shares four upstream slots across clients and removes a cancelled queued request", async () => {
+  const complete: Array<() => void> = [];
+  const fetchMock = vi.fn<typeof fetch>(async () => new Promise<Response>(resolve => {
+    complete.push(() => resolve(new Response(JSON.stringify(validResponse))));
+  }));
+  const clients = [new OsrmClient({ fetch: fetchMock }), new OsrmClient({ fetch: fetchMock })];
+  const cancelled = new AbortController();
+  const requests = Array.from({ length: 6 }, (_, index) =>
+    clients[index % 2]!.getDrivingRoute({
+      ...request,
+      ...(index === 4 ? { signal: cancelled.signal } : {}),
+    }),
+  );
+  const settled = Promise.allSettled(requests);
+  expect(fetchMock).toHaveBeenCalledTimes(4);
+  cancelled.abort();
+  complete[0]!();
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(5));
+  for (const resolve of complete.slice(1)) resolve();
+  const results = await settled;
+  expect(results.filter(result => result.status === "fulfilled")).toHaveLength(5);
+  expect(results[4]?.status).toBe("rejected");
+});

@@ -1,5 +1,6 @@
 import type { MarineForecastProvider } from "../../marine/marine-forecast.js";
 import type { WeatherForecastProvider } from "../../weather/weather-forecast.js";
+import { waitForSignal } from "../../../shared/async/abort.js";
 import { mapWithConcurrency } from "../../../shared/async/map-with-concurrency.js";
 import type { ForecastDays } from "../../../shared/forecast/forecast-days.js";
 import type { RecommendationCandidate } from "../candidates/recommendation-candidate.js";
@@ -31,11 +32,12 @@ export class CandidateForecastLoader {
   public async load(
     candidates: readonly RecommendationCandidate[],
     forecastDays: ForecastDays,
+    signal?: AbortSignal,
   ): Promise<CandidateForecastBatch> {
     const results = await mapWithConcurrency(
       candidates,
       this.concurrency,
-      (candidate) => this.loadCandidate(candidate, forecastDays),
+      (candidate) => this.loadCandidate(candidate, forecastDays, signal),
     );
 
     return results.reduce<CandidateForecastBatch>(
@@ -54,8 +56,10 @@ export class CandidateForecastLoader {
   private async loadCandidate(
     candidate: RecommendationCandidate,
     forecastDays: ForecastDays,
+    signal?: AbortSignal,
   ): Promise<CandidateForecastResult> {
     const request = {
+      ...(signal ? { signal } : {}),
       location: {
         latitude: candidate.latitude,
         longitude: candidate.longitude,
@@ -63,10 +67,19 @@ export class CandidateForecastLoader {
       days: forecastDays,
     } as const;
 
-    const [weather, marine] = await Promise.allSettled([
-      this.dependencies.weatherProvider.getForecast(request),
-      this.dependencies.marineProvider.getForecast(request),
-    ]);
+    const [weather, marine] = await waitForSignal(Promise.allSettled([
+      Promise.resolve().then(() => {
+        signal?.throwIfAborted();
+        return this.dependencies.weatherProvider.getForecast(request);
+      }),
+      Promise.resolve().then(() => {
+        signal?.throwIfAborted();
+        return this.dependencies.marineProvider.getForecast(request);
+      }),
+    ]), signal).catch((reason: unknown) => [
+      { status: "rejected" as const, reason },
+      { status: "rejected" as const, reason },
+    ] as const);
 
     if (weather.status === "rejected" || marine.status === "rejected") {
       return {

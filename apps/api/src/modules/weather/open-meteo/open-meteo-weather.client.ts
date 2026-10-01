@@ -59,6 +59,7 @@ export class OpenMeteoWeatherClient implements WeatherForecastProvider {
     const url = this.createUrl(request);
     const response = await this.fetch(url, {
       headers: { accept: "application/json" },
+      ...(request.signal ? { signal: request.signal } : {}),
     });
 
     if (!response.ok) {

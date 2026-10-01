@@ -3,6 +3,7 @@ import type { ForecastSourceFreshness } from "@kuda-krym/contracts";
 import type { ForecastDays } from "../../shared/forecast/forecast-days.js";
 
 export type MarineForecastRequest = Readonly<{
+  signal?: AbortSignal;
   location: Readonly<{ latitude: number; longitude: number }>;
   days: ForecastDays;
 }>;

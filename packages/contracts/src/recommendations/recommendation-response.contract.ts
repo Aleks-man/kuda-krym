@@ -77,6 +77,7 @@ export const recommendationResponseSchema = z.object({
     candidateCount: z.number().int().nonnegative(),
     recommendationCount: z.number().int().min(0).max(10),
     unavailableCount: z.number().int().nonnegative(),
+    timedOut: z.boolean().optional(),
   }),
 });
 

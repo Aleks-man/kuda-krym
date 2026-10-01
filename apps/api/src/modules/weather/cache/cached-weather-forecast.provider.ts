@@ -40,21 +40,24 @@ export class CachedWeatherForecastProvider implements WeatherForecastProvider {
 
   async getForecast(request: WeatherForecastRequest): Promise<WeatherForecast> {
     const key = createForecastCacheKey("weather", request.location, request.days);
-    return this.coalescer.run(key, async () => {
+    return this.coalescer.run(key, async (signal) => {
       const cached = await this.readCache(key);
+      signal.throwIfAborted();
       if (cached && getCacheFreshness(cached, this.currentTime()) === "FRESH") {
         return markDataFreshness(cached.value, "FRESH");
       }
 
       try {
-        const forecast = await this.options.provider.getForecast(request);
+        const forecast = await this.options.provider.getForecast(
+        request.signal ? { ...request, signal } : request,
+      );
         await this.writeCache(key, forecast);
         return markDataFreshness(forecast, "FRESH");
       } catch (error) {
         if (cached) return markDataFreshness(cached.value, "STALE");
         throw error;
       }
-    });
+    }, request.signal);
   }
 
   private async readCache(

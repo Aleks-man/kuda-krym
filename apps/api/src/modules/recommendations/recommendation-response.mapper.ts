@@ -47,6 +47,7 @@ export function mapRecommendationResponse(
       maxTravelMinutes: calculation.context.maxTravelMinutes,
     },
     meta: {
+      ...(calculation.meta.timedOut ? { timedOut: true } : {}),
       candidateCount: calculation.meta.candidateCount,
       recommendationCount: calculation.meta.recommendationCount,
       unavailableCount: calculation.meta.failureCount,

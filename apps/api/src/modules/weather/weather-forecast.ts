@@ -8,6 +8,7 @@ export type ForecastLocation = Readonly<{
 }>;
 
 export type WeatherForecastRequest = Readonly<{
+  signal?: AbortSignal;
   location: ForecastLocation;
   days: ForecastDays;
 }>;
