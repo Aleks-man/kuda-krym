@@ -128,7 +128,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
                     <span className={styles.alternativeName}>
                       <strong>{locationName}</strong>
                       <small>{item.beach.name}</small>
-                      <RecommendationFreshness item={item} />
+                      <AlternativeParameter item={item} priority={result.context.priority} />
                     </span>
                     <span className={styles.alternativeTravel}>
                       <strong>{formatTravelDuration(item.travel.durationMinutes)}</strong>
@@ -156,6 +156,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
                       →
                     </span>
                   </Link>
+                  <AlternativeFreshness item={item} />
                 </li>
               );
             })}
@@ -204,5 +205,49 @@ function RecommendationFreshness({ item }: { item: RecommendationItem }) {
         </span>
       ) : null}
     </span>
+  );
+}
+
+function AlternativeParameter({ item, priority }: {
+  item: RecommendationItem;
+  priority: RecommendationResponse["context"]["priority"];
+}) {
+  const c = item.conditions;
+  const measure = (label: string, value: number | null, unit: string, digits = 0) =>
+    value === null ? `${label}: нет данных` : `${label} ${formatMeasurement(value, unit, digits)}`;
+  const text = priority === "WARM_WATER"
+    ? measure("Вода", c.seaSurfaceTemperatureCelsius, "°C")
+    : priority === "CALM_SEA"
+      ? measure("Волны", c.waveHeightMeters, "м", 1)
+      : [
+          measure("Воздух", c.airTemperatureCelsius, "°C"),
+          measure("Ветер", c.windSpeedMetersPerSecond, "м/с", 1),
+          measure("Вероятность осадков", c.precipitationProbabilityPercent, "%"),
+        ].join(" · ");
+  const source = priority === "COMFORT" ? item.freshness?.sources.weather : item.freshness?.sources.marine;
+
+  return (
+    <span className={styles.priorityParameter} title="Средние значения за выбранное время поездки">
+      {text}
+      {source?.status === "STALE" ? <span className={styles.stale}> · устаревшие данные</span> : null}
+    </span>
+  );
+}
+
+function AlternativeFreshness({ item }: { item: RecommendationItem }) {
+  const freshness = item.freshness;
+  if (!freshness) return <p className={styles.alternativeNotice}>Свежесть данных неизвестна</p>;
+  if (freshness.status === "FRESH") return null;
+  const weatherStale = freshness.sources.weather.status === "STALE";
+  const marineStale = freshness.sources.marine?.status === "STALE";
+  const label = weatherStale && marineStale
+    ? "Прогноз не обновился"
+    : weatherStale ? "Погода не обновилась" : marineStale ? "Данные моря не обновились" : "Прогноз не обновился";
+
+  return (
+    <details className={styles.alternativeNotice}>
+      <summary>{label}</summary>
+      <RecommendationFreshness item={item} />
+    </details>
   );
 }
