@@ -84,11 +84,13 @@ test("explains partial and empty timeout results without claiming no beaches mat
 });
 
 test("shows stale data warnings and source timestamps in cards and alternatives", async ({ page }) => {
+  let priority: "WARM_WATER" | "CALM_SEA" | "COMFORT" = "WARM_WATER";
   const weatherTime = "2026-10-01T06:00:00.000Z";
   const marineTime = "2026-09-30T18:00:00.000Z";
   await page.route("**/api/recommendations", route => route.fulfill({
     json: {
       ...recommendationResponseFixture,
+      context: { ...recommendationResponseFixture.context, priority },
       data: Array.from({ length: 4 }, (_, index) => ({
         ...recommendationResponseFixture.data[0],
         position: index + 1,
@@ -127,6 +129,20 @@ test("shows stale data warnings and source timestamps in cards and alternatives"
   ]);
   await expect(notes.nth(1)).not.toContainText("Прогноз устарел");
   await page.getByText("Показать остальные варианты", { exact: false }).click();
+  const alternative = page.locator("li").filter({ hasText: "Данные моря не обновились" });
+  await expect(alternative).toContainText("Вода 24 °C");
+  await expect(alternative).toContainText("устаревшие данные");
+  await expect(alternative.getByText("Погода обновлена:", { exact: false })).not.toBeVisible();
+  await alternative.getByText("Данные моря не обновились", { exact: true }).click();
   await expect(notes).toHaveCount(4);
   await expect(notes.last()).toContainText("Прогноз устарел");
+  for (const [nextPriority, expected] of [
+    ["CALM_SEA", "Волны 0.3 м"],
+    ["COMFORT", "Воздух 27 °C · Ветер 2.8 м/с · Вероятность осадков 5 %"],
+  ] as const) {
+    priority = nextPriority;
+    await page.getByRole("button", { name: "Подобрать пляж" }).click();
+    await expect(alternative).toContainText(expected);
+  }
+  await expect(alternative.getByTitle("Средние значения за выбранное время поездки")).not.toContainText("устаревшие данные");
 });

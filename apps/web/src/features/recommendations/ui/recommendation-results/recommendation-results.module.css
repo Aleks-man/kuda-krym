@@ -26,10 +26,10 @@
 .cardLink:focus-visible { outline: none; }
 .empty { grid-column: 1 / -1; margin-top: 16px; padding: 22px; border-radius: 18px; background: rgb(255 255 255 / 65%); color: var(--muted); }
 .alternatives { display: grid; }
-.alternatives summary { display: flex; width: fit-content; min-width: 260px; padding: 14px 18px; align-items: center; justify-content: space-between; border-radius: 14px; background: var(--foreground); color: white; font-size: 13px; font-weight: 800; cursor: pointer; list-style: none; gap: 18px; }
-.alternatives summary::-webkit-details-marker { display: none; }
-.alternatives summary span { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: rgb(255 255 255 / 14%); font-size: 11px; }
-.alternatives[open] summary { margin-bottom: 14px; }
+.alternatives > summary { display: flex; width: fit-content; min-width: 260px; padding: 14px 18px; align-items: center; justify-content: space-between; border-radius: 14px; background: var(--foreground); color: white; font-size: 13px; font-weight: 800; cursor: pointer; list-style: none; gap: 18px; }
+.alternatives > summary::-webkit-details-marker { display: none; }
+.alternatives > summary span { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: rgb(255 255 255 / 14%); font-size: 11px; }
+.alternatives[open] > summary { margin-bottom: 14px; }
 .alternatives ol { display: grid; margin: 0; padding: 0; border: 1px solid rgb(255 255 255 / 82%); border-radius: 20px; overflow: hidden; background: rgb(255 255 255 / 68%); list-style: none; }
 .alternatives li + li { border-top: 1px solid var(--border); }
 .alternatives li { position: relative; }
@@ -50,7 +50,7 @@
 @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .alternatives li > a { grid-template-columns: 28px 1fr 44px 16px; } .alternativeTravel { grid-column: 2; } .alternativeConditions { grid-column: 2 / -1; } .alternativeScore { grid-column: 3; grid-row: 1 / span 2; } .alternativeArrow { grid-column: 4; grid-row: 1 / span 2; } }
 @media (max-width: 680px) { .card { padding: 174px 18px 18px; border-radius: 19px; } .visual { height: 156px; } .score { width: 56px; height: 56px; } .score strong { font-size: 20px; } .card h4 { font-size: 21px; } }
-@media (max-width: 400px) { .card { padding-top: 164px; } .visual { height: 148px; } .score { width: 50px; height: 50px; } .score strong { font-size: 18px; } .alternatives summary { min-width: 0; width: 100%; } }
+@media (max-width: 400px) { .card { padding-top: 164px; } .visual { height: 148px; } .score { width: 50px; height: 50px; } .score strong { font-size: 18px; } .alternatives > summary { min-width: 0; width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .card, .image { transition: none; } }
 
 @media (hover: hover) and (pointer: fine) {
@@ -62,3 +62,9 @@
 
 .freshness { display: grid; margin-top: 10px; gap: 4px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .stale { color: #965039; font-weight: 700; }
+
+.priorityParameter { color: var(--foreground); font-size: 12px; line-height: 1.5; }
+.alternativeNotice { margin: 0 18px 14px 66px; color: #965039; font-size: 12px; }
+.alternativeNotice > summary { width: fit-content; cursor: pointer; font-weight: 700; }
+.alternativeNotice > summary:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 4px; }
+@media (max-width: 720px) { .alternativeNotice { margin-left: 60px; } }
