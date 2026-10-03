@@ -1,3 +1,5 @@
+import { CityLinks } from "@/features/cities/ui/city-links/city-links";
+
 import { connection } from "next/server";
 
 import { getCoastalLocations } from "@/features/coastal-locations/api/get-coastal-locations";
@@ -11,7 +13,7 @@ import styles from "./page.module.css";
 
 export const metadata = createPageMetadata({
   title: "Прогноз у моря в Крыму",
-  description: "Погода и состояние моря в прибрежных районах Крыма.",
+  description: "Погода в Крыму сегодня, завтра и на 7 дней. Прогноз по городам и побережью: температура воздуха и воды, ветер, осадки и волны.",
   pathname: "/coast",
 });
 
@@ -43,6 +45,7 @@ export default async function CoastPage() {
         <CoastalForecastFinder locations={locations} />
       </section>
       <CoastalLocationGroups locations={locations} />
+      <CityLinks />
     </main>
   );
 }

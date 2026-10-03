@@ -11,7 +11,7 @@ export function CityHero({ city }: Readonly<{ city: WeatherCity }>) {
       <div className={styles.copy}>
         <ForecastBackLink className={styles.back} />
         <p className={styles.eyebrow}>{city.kind === "city" ? "Погода в городе" : "Погода в посёлке"}</p>
-        <h1>{city.name}</h1>
+        <h1>Погода: {city.name}</h1>
         <p className={styles.area}>{city.areaLabel}</p>
         <p className={styles.description}>
           Температура, облачность, осадки и ветер на ближайшие семь дней.

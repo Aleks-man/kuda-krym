@@ -63,7 +63,7 @@ function selectDisplayHours(hours: ForecastHour[], now: Date): ForecastHour[] {
   });
 }
 
-function formatDayLabel(dateKey: string, now: Date): string {
+export function formatDayLabel(dateKey: string, now: Date): string {
   const todayKey = getCrimeaDateKey(now);
   const tomorrowKey = getCrimeaDateKey(new Date(now.getTime() + millisecondsPerDay));
   const prefix = dateKey === todayKey
@@ -75,7 +75,7 @@ function formatDayLabel(dateKey: string, now: Date): string {
   return `${prefix ? prefix + ", " : ""}${formatForecastDateOption(dateKey)}`;
 }
 
-function getCrimeaDateKey(date: Date): string {
+export function getCrimeaDateKey(date: Date): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
     day: "2-digit",
     month: "2-digit",

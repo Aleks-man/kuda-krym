@@ -6,7 +6,7 @@ import { getCoastalLocation } from "@/features/coastal-locations/api/get-coastal
 import { CoastalLocationBeaches } from "@/features/coastal-locations/ui/coastal-location-beaches/coastal-location-beaches";
 import { CoastalLocationForecast } from "@/features/coastal-locations/ui/coastal-location-forecast/coastal-location-forecast";
 import { CoastalLocationHero } from "@/features/coastal-locations/ui/coastal-location-hero/coastal-location-hero";
-import { BeachForecastSkeleton } from "@/features/forecast/ui/beach-forecast/beach-forecast-skeleton";
+import { ForecastLocationInfo } from "@/features/forecast/ui/forecast-location-info/forecast-location-info";
 import { createPageMetadata } from "@/shared/seo/page-metadata";
 import { JsonLd } from "@/shared/seo/json-ld";
 import { createPlaceStructuredData } from "@/shared/seo/structured-data";
@@ -32,8 +32,8 @@ export async function generateMetadata({
   }
 
   return createPageMetadata({
-    title: `Погода у моря — ${location.name}`,
-    description: `Погода, ветер, волны и температура моря в ${location.name}.`,
+    title: `Погода: ${location.name} — сегодня и на 7 дней`,
+    description: `Погода сегодня и завтра: ${location.name}, Крым. Прогноз на 7 дней: температура воздуха, осадки и ветер, температура воды в море и волны.`,
     pathname: `/coast/${location.slug}`,
   });
 }
@@ -61,12 +61,11 @@ export default async function CoastLocationPage({
       />
       <main className={styles.main}>
         <CoastalLocationHero location={location} />
-        <Suspense fallback={<BeachForecastSkeleton />}>
-          <CoastalLocationForecast slug={location.slug} />
-        </Suspense>
+        <CoastalLocationForecast slug={location.slug} />
         <Suspense fallback={null}>
           <CoastalLocationBeaches slug={location.slug} />
         </Suspense>
+        <ForecastLocationInfo location={location} />
       </main>
     </>
   );

@@ -5,6 +5,7 @@ import type {
   ForecastSunTimes,
 } from "@kuda-krym/contracts";
 
+import { DailyForecast } from "../daily-forecast/daily-forecast";
 import { ForecastAutoRefresh } from "../forecast-auto-refresh/forecast-auto-refresh";
 import { getCurrentWeatherPresentation, selectCurrentForecastHour } from "../../model/current-weather-presentation";
 import { UvIndex } from "../uv-index/uv-index";
@@ -120,6 +121,7 @@ export function ForecastSummary({
 
       {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
+      <DailyForecast hours={forecastHours} showMarine={showMarine} />
       <ForecastTimeline locationName={currentLabel} catalogHref={catalogHref} generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
 
       <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
