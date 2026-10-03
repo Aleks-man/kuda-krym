@@ -9,12 +9,12 @@ test("city forecasts have crawlable links in the catalog", async ({ page }) => {
   await expect(page).toHaveURL(/\/cities\/simferopol$/, { timeout: 20_000 });
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Погода: Симферополь");
 });
-for (const [path, name, marine] of [["/cities/simferopol", "Симферополь", false], ["/coast/yalta", "Ялта", true]] as const) {
-  test(`${path} serves SEO metadata and a forecast summary without JavaScript`, async ({ browser, baseURL, request }) => {
+for (const [path, name] of [["/cities/simferopol", "Симферополь"], ["/coast/yalta", "Ялта"]] as const) {
+  test(`${path} serves SEO metadata and the original forecast without JavaScript`, async ({ browser, baseURL, request }) => {
     const response = await request.get(path);
     expect(response.ok()).toBe(true);
     const html = await response.text();
-    expect(html).toContain("daily-forecast-title");
+    expect(html).not.toContain("daily-forecast-title");
     expect(html).toContain("forecast-location-info-title");
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     try {
@@ -22,26 +22,33 @@ for (const [path, name, marine] of [["/cities/simferopol", "Симферопол
       await page.goto(`${baseURL}${path}`);
       await expect(page).toHaveTitle(`Погода: ${name} — сегодня и на 7 дней | Куда.Крым`);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(path + "$"));
-      const table = page.locator('section[aria-labelledby="daily-forecast-title"] table');
-      await expect(table).toBeVisible();
-      expect(await table.locator("tbody tr").count()).toBeGreaterThan(0);
-      expect(await table.locator("tbody tr").count()).toBeLessThanOrEqual(7);
-      await expect(table.getByRole("columnheader", { name: "Вода, средняя" })).toHaveCount(marine ? 1 : 0);
+      await expect(page.locator('section[aria-labelledby="daily-forecast-title"]')).toHaveCount(0);
+      await expect(page.getByRole("region", { name: "Погода сейчас", exact: true })).toBeVisible();
+      await expect(page.locator("#forecast-days-timeline")).toBeVisible();
       for (const width of [320, 390, 768, 1024, 1280]) {
         await page.setViewportSize({ width, height: 900 });
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-        const forecast = page.locator('section[aria-labelledby="daily-forecast-title"]');
-        expect(await forecast.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
-        expect(await table.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
-        const firstRow = table.locator("tbody tr").first();
-        await expect(firstRow).toBeVisible();
-        for (const cell of await firstRow.locator("td").all()) {
-          expect(await cell.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
-        }
-        if (width === 390 || width === 768) {
-          await forecast.screenshot({ path: test.info().outputPath(`summary-${width}.png`) });
-        }
       }
     } finally { await context.close(); }
   });
 }
+
+test("forecast explanation uses the same dark description style as nearby beaches", async ({ page }) => {
+  await page.goto("/coast/alushta");
+  const info = page.locator('section[aria-labelledby="forecast-location-info-title"]');
+  const reference = page.locator('section[aria-labelledby="nearby-beaches-title"] > p');
+  await expect(info).toBeVisible();
+  await expect(reference).toBeVisible();
+  const expectedStyle = await reference.evaluate(element => {
+    const style = getComputedStyle(element);
+    return { color: style.color, fontWeight: style.fontWeight, fontSize: style.fontSize, lineHeight: style.lineHeight, opacity: style.opacity };
+  });
+  for (const paragraph of await info.locator("p").all()) {
+    expect(await paragraph.evaluate(element => {
+      const style = getComputedStyle(element);
+      return { color: style.color, fontWeight: style.fontWeight, fontSize: style.fontSize, lineHeight: style.lineHeight, opacity: style.opacity };
+    })).toEqual(expectedStyle);
+  }
+  await info.scrollIntoViewIfNeeded();
+  await info.screenshot({ path: test.info().outputPath("forecast-explanation.png") });
+});
