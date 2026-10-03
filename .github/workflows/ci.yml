@@ -69,9 +69,24 @@ jobs:
           docker compose --env-file compose.env.example run --rm --no-deps migrate npm run validate --workspace @kuda-krym/database
           docker compose --env-file compose.env.example run --rm --no-deps migrate node -e "require.resolve('tsx'); try { require.resolve('next'); process.exit(1); } catch (error) { if (error.code !== 'MODULE_NOT_FOUND') throw error; }"
 
+      - name: Pull PostgreSQL image with retries
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            if docker compose --env-file compose.env.example pull postgres; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::PostgreSQL image download failed after 3 attempts"
+              exit 1
+            fi
+            echo "::warning::PostgreSQL image download failed (attempt $attempt/3); retrying"
+            sleep "$((attempt * 10))"
+          done
+
       - name: Check migration and seed against disposable PostgreSQL
         run: |
-          docker compose --env-file compose.env.example up -d --wait postgres
+          docker compose --env-file compose.env.example up -d --wait --pull never postgres
           docker compose --env-file compose.env.example run --rm --no-deps migrate
           docker compose --env-file compose.env.example --profile tools run --rm --no-deps seed
           docker compose --env-file compose.env.example run --rm --no-deps migrate
