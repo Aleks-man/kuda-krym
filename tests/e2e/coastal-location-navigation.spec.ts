@@ -14,7 +14,7 @@ test("opens a coastal location from the catalog", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/coast\/yalta$/, { timeout: 20_000 });
 
-  const locationHeading = page.getByRole("heading", { level: 1, name: "Ялта" });
+  const locationHeading = page.getByRole("heading", { level: 1, name: "Погода: Ялта" });
   const locationHero = locationHeading.locator("xpath=ancestor::header[1]");
 
   await expect(locationHeading).toBeVisible();

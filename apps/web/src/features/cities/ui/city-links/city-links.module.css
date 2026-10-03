@@ -1,0 +1,7 @@
+.section { display: grid; gap: 20px; }
+.heading h2 { margin: 0; font-size: clamp(24px, 4vw, 36px); }
+.list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; padding: 0; margin: 0; list-style: none; }
+.list li { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; }
+.list a { display: block; padding: 16px 16px 8px; color: var(--accent-strong); font-weight: 700; }
+.list a:hover { text-decoration: underline; }
+.list p { margin: 0; padding: 0 16px 16px; color: var(--muted); font-size: 13px; }

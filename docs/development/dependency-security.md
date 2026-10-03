@@ -7,7 +7,8 @@ npm run audit:security
 ```
 
 The command fails when npm reports a package or advisory that is not listed in
-`config/security-audit-policy.json`. The policy contains narrow temporary
+`config/security-audit-policy.json`. ESLint exceptions additionally require exact reviewed versions and dev-only entries
+in the lockfile; a production copy fails the audit. The policy contains narrow temporary
 exceptions, not severity-wide ignores.
 
 ## Reviewed Prisma exceptions
@@ -31,3 +32,24 @@ compatible Prisma release updates the affected dependencies.
 
 Do not run `npm audit fix --force`; review dependency changes and verify the full
 quality and E2E suites instead.
+
+## Reviewed ESLint exception
+
+As of 2026-10-03, `eslint-config-next@16.3.3` uses
+`@next/eslint-plugin-next@16.3.3` -> `fast-glob@3.3.1` -> `micromatch@4.0.8`
+-> `braces@3.0.3`. [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+reports stack exhaustion on deeply nested brace patterns. No patched braces
+release is available; the current Next ESLint plugin still uses fast-glob.
+
+All five packages are development-only in the committed lockfile;
+`npm ls braces --omit=dev` confirms no production dependency. ESLint receives
+repository-controlled file patterns, not public weather request data. This is a
+temporary tooling exception, not a fix for the underlying vulnerability.
+The policy checks every reported installation path for `dev: true` and the exact
+reviewed version. New advisories, versions, packages, or production copies fail.
+Remove this exception when upstream ships a compatible fix. Do not feed untrusted
+glob patterns to this toolchain.
+
+`npm run test:security` covers these restrictions and audit service errors; it also
+runs as part of `npm test` and `npm run check`. Run `npm run audit:security` separately
+before pushing because it queries the live advisory database.

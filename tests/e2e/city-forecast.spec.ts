@@ -5,7 +5,7 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
   const expectedDays = await prepareForecastCalendar(page);
   await page.goto("/cities/simferopol");
 
-  await expect(page.getByRole("heading", { level: 1, name: "Симферополь" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Погода: Симферополь" })).toBeVisible();
   await expect(page.getByRole("img", { name: "Исторический центр Симферополя и городская пешеходная улица" })).toBeVisible();
 
   const forecast = page.locator('section[aria-labelledby="forecast-title"]');
@@ -23,7 +23,7 @@ test("opens the Simferopol weather forecast without marine conditions", async ({
 for (const place of [{ slug: "bakhchisaray", name: "Бахчисарай" }, { slug: "krasnogvardeyskoye", name: "Красногвардейское" }]) {
   test(`shows a weather-only page for ${place.name}`, async ({ page }) => {
     await page.goto(`/cities/${place.slug}`);
-    await expect(page.getByRole("heading", { level: 1, name: place.name, exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: `Погода: ${place.name}`, exact: true })).toBeVisible();
     const forecast = page.getByRole("region", { name: "Погода сейчас", exact: true });
     await expect(forecast).toBeVisible();
     await expect(forecast.getByText(place.name, { exact: true }).first()).toBeVisible();

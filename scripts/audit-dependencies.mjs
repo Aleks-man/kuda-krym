@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { reviewAudit } from "./security-audit-policy.mjs";
 
 const policy = JSON.parse(
   readFileSync(new URL("../config/security-audit-policy.json", import.meta.url), "utf8"),
@@ -25,28 +26,23 @@ try {
   throw new Error(`npm audit returned invalid JSON: ${audit.stderr.trim()}`);
 }
 
-const vulnerabilities = Object.entries(report.vulnerabilities ?? {});
-const allowedPackages = new Set(policy.allowedPackages);
-const allowedAdvisories = new Set(policy.allowedAdvisories);
-const unexpectedPackages = vulnerabilities
-  .map(([name]) => name)
-  .filter((name) => !allowedPackages.has(name));
-const unexpectedAdvisories = vulnerabilities
-  .flatMap(([, vulnerability]) => vulnerability.via)
-  .filter((item) => typeof item === "object")
-  .map((advisory) => advisory.source)
-  .filter((source) => !allowedAdvisories.has(source));
+if (audit.status !== 0 && audit.status !== 1) {
+  throw new Error(`npm audit failed: ${audit.stderr.trim()}`);
+}
 
-if (unexpectedPackages.length > 0 || unexpectedAdvisories.length > 0) {
-  console.error("npm audit found vulnerabilities outside the reviewed policy", {
-    unexpectedAdvisories: [...new Set(unexpectedAdvisories)],
-    unexpectedPackages: [...new Set(unexpectedPackages)],
-  });
+const lockfile = JSON.parse(
+  readFileSync(new URL("../package-lock.json", import.meta.url), "utf8"),
+);
+const review = reviewAudit(report, policy, lockfile);
+const vulnerabilities = Object.keys(report.vulnerabilities);
+
+if (Object.values(review).some((entries) => entries.length > 0)) {
+  console.error("npm audit found vulnerabilities outside the reviewed policy", review);
   process.exitCode = 1;
 } else if (vulnerabilities.length === 0) {
   console.log("npm audit found no known vulnerabilities.");
 } else {
   console.log(
-    `npm audit found only ${vulnerabilities.length} reviewed Prisma-related entries.`,
+    `npm audit found only ${vulnerabilities.length} explicitly reviewed entries; known vulnerabilities remain (see docs/development/dependency-security.md).`,
   );
 }

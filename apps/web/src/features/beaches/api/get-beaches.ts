@@ -10,10 +10,12 @@ const defaultApiUrl = "http://127.0.0.1:4000";
 
 export async function getBeaches(
   query: BeachCatalogQuery = {},
+  signal?: AbortSignal,
 ): Promise<BeachListResponse> {
   const apiUrl = process.env.API_URL ?? defaultApiUrl;
   const response = await fetch(createBeachCatalogUrl(apiUrl, query), {
     next: { revalidate: 300 },
+    ...(signal ? { signal } : {}),
   });
 
   if (!response.ok) {

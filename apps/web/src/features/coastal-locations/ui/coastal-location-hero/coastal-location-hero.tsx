@@ -23,7 +23,7 @@ export function CoastalLocationHero({ location }: CoastalLocationHeroProps) {
           {coastalRegionLabels[location.region]} ·{" "}
           {waterBodyLabels[location.waterBody]}
         </p>
-        <h1>{location.name}</h1>
+        <h1>Погода: {location.name}</h1>
         <p className={styles.description}>
           Актуальные условия у моря: температура воздуха и воды, ветер, осадки и
           волны.

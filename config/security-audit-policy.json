@@ -1,9 +1,21 @@
 {
-  "allowedAdvisories": [1145093, 1153173, 1158532],
+  "allowedAdvisories": [
+    1145093,
+    1153173,
+    1158532,
+    1240992
+  ],
   "allowedPackages": [
     "@prisma/config",
     "deepmerge-ts",
     "mysql2",
     "prisma"
-  ]
+  ],
+  "reviewedDevPackages": {
+    "@next/eslint-plugin-next": "16.3.3",
+    "braces": "3.0.3",
+    "eslint-config-next": "16.3.3",
+    "fast-glob": "3.3.1",
+    "micromatch": "4.0.8"
+  }
 }
