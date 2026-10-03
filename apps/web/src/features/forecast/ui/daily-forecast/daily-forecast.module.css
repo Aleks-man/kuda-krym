@@ -1,17 +1,16 @@
 .section {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   min-width: 0;
   margin-block: 28px;
-  padding: clamp(18px, 3vw, 26px);
-  border: 1px solid var(--border);
+  padding: 20px clamp(22px, 4vw, 30px);
+  border: 1px solid rgb(255 255 255 / 75%);
   border-radius: 22px;
-  background: var(--surface);
+  background: linear-gradient(145deg, #e7f4ef, #d9eeea);
   box-shadow: 0 16px 44px rgb(22 48 43 / 6%);
 }
 .section h3, .section p { margin: 0; }
-.section h3 { font-size: clamp(22px, 3vw, 28px); letter-spacing: -0.035em; }
-.section p, .forecast caption { color: var(--foreground); font-size: 13px; line-height: 1.6; }
+.section p, .forecast caption { color: var(--muted); font-size: 13px; line-height: 1.6; }
 .forecast { min-width: 0; border: 1px solid var(--border); border-radius: 16px; }
 .forecast table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .forecast caption { padding: 12px; text-align: left; }
@@ -24,7 +23,7 @@
 @media (max-width: 1024px) {
   .forecast { border: 0; border-radius: 0; }
   .forecast table { display: block; }
-  .forecast caption { display: block; padding: 0 0 14px; }
+  .forecast caption { display: block; padding: 0 0 12px; }
   .forecast thead {
     position: absolute;
     width: 1px;
@@ -34,31 +33,32 @@
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  .forecast tbody { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .forecast tbody { display: grid; gap: 8px; }
   .forecast tbody tr {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     min-width: 0;
     border: 1px solid var(--border);
-    border-radius: 14px;
-    background: #f7faf9;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 35%);
   }
+  .forecast table[data-marine="false"] tbody tr { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .forecast th[scope="row"] {
     grid-column: 1 / -1;
     min-width: 0;
-    padding: 12px;
+    padding: 8px 10px;
     border: 0;
-    border-radius: 14px 14px 0 0;
-    background: var(--accent-soft);
-    font-size: 14px;
     line-height: 1.45;
   }
-  .forecast td { display: grid; gap: 4px; min-width: 0; padding: 10px 12px; white-space: normal; font-weight: 750; }
-  .forecast .air { grid-column: 1 / -1; }
-  .metricLabel { display: block; font-size: 12px; font-weight: 500; line-height: 1.4; color: var(--foreground); }
+  .forecast td { display: grid; gap: 3px; min-width: 0; padding: 8px 10px; white-space: normal; }
+  .metricLabel { display: block; font-size: 12px; line-height: 1.4; color: var(--foreground); }
 }
 
-@media (max-width: 679px) {
-  .section { padding: 16px; border-radius: 18px; }
-  .forecast tbody { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (max-width: 620px) {
+  .section { padding: 16px 18px; border-radius: 18px; }
+  .forecast tbody tr { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .forecast table[data-marine="false"] tbody tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .forecast .air { grid-column: 1 / span 2; }
+  .forecast .water { grid-column: 3; grid-row: 2; }
+  .forecast td { padding: 8px; }
 }
