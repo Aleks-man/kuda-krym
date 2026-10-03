@@ -27,7 +27,21 @@ for (const [path, name, marine] of [["/cities/simferopol", "Симферопол
       expect(await table.locator("tbody tr").count()).toBeGreaterThan(0);
       expect(await table.locator("tbody tr").count()).toBeLessThanOrEqual(7);
       await expect(table.getByRole("columnheader", { name: "Вода, средняя" })).toHaveCount(marine ? 1 : 0);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      for (const width of [320, 390, 768, 1024, 1280]) {
+        await page.setViewportSize({ width, height: 900 });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const forecast = page.locator('section[aria-labelledby="daily-forecast-title"]');
+        expect(await forecast.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+        expect(await table.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+        const firstRow = table.locator("tbody tr").first();
+        await expect(firstRow).toBeVisible();
+        for (const cell of await firstRow.locator("td").all()) {
+          expect(await cell.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+        }
+        if (width === 390 || width === 768) {
+          await forecast.screenshot({ path: test.info().outputPath(`summary-${width}.png`) });
+        }
+      }
     } finally { await context.close(); }
   });
 }

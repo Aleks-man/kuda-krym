@@ -1,4 +1,4 @@
 .section { display: grid; gap: 12px; margin-top: var(--layout-section-gap); }
 .section h2, .section p { margin: 0; }
 .section h2 { font-size: clamp(22px, 3vw, 30px); }
-.section p { color: var(--muted); line-height: 1.7; }
+.section p { color: var(--foreground); line-height: 1.7; }
