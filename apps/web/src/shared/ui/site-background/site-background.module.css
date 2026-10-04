@@ -44,13 +44,19 @@
 
 .city {
   background-image:
-    radial-gradient(circle at 16% 18%, rgb(255 214 143 / 32%), transparent 34%),
-    radial-gradient(circle at 82% 12%, rgb(179 221 210 / 42%), transparent 32%),
-    linear-gradient(145deg, #f7f4e9 0%, #edf5ef 48%, #e6f1ed 100%);
-  filter: none;
+    linear-gradient(135deg, rgb(248 251 245 / 72%), rgb(240 247 239 / 62%)),
+    url("/images/site-city-park-v2.webp");
+  background-position: center;
 }
 
 @media (max-width: 680px) {
+  .city {
+    background-image:
+      linear-gradient(135deg, rgb(248 251 245 / 78%), rgb(240 247 239 / 70%)),
+      url("/images/site-city-park-mobile-v2.webp");
+    background-position: 82% center;
+  }
+
   .coast,
   .beaches {
     background-position: 58% center;
