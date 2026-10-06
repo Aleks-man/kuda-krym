@@ -7,16 +7,16 @@ import { ImageCredit } from "@/shared/ui/image-credit/image-credit";
 import { getBeachLabels } from "../../model/beach-labels";
 import styles from "./beach-detail-hero.module.css";
 
-type BeachDetailHeroProps = Readonly<{ beach: BeachDetail }>;
+type BeachDetailHeroProps = Readonly<{ beach: BeachDetail; fromRecommendations?: boolean }>;
 
-export function BeachDetailHero({ beach }: BeachDetailHeroProps) {
+export function BeachDetailHero({ beach, fromRecommendations }: BeachDetailHeroProps) {
   const labels = getBeachLabels(beach);
 
   return (
     <section className={styles.hero}>
       <div className={styles.copy}>
-        <Link className={styles.back} href="/beaches">
-          ← Все пляжи
+        <Link className={styles.back} href={fromRecommendations ? "/#preferences" : "/beaches"}>
+          {fromRecommendations ? "← К подбору" : "← Все пляжи"}
         </Link>
         <p className={styles.region}>{labels.region}</p>
         <h1>{beach.name}</h1>

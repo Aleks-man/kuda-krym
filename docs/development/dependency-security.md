@@ -53,3 +53,13 @@ glob patterns to this toolchain.
 `npm run test:security` covers these restrictions and audit service errors; it also
 runs as part of `npm test` and `npm run check`. Run `npm run audit:security` separately
 before pushing because it queries the live advisory database.
+
+## Patched dependency snapshot (2026-10-06)
+
+The committed lockfile updates `proxy-addr` to 2.0.8, `source-map-js` to 1.2.2,
+and `sharp` to 0.35.5 (including its platform binaries and libvips packages).
+These address newly reported advisories without adding policy exceptions:
+
+- [proxy-addr GHSA-jqcg-44mw-7w3h](https://github.com/advisories/GHSA-jqcg-44mw-7w3h);
+- [source-map-js GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q);
+- [sharp GHSA-wq5f-xc86-pv6w](https://github.com/advisories/GHSA-wq5f-xc86-pv6w).

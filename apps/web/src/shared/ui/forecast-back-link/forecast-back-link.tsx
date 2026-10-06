@@ -7,10 +7,12 @@ import { Suspense } from "react";
 type Props = Readonly<{ className?: string }>;
 
 function ContextualLink({ className }: Props) {
-  const fromHome = useSearchParams().get("from") === "home";
+  const from = useSearchParams().get("from");
+  const fromHome = from === "home";
+  const fromRecommendations = from === "recommendations";
   return (
-    <Link className={className} href={fromHome ? "/" : "/coast"}>
-      {fromHome ? "← На главную" : "← К населённым пунктам"}
+    <Link className={className} href={fromRecommendations ? "/#preferences" : fromHome ? "/" : "/coast"}>
+      {fromRecommendations ? "← К подбору" : fromHome ? "← На главную" : "← К населённым пунктам"}
     </Link>
   );
 }

@@ -5,10 +5,10 @@ import { ForecastSummary } from "@/features/forecast/ui/forecast-summary/forecas
 import { getCoastalForecast } from "../../api/get-coastal-forecast";
 import styles from "./coastal-location-forecast.module.css";
 
-type CoastalLocationForecastProps = Readonly<{ slug: string }>;
+type CoastalLocationForecastProps = Readonly<{ slug: string; initialDate?: string; fromRecommendations?: boolean }>;
 
 export async function CoastalLocationForecast({
-  slug,
+  slug, initialDate, fromRecommendations,
 }: CoastalLocationForecastProps) {
   const forecast = await loadForecast(slug);
 
@@ -23,6 +23,8 @@ export async function CoastalLocationForecast({
   return (
     <ForecastSummary
       catalogHref="/coast"
+      initialDate={initialDate}
+      fromRecommendations={fromRecommendations}
       currentLabel={forecast.location.name}
       eyebrow="Условия у побережья"
       generatedAt={forecast.generatedAt}

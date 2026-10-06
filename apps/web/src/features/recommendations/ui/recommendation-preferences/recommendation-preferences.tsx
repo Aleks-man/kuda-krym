@@ -10,7 +10,7 @@ import { createRecommendationRequest } from "../../model/recommendation-form";
 import {
   getRecommendationDateOptions,
   parseRelativeRecommendationDate,
-  type RelativeRecommendationDate,
+  resolveRecommendationDate,
 } from "../../model/crimea-date";
 import {
   getFirstAvailableRecommendationTime,
@@ -25,10 +25,36 @@ import {
 import { PreferenceChoice } from "../preference-choice/preference-choice";
 import { RecommendationResults } from "../recommendation-results/recommendation-results";
 import { TravelTimeField } from "../travel-time-field/travel-time-field";
+import {
+  readRecommendationSession,
+  saveRecommendationSession,
+  type RecommendationDraft,
+  type RecommendationSession,
+} from "../../model/recommendation-session";
+import { getPopularDepartureLocations } from "@/features/departure-locations/model/departure-location-option";
 import styles from "./recommendation-preferences.module.css";
 
 export function RecommendationPreferences() {
-  const [result, setResult] = useState<RecommendationResponse | null>(null);
+  const client = useSyncExternalStore(subscribeToClientState, getClientSnapshot, getServerSnapshot);
+  return (
+    <RecommendationPreferencesForm
+      key={client ? "client" : "server"}
+      restored={client ? readRecommendationSession() : null}
+      persist={client}
+    />
+  );
+}
+
+function RecommendationPreferencesForm({ restored, persist }: { restored: RecommendationSession | null; persist: boolean }) {
+  const [draft, setDraft] = useState<RecommendationDraft>(() => restored?.draft ?? {
+    originQuery: "Симферополь", origin: getPopularDepartureLocations("Симферополь")[0] ?? null,
+    date: "today", time: "day", priority: "calm_sea", maxTravelMinutes: "60",
+  });
+  const [result, setResult] = useState<RecommendationResponse | null>(restored?.result ?? null);
+  const [resultSavedAt, setResultSavedAt] = useState<number | null>(restored?.resultSavedAt ?? null);
+  const selectedDate = draft.date;
+  const selectedTime = draft.time;
+  const updateDraft = (patch: Partial<RecommendationDraft>) => setDraft(previous => ({ ...previous, ...patch }));
   const resultsRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -41,14 +67,7 @@ export function RecommendationPreferences() {
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedDate, setSelectedDate] =
-    useState<RelativeRecommendationDate>("today");
-  const [selectedTime, setSelectedTime] = useState<RecommendationTime>("day");
-  const canShowCurrentDates = useSyncExternalStore(
-    subscribeToClientState,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
+  const canShowCurrentDates = persist;
   const currentDate = canShowCurrentDates ? new Date() : null;
   const todayIsUnavailable = currentDate
     ? isTodayUnavailable(currentDate)
@@ -64,6 +83,12 @@ export function RecommendationPreferences() {
     ? getFirstAvailableRecommendationTime(effectiveDate, currentDate)
     : selectedTime;
 
+  useEffect(() => {
+    if (!persist) return;
+    saveRecommendationSession({ draft: { ...draft, date: effectiveDate, time: effectiveTime },
+      calendarDate: resolveRecommendationDate(effectiveDate), result, resultSavedAt });
+  }, [draft, effectiveDate, effectiveTime, persist, result, resultSavedAt]);
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
@@ -74,6 +99,7 @@ export function RecommendationPreferences() {
       trackGoal("recommendation_submit");
       const response = await submitRecommendations(request);
       setResult(response);
+      setResultSavedAt(Date.now());
       trackGoal(response.data.length > 0 ? "recommendation_results" : "recommendation_empty");
     } catch (cause) {
       trackGoal("recommendation_error");
@@ -101,9 +127,13 @@ export function RecommendationPreferences() {
 
       <form aria-busy={isLoading} className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.row}>
-          <DepartureLocationField />
+          <DepartureLocationField
+            value={{ query: draft.originQuery, selected: draft.origin }}
+            onChange={({ query, selected }) => updateDraft({ originQuery: query, origin: selected })}
+            preserveSelectionOnFocus={restored !== null}
+          />
 
-          <TravelTimeField />
+          <TravelTimeField value={draft.maxTravelMinutes} onChange={(maxTravelMinutes) => updateDraft({ maxTravelMinutes })} />
         </div>
 
         <fieldset className={styles.fieldset}>
@@ -114,7 +144,7 @@ export function RecommendationPreferences() {
               label="Дата поездки"
               name="date"
               value={effectiveDate}
-              onChange={(value) => setSelectedDate(parseRelativeRecommendationDate(value))}
+              onChange={(value) => updateDraft({ date: parseRelativeRecommendationDate(value) })}
               options={getRecommendationDateOptions(currentDate).filter((option) => option.value !== "today" || !todayIsUnavailable)}
             />
           ) : <input type="hidden" name="date" value={effectiveDate} />}
@@ -131,7 +161,7 @@ export function RecommendationPreferences() {
                 key={option.value}
                 label={option.label}
                 name="time"
-                onChange={() => setSelectedTime(option.value)}
+                onChange={() => updateDraft({ time: option.value })}
                 value={option.value}
               />
             ))}
@@ -141,9 +171,10 @@ export function RecommendationPreferences() {
         <fieldset className={styles.fieldset}>
           <legend>Что важнее всего</legend>
           <div className={styles.threeColumns}>
-            {priorityOptions.map((option, index) => (
+            {priorityOptions.map((option) => (
               <PreferenceChoice
-                defaultChecked={index === 0}
+                checked={draft.priority === option.value}
+                onChange={() => updateDraft({ priority: option.value })}
                 icon={option.icon}
                 key={option.value}
                 label={option.label}
