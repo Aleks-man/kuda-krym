@@ -13,14 +13,19 @@ import styles from "./departure-location-field.module.css";
 
 const initialOption = getPopularDepartureLocations("Симферополь")[0];
 
-export function DepartureLocationField() {
+type FieldValue = { query: string; selected: DepartureLocationOption | null };
+export function DepartureLocationField({ value, onChange, preserveSelectionOnFocus = false }: {
+  value?: FieldValue; onChange?: (value: FieldValue) => void; preserveSelectionOnFocus?: boolean;
+} = {}) {
   const inputId = useId();
   const listboxId = useId();
-  const shouldClearInitialOrigin = useRef(true);
-  const [query, setQuery] = useState(initialOption?.label ?? "");
-  const [selected, setSelected] = useState<DepartureLocationOption | null>(
+  const shouldClearInitialOrigin = useRef(!preserveSelectionOnFocus);
+  const [internalQuery, setQuery] = useState(initialOption?.label ?? "");
+  const [internalSelected, setSelected] = useState<DepartureLocationOption | null>(
     initialOption ?? null,
   );
+  const query = value?.query ?? internalQuery;
+  const selected = value ? value.selected : internalSelected;
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const search = useDepartureLocationSearch(query);
@@ -35,6 +40,7 @@ export function DepartureLocationField() {
   const activeOption = options[activeIndex];
 
   function selectOption(option: DepartureLocationOption) {
+    onChange?.({ query: option.label, selected: option });
     setSelected(option);
     setQuery(option.label);
     setIsOpen(false);
@@ -80,6 +86,7 @@ export function DepartureLocationField() {
           autoComplete="off"
           id={inputId}
           onChange={(event) => {
+            onChange?.({ query: event.target.value, selected: null });
             setQuery(event.target.value);
             setSelected(null);
             setIsOpen(true);
@@ -90,6 +97,7 @@ export function DepartureLocationField() {
 
             if (shouldClearInitialOrigin.current) {
               shouldClearInitialOrigin.current = false;
+              onChange?.({ query: "", selected: null });
               setQuery("");
               setSelected(null);
               setActiveIndex(0);

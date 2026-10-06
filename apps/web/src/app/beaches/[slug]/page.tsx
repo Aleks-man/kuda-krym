@@ -1,3 +1,4 @@
+import { recommendationDateSchema } from "@kuda-krym/contracts";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -13,7 +14,7 @@ import { getSiteUrl } from "@/shared/config/site-url";
 
 import styles from "./page.module.css";
 
-type BeachPageProps = Readonly<{ params: Promise<{ slug: string }> }>;
+type BeachPageProps = Readonly<{ params: Promise<{ slug: string }>; searchParams: Promise<{ date?: string | string[]; from?: string | string[] }> }>;
 
 export async function generateMetadata({
   params,
@@ -36,7 +37,10 @@ export async function generateMetadata({
   });
 }
 
-export default async function BeachPage({ params }: BeachPageProps) {
+export default async function BeachPage({ params, searchParams }: BeachPageProps) {
+  const query = await searchParams;
+  const initialDate = recommendationDateSchema.safeParse(query.date).data;
+  const fromRecommendations = query.from === "recommendations";
   const { slug } = await params;
   const beach = await getBeach(slug);
 
@@ -57,9 +61,9 @@ export default async function BeachPage({ params }: BeachPageProps) {
         })}
       />
       <main className={styles.main}>
-        <BeachDetailHero beach={beach} />
+        <BeachDetailHero beach={beach} fromRecommendations={fromRecommendations} />
         <BeachCoastalLink coastalLocation={beach.coastalLocation} />
-        <BeachForecast beachId={beach.id} />
+        <BeachForecast beachId={beach.id} initialDate={initialDate} fromRecommendations={fromRecommendations} />
         <BeachFacts beach={beach} />
       </main>
     </>

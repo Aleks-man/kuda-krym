@@ -1,3 +1,4 @@
+import { recommendationDateSchema } from "@kuda-krym/contracts";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -16,6 +17,7 @@ import styles from "./page.module.css";
 
 type CoastLocationPageProps = Readonly<{
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ date?: string | string[]; from?: string | string[] }>;
 }>;
 
 export async function generateMetadata({
@@ -40,7 +42,11 @@ export async function generateMetadata({
 
 export default async function CoastLocationPage({
   params,
+  searchParams,
 }: CoastLocationPageProps) {
+  const query = await searchParams;
+  const initialDate = recommendationDateSchema.safeParse(query.date).data;
+  const fromRecommendations = query.from === "recommendations";
   const { slug } = await params;
   const location = await getCoastalLocation(slug);
 
@@ -61,7 +67,7 @@ export default async function CoastLocationPage({
       />
       <main className={styles.main}>
         <CoastalLocationHero location={location} />
-        <CoastalLocationForecast slug={location.slug} />
+        <CoastalLocationForecast slug={location.slug} initialDate={initialDate} fromRecommendations={fromRecommendations} />
         <Suspense fallback={null}>
           <CoastalLocationBeaches slug={location.slug} />
         </Suspense>

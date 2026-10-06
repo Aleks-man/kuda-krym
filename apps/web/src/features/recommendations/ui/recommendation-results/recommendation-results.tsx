@@ -95,11 +95,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
             <Link
               aria-label={`Открыть ${item.beach.coastalLocation ? `прогноз для ${item.beach.coastalLocation.name}` : `пляж ${item.beach.name}`}`}
               className={styles.cardLink}
-              href={
-                item.beach.coastalLocation
-                  ? `/coast/${item.beach.coastalLocation.slug}`
-                  : `/beaches/${item.beach.slug}`
-              }
+              href={getRecommendationHref(item, result.context.date)}
             >
               {item.beach.coastalLocation ? "Открыть прогноз" : "Открыть пляж"}{" "}
               <span>→</span>
@@ -121,7 +117,7 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
 
               return (
                 <li key={item.beach.id}>
-                  <Link href={getRecommendationHref(item)}>
+                  <Link href={getRecommendationHref(item, result.context.date)}>
                     <span className={styles.alternativePosition}>
                       {item.position}
                     </span>
@@ -167,10 +163,11 @@ export function RecommendationResults({ result, ref }: RecommendationResultsProp
   );
 }
 
-function getRecommendationHref(item: RecommendationItem) {
-  return item.beach.coastalLocation
+function getRecommendationHref(item: RecommendationItem, date: string) {
+  const pathname = item.beach.coastalLocation
     ? `/coast/${item.beach.coastalLocation.slug}`
     : `/beaches/${item.beach.slug}`;
+  return `${pathname}?${new URLSearchParams({ from: "recommendations", date })}#forecast-timeline-title`;
 }
 
 function getWeakConditions(item: RecommendationItem) {

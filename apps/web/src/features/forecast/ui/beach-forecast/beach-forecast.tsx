@@ -4,9 +4,9 @@ import { getBeachForecast } from "../../api/get-beach-forecast";
 import { ForecastSummary } from "../forecast-summary/forecast-summary";
 import styles from "./beach-forecast.module.css";
 
-type BeachForecastProps = Readonly<{ beachId: string }>;
+type BeachForecastProps = Readonly<{ beachId: string; initialDate?: string; fromRecommendations?: boolean }>;
 
-export async function BeachForecast({ beachId }: BeachForecastProps) {
+export async function BeachForecast({ beachId, initialDate, fromRecommendations }: BeachForecastProps) {
   const forecast = await loadForecast(beachId);
   if (!forecast || forecast.hourly.length === 0) {
     return <ForecastUnavailable />;
@@ -14,6 +14,8 @@ export async function BeachForecast({ beachId }: BeachForecastProps) {
   return (
     <ForecastSummary
       catalogHref="/beaches"
+      initialDate={initialDate}
+      fromRecommendations={fromRecommendations}
       currentLabel={forecast.beach.name}
       eyebrow="Условия у воды"
       generatedAt={forecast.generatedAt}

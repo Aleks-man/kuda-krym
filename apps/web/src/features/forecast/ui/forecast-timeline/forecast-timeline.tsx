@@ -4,23 +4,30 @@ import Link from "next/link";
 import { SelectField } from "@/shared/ui/select-field/select-field";
 
 import type { ForecastHour, ForecastSunTimes } from "@kuda-krym/contracts";
-import { memo, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
+import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { UvIndex } from "../uv-index/uv-index";
 import { isCrimeaDaylight } from "../../model/crimea-daylight";
 import { formatForecastDateOption, selectForecastDays } from "../../model/forecast-days";
 import { formatForecastTime, formatForecastUpdatedAt, formatMeasurement } from "../../model/forecast-view";
 import styles from "./forecast-timeline.module.css";
 
-type Props = Readonly<{ locationName: string; catalogHref: "/beaches" | "/coast"; generatedAt: string; hours: ForecastHour[]; showMarine?: boolean; sunTimes: ForecastSunTimes[] }>;
+type Props = Readonly<{ locationName: string; initialDate?: string; fromRecommendations?: boolean; catalogHref: "/beaches" | "/coast"; generatedAt: string; hours: ForecastHour[]; showMarine?: boolean; sunTimes: ForecastSunTimes[] }>;
 type DragState = { pointerId: number; startX: number; scrollLeft: number };
 
-export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours, showMarine = true, sunTimes }: Props) {
+export function ForecastTimeline({ initialDate, fromRecommendations, locationName, catalogHref, generatedAt, hours, showMarine = true, sunTimes }: Props) {
   const days = useMemo(() => selectForecastDays(hours), [hours]);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const initialSelectionRef = useRef<string | undefined>(undefined);
   const scrollTargetRef = useRef<number | null>(null);
   const dragRef = useRef<DragState>({ pointerId: -1, startX: 0, scrollLeft: 0 });
-  const [selectedDate, setSelectedDate] = useState(days[0]?.dateKey ?? "");
+  const [selectedDate, setSelectedDate] = useState(() => days.find(day => day.dateKey === initialDate)?.dateKey ?? days[0]?.dateKey ?? "");
   const selectedDay = days.find((day) => day.dateKey === selectedDate) ?? days[0];
+  useEffect(() => {
+    if (initialDate && initialSelectionRef.current !== initialDate && days.some(day => day.dateKey === initialDate)) {
+      initialSelectionRef.current = initialDate;
+      scrollTargetRef.current = scrollToDay(scrollerRef.current, initialDate, "instant");
+    }
+  }, [initialDate, days]);
   if (!selectedDay) return null;
   const selectedSunTimes = sunTimes.find((item) => item.date === selectedDay.dateKey);
 
@@ -97,11 +104,11 @@ export function ForecastTimeline({ locationName, catalogHref, generatedAt, hours
           </div>
         </div>
         <footer>
-          <Link className={styles.back} href={catalogHref}>
+          <Link className={styles.back} href={fromRecommendations ? "/#preferences" : catalogHref}>
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="m9 4-5 5 5 5M4 9h10a6 6 0 0 1 0 12h-3" />
             </svg>
-            {catalogHref === "/beaches" ? "Назад к выбору пляжа" : "Назад к выбору населённого пункта"}
+            {fromRecommendations ? "Назад к подбору" : catalogHref === "/beaches" ? "Назад к выбору пляжа" : "Назад к выбору населённого пункта"}
           </Link>
         </footer>
       </section>
@@ -134,11 +141,11 @@ function SunTimeEvent({
   );
 }
 
-function scrollToDay(scroller: HTMLDivElement | null, dateKey: string) {
+function scrollToDay(scroller: HTMLDivElement | null, dateKey: string, behavior: ScrollBehavior = "smooth") {
   const target = scroller?.querySelector<HTMLElement>(`[data-date="${dateKey}"]`);
   if (!scroller || !target) return null;
   const left = Math.min(target.offsetLeft + target.clientLeft, scroller.scrollWidth - scroller.clientWidth);
-  scroller.scrollTo({ behavior: "smooth", left });
+  scroller.scrollTo({ behavior, left });
   return left;
 }
 

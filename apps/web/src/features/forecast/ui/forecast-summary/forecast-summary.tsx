@@ -23,6 +23,8 @@ import styles from "./forecast-summary.module.css";
 
 type ForecastSummaryProps = Readonly<{
   currentLabel: string;
+  initialDate?: string;
+  fromRecommendations?: boolean;
   currentWeather?: CurrentWeather | null;
   catalogHref: "/beaches" | "/coast";
   eyebrow: string;
@@ -35,7 +37,7 @@ type ForecastSummaryProps = Readonly<{
 }>;
 
 export function ForecastSummary({
-  currentLabel,
+  currentLabel, initialDate, fromRecommendations,
   currentWeather,
   catalogHref,
   eyebrow,
@@ -120,7 +122,7 @@ export function ForecastSummary({
 
       {showMarine ? <ConditionScores scores={current.scores} /> : null}
       <ForecastConfidence confidence={current.confidence} />
-      <ForecastTimeline locationName={currentLabel} catalogHref={catalogHref} generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
+      <ForecastTimeline key={currentLabel + (initialDate ?? "")} initialDate={initialDate} fromRecommendations={fromRecommendations} locationName={currentLabel} catalogHref={catalogHref} generatedAt={generatedAt} hours={forecastHours} showMarine={showMarine} sunTimes={sunTimes} />
 
       <ForecastProvenance generatedAt={generatedAt} showMarine={showMarine} />
     </section>
