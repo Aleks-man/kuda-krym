@@ -56,7 +56,7 @@ for attempt in {1..30}; do
   WEB_STATUS="$(docker inspect -f '{{.State.Health.Status}}' kuda-krym-web-1 2>/dev/null || true)"
   if [[ "$API_STATUS" == healthy && "$WEB_STATUS" == healthy ]]; then
     docker compose exec -T caddy wget -qO- http://api:4000/api/health/ready >/dev/null
-    curl -fsS https://kudakrym.ru/ >/dev/null
+    curl -fsS --resolve kudakrym.ru:443:127.0.0.1 https://kudakrym.ru/ >/dev/null
     echo "Deployment $NEW_TAG completed successfully."
 
     if [[ "$PREVIOUS_TAG" =~ ^[0-9a-f]{40}$ && "$PREVIOUS_TAG" != "$NEW_TAG" ]]; then
