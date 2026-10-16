@@ -175,7 +175,7 @@ describe("normalizeRecommendationRequest", () => {
       new Date("2026-08-20T22:30:00.000Z"),
     );
 
-    expect(context.forecastDays).toBe(1);
+    expect(context.forecastDays).toBe(2);
   });
 
   it.each(["2026-08-19", "2026-08-27"])("rejects %s outside the seven-day forecast window", (date) => {
@@ -203,6 +203,6 @@ describe("weekly recommendation dates", () => {
   });
   it("accepts the seventh Crimea day across a month boundary before UTC midnight", () => {
     const context = normalizeRecommendationRequest({ origin: "yalta", date: "2026-09-07", time: "day", priority: "comfort", maxTravelMinutes: 90 }, new Date("2026-08-31T22:00:00Z"));
-    expect(context.forecastDays).toBe(7);
+    expect(context.forecastDays).toBe(8);
   });
 });

@@ -10,4 +10,8 @@ export const forecastDaysSchema = z.union([
   z.literal(7),
 ]);
 
-export type ForecastDays = z.infer<typeof forecastDaysSchema>;
+// Seven Crimea calendar days can span eight UTC dates before UTC midnight.
+// Public forecast endpoints still validate their seven-day limit above.
+export const providerForecastDaysSchema = z.union([forecastDaysSchema, z.literal(8)]);
+
+export type ForecastDays = z.infer<typeof providerForecastDaysSchema>;
