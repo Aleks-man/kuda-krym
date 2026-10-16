@@ -1,6 +1,20 @@
 import { expect, test, type Page } from "@playwright/test";
 import { recommendationResponseFixture } from "./fixtures/recommendation-response";
 
+async function expectForecastDateInView(page: Page, date: string) {
+  const scroller = page.locator('[aria-label="Почасовой прогноз: прокрутка по времени"]');
+  await expect(scroller.locator(`[data-date="${date}"]`).first()).toBeAttached();
+  // Tomorrow can be the first available day after 23:00 in Crimea, at scrollLeft = 0.
+  await expect.poll(() => scroller.evaluate((element, dateKey) => {
+    const target = element.querySelector<HTMLElement>(`[data-date="${dateKey}"]`)!;
+    const expectedLeft = Math.min(
+      target.offsetLeft + target.clientLeft,
+      element.scrollWidth - element.clientWidth,
+    );
+    return Math.abs(element.scrollLeft - expectedLeft);
+  }, date)).toBeLessThanOrEqual(1);
+}
+
 async function chooseTrip(page: Page) {
   await page.getByRole("combobox", { name: "Откуда выезжаем" }).fill("Ялта");
   await page.getByRole("option", { name: /^Ялта/ }).first().click();
@@ -15,6 +29,7 @@ async function chooseTrip(page: Page) {
 for (const beachOnly of [false, true]) {
   test("restores the trip and selected date for " + (beachOnly ? "a beach" : "a coastal forecast"), async ({ page }) => {
     test.setTimeout(90_000);
+    await page.clock.setFixedTime(new Date());
     let count = 0;
     let selectedDate = "";
     await page.route("**/api/recommendations", async route => {
@@ -37,9 +52,10 @@ for (const beachOnly of [false, true]) {
     await expect(page).toHaveURL(new RegExp(beachOnly ? "/beaches/popovka" : "/coast/yalta"), { timeout: 20_000 });
     expect(new URL(page.url()).searchParams.get("date")).toBe(selectedDate);
     await expect(page.locator('input[name="forecastDate"]')).toHaveValue(selectedDate);
-    await expect.poll(() => page.locator('[aria-label="Почасовой прогноз: прокрутка по времени"]').evaluate(el => el.scrollLeft)).toBeGreaterThan(0);
+    await expectForecastDateInView(page, selectedDate);
     await page.reload();
     await expect(page.locator('input[name="forecastDate"]')).toHaveValue(selectedDate);
+    await expectForecastDateInView(page, selectedDate);
     await page.getByRole("link", { name: "← К подбору", exact: true }).click();
     await expect(page).toHaveURL(/\/#preferences$/, { timeout: 20_000 });
     await expect(link).toBeVisible();

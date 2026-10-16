@@ -14,9 +14,15 @@ const settlementPlaceValues = new Set([
 
 export function mapPhotonFeatures(
   features: readonly PhotonFeature[],
+  query: string,
 ): DepartureLocation[] {
+  const normalizedQuery = query.trim().toLocaleLowerCase("ru");
+
   return features
     .filter(isCrimeaFeature)
+    .filter(({ properties }) =>
+      properties.name.toLocaleLowerCase("ru").includes(normalizedQuery),
+    )
     .map(mapPhotonFeature)
     .filter(hasRussianDisplayText)
     .slice(0, 8);

@@ -23,5 +23,11 @@ it.each(inlandForecastLocations)("finds $name and routes to its own forecast", (
 
 it("disambiguates Pervomayskoye with its district", () => {
   expect(getForecastPlaceOptions([], "Первомайское")).toEqual([expect.objectContaining({ href: "/cities/pervomayskoye", detail: "Первомайский район" })]);
-  expect(getForecastPlaceOptions([], "Кировский район")).toEqual([expect.objectContaining({ name: "Старый Крым" })]);
+  expect(getForecastPlaceOptions([], "Кировский район")).toEqual([]);
+});
+
+it("matches settlement names without matching their districts", () => {
+  expect(getForecastPlaceOptions([], " СИМФЕРОПОЛЬ ").map(({ name }) => name)).toEqual(["Симферополь"]);
+  expect(getForecastPlaceOptions([], "симф").map(({ name }) => name)).toEqual(["Симферополь"]);
+  expect(getForecastPlaceOptions([], "Гвардейское")).toContainEqual(expect.objectContaining({ name: "Гвардейское" }));
 });
