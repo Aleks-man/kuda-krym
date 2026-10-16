@@ -20,7 +20,7 @@ export function getForecastPlaceOptions(locations: readonly CoastalLocation[], q
   }));
   const normalizedQuery = query.trim().toLocaleLowerCase("ru");
   for (const city of cities) {
-    if (!`${city.name} ${city.areaLabel}`.toLocaleLowerCase("ru").includes(normalizedQuery)) continue;
+    if (!city.name.toLocaleLowerCase("ru").includes(normalizedQuery)) continue;
     options.push({ id: `city-${city.slug}`, name: city.name, slug: city.slug, href: `/cities/${city.slug}`, detail: city.areaLabel });
   }
   return options.sort((a, b) => a.name.localeCompare(b.name, "ru"));

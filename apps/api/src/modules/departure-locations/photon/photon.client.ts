@@ -39,7 +39,7 @@ export class PhotonClient implements DepartureLocationProvider {
     }
 
     const payload = photonResponseSchema.parse(await response.json());
-    return mapPhotonFeatures(payload.features);
+    return mapPhotonFeatures(payload.features, query);
   }
 
   private createUrl(query: string): URL {

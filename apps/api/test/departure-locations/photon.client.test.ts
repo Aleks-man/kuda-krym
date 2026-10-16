@@ -42,6 +42,29 @@ describe("PhotonClient", () => {
     expect(requestedUrl.searchParams.has("lang")).toBe(false);
   });
 
+  it("matches only settlement names before limiting suggestions", async () => {
+    const payload = {
+      features: [
+        ...Array.from({ length: 8 }, () =>
+          feature("Гвардейское", 34.0, 45.1, "Крым"),
+        ),
+        feature("Симферополь", 34.1, 44.95, "Крым"),
+      ],
+    };
+    const fetchMock = vi.fn<typeof fetch>().mockImplementation(async () =>
+      new Response(JSON.stringify(payload), { status: 200 }),
+    );
+    const client = new PhotonClient({ fetch: fetchMock });
+
+    const locations = await client.search(" СИМФ ");
+    expect(locations.map(({ name }) => name)).toEqual(["Симферополь"]);
+    expect(locations[0]?.context).toBe("Симферопольский район");
+    await expect(client.search("Симферопольский район")).resolves.toEqual([]);
+    expect((await client.search("гвард")).map(({ name }) => name)).toEqual(
+      Array(8).fill("Гвардейское"),
+    );
+  });
+
   it("reports an upstream HTTP error", async () => {
     const fetchMock = vi
       .fn<typeof fetch>()
