@@ -285,3 +285,33 @@ it("bounds catalog waiting and never starts providers after the deadline", async
     vi.useRealTimers();
   }
 });
+
+it.each([0, 1, 6])("finds a beach on Crimea day offset %i before UTC midnight", async (offset) => {
+  const evaluatedAt = new Date("2026-08-23T22:30:00Z");
+  const date = new Date(Date.UTC(2026, 7, 24 + offset)).toISOString().slice(0, 10);
+  const candidate = createCandidate("yalta", 44.5);
+  // Open-Meteo GMT forecasts start at midnight of the current UTC day.
+  const times = (days: number) => Array.from({ length: days * 24 }, (_, hour) =>
+    new Date(Date.UTC(2026, 7, 23, hour)).toISOString().slice(0, 16),
+  );
+  const service = new RecommendationService({
+    candidateService: { listEligible: async () => [candidate] },
+    routeLoader: createRouteLoader(),
+    forecastLoader: new CandidateForecastLoader({
+      weatherProvider: { getForecast: async ({ location, days }) => {
+        const forecast = createWeatherForecast(location);
+        return { ...forecast, hourly: times(days).map(time => ({ ...forecast.hourly[0]!, time })) };
+      } },
+      marineProvider: { getForecast: async ({ location, days }) => {
+        const forecast = createMarineForecast(location, 0.2);
+        return { ...forecast, hourly: times(days).map(time => ({ ...forecast.hourly[0]!, time })) };
+      } },
+    }),
+    now: () => evaluatedAt,
+  });
+
+  const result = await service.calculate({ ...request, date });
+  expect(result.failures).toEqual([]);
+  expect(result.recommendations).toHaveLength(1);
+  expect(result.recommendations[0]?.hourCount).toBe(6);
+});

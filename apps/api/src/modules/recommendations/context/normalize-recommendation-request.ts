@@ -1,6 +1,6 @@
 import type { RecommendationRequest } from "@kuda-krym/contracts";
 
-import { forecastDaysSchema } from "../../../shared/forecast/forecast-days.js";
+import { forecastDaysSchema, providerForecastDaysSchema } from "../../../shared/forecast/forecast-days.js";
 
 import type { RecommendationContext } from "./recommendation-context.js";
 import { UnsupportedRecommendationDateError } from "./recommendation-context.error.js";
@@ -29,11 +29,16 @@ export function normalizeRecommendationRequest(
   }
 
   const window = visitWindows[request.time];
+  // Open-Meteo is requested in GMT, so forecast_days starts at UTC midnight.
+  const utcToday = now.toISOString().slice(0, 10);
+  const providerDays = providerForecastDaysSchema.parse(
+    (Date.parse(request.date) - Date.parse(utcToday)) / dayMilliseconds + 1,
+  );
 
   return {
     origin: normalizeRecommendationOrigin(request.origin),
     date: request.date,
-    forecastDays: forecastDays.data,
+    forecastDays: providerDays,
     visitWindow: {
       startsAt: toUtc(request.date, window.startsAt),
       endsAt: toUtc(request.date, window.endsAt),
