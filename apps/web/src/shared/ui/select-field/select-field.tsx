@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
 } from "react";
 
+import { useDismissOnOutsidePointer } from "@/shared/browser/use-dismiss-on-outside-pointer";
 import styles from "./select-field.module.css";
 
 export type SelectFieldOption = Readonly<{
@@ -41,6 +42,8 @@ export function SelectField({
   const [internalValue, setValue] = useState(initialValue);
   const value = controlledValue ?? internalValue;
   const [isOpen, setIsOpen] = useState(false);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  useDismissOnOutsidePointer(fieldRef, isOpen, () => setIsOpen(false));
   const [activeIndex, setActiveIndex] = useState(() =>
     Math.max(0, options.findIndex((option) => option.value === (controlledValue ?? initialValue))),
   );
@@ -82,6 +85,7 @@ export function SelectField({
 
   return (
     <div
+      ref={fieldRef}
       className={styles.field}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);

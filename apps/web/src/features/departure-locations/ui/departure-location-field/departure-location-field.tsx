@@ -9,6 +9,7 @@ import {
   type DepartureLocationOption,
 } from "../../model/departure-location-option";
 import { useDepartureLocationSearch } from "../../model/use-departure-location-search";
+import { useDismissOnOutsidePointer } from "@/shared/browser/use-dismiss-on-outside-pointer";
 import styles from "./departure-location-field.module.css";
 
 const initialOption = getPopularDepartureLocations("Симферополь")[0];
@@ -27,6 +28,8 @@ export function DepartureLocationField({ value, onChange, preserveSelectionOnFoc
   const query = value?.query ?? internalQuery;
   const selected = value ? value.selected : internalSelected;
   const [isOpen, setIsOpen] = useState(false);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  useDismissOnOutsidePointer(fieldRef, isOpen, () => setIsOpen(false));
   const [activeIndex, setActiveIndex] = useState(0);
   const search = useDepartureLocationSearch(query);
   const options = useMemo(
@@ -67,6 +70,7 @@ export function DepartureLocationField({ value, onChange, preserveSelectionOnFoc
 
   return (
     <div
+      ref={fieldRef}
       className={styles.field}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
