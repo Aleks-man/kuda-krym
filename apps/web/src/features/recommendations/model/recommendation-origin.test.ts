@@ -21,10 +21,10 @@ describe("parseRecommendationOrigin", () => {
 
   it("requires a location selected from suggestions", () => {
     expect(() => parseRecommendationOrigin("")).toThrow(
-      "Выберите населённый пункт из списка",
+      "Выберите, откуда вы планируете выезжать",
     );
     expect(() => parseRecommendationOrigin("неизвестное место")).toThrow(
-      "Выберите населённый пункт из списка",
+      "Выберите, откуда вы планируете выезжать",
     );
   });
 });
