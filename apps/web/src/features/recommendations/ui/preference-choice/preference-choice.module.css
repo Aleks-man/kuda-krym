@@ -1,4 +1,4 @@
-.choice { display: block; min-width: 0; cursor: pointer; }
+.choice { display: grid; min-width: 0; cursor: pointer; }
 .choice input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .content { display: flex; min-height: 66px; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 15px; background: rgb(255 255 255 / 72%); transition: border-color 160ms ease, background 160ms ease, transform 160ms ease; }
 .content > span { display: grid; gap: 3px; }

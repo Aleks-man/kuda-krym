@@ -32,7 +32,7 @@ export const timeOptions = [
 ] as const;
 
 export const priorityOptions = [
-  { value: "calm_sea", label: "Спокойное море", icon: "≈" },
-  { value: "warm_water", label: "Тёплая вода", icon: "°" },
-  { value: "comfort", label: "Комфортная погода", icon: "☼" },
+  { value: "calm_sea", label: "Спокойное море", icon: "calm-sea" },
+  { value: "warm_water", label: "Тёплая вода", icon: "warm-water" },
+  { value: "comfort", label: "Комфортная погода", icon: "comfortable-weather" },
 ] as const;
