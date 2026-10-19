@@ -15,7 +15,14 @@ for (const [path, name] of [["/cities/simferopol", "Симферополь"], ["
     expect(response.ok()).toBe(true);
     const html = await response.text();
     expect(html).not.toContain("daily-forecast-title");
-    expect(html).toContain("forecast-location-info-title");
+    const isCity = path.startsWith("/cities/");
+    const cityNote = "Расчётный прогноз Open-Meteo · Время московское";
+    if (isCity) {
+      expect(html).toContain(cityNote);
+      expect(html).not.toContain("forecast-location-info-title");
+    } else {
+      expect(html).toContain("forecast-location-info-title");
+    }
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     try {
       const page = await context.newPage();
@@ -25,6 +32,12 @@ for (const [path, name] of [["/cities/simferopol", "Симферополь"], ["
       await expect(page.locator('section[aria-labelledby="daily-forecast-title"]')).toHaveCount(0);
       await expect(page.getByRole("region", { name: "Погода сейчас", exact: true })).toBeVisible();
       await expect(page.locator("#forecast-days-timeline")).toBeVisible();
+      if (isCity) {
+        await expect(page.getByText(cityNote, { exact: true })).toBeVisible();
+        await expect(page.locator("#forecast-location-info-title")).toHaveCount(0);
+      } else {
+        await expect(page.locator("#forecast-location-info-title")).toBeVisible();
+      }
       for (const width of [320, 390, 768, 1024, 1280]) {
         await page.setViewportSize({ width, height: 900 });
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
