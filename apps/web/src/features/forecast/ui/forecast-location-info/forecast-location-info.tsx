@@ -13,7 +13,7 @@ export function ForecastLocationInfo({ location }: Readonly<{ location: CoastalL
     {coastal ? <>
       <p className={beachStyles.description}>{location.name} — {coastalRegionLabels[location.region]}, {waterBodyLabels[location.waterBody]}. Погода рассчитана для точки {point(location.weatherCoordinates)}; морские условия — для точки {point(location.marineCoordinates)}.</p>
       <p className={beachStyles.description}>Температура воды и высота волн относятся к морской точке прогноза. У берега и в защищённых бухтах условия могут отличаться. Сравните прогноз с пляжами поблизости перед поездкой.</p>
-    </> : <p className={beachStyles.description}>{location.name} — {location.areaLabel}. Прогноз температуры воздуха, осадков и ветра рассчитан для точки {point(location.coordinates)}. На этой странице показана погода в населённом пункте; морские условия смотрите в прогнозах побережья.</p>}
-    <p className={beachStyles.description}>Источник — погодные модели Open-Meteo. Это расчётный прогноз, а не измерение местной метеостанции. Время указано по Москве; дата обновления и доступность данных отмечены в блоке прогноза.</p>
+      <p className={beachStyles.description}>Источник — погодные модели Open-Meteo. Это расчётный прогноз, а не измерение местной метеостанции. Время указано по Москве; дата обновления и доступность данных отмечены в блоке прогноза.</p>
+    </> : <p className={beachStyles.description}>Погода по моделям Open-Meteo. Прогноз расчётный, а не данные местной метеостанции. Время московское.</p>}
   </section>;
 }
