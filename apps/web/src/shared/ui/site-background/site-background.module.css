@@ -42,19 +42,29 @@
   background-position: center;
 }
 
-.city {
+.city,
+.simferopol {
   background-image:
     linear-gradient(135deg, rgb(248 251 245 / 72%), rgb(240 247 239 / 62%)),
-    url("/images/site-city-park-v2.webp");
+    var(--city-background, url("/images/site-city-park-v2.webp"));
   background-position: center;
 }
 
+.simferopol {
+  --city-background: url("/images/site-simferopol-evening-v1.webp");
+}
+
 @media (max-width: 680px) {
-  .city {
+  .city,
+  .simferopol {
     background-image:
       linear-gradient(135deg, rgb(248 251 245 / 78%), rgb(240 247 239 / 70%)),
-      url("/images/site-city-park-mobile-v2.webp");
+      var(--city-background, url("/images/site-city-park-mobile-v2.webp"));
     background-position: 82% center;
+  }
+
+  .simferopol {
+    background-position: center;
   }
 
   .coast,

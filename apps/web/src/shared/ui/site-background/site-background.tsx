@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 import styles from "./site-background.module.css";
 
-type BackgroundVariant = "home" | "coast" | "beaches" | "city";
+type BackgroundVariant = "home" | "coast" | "beaches" | "city" | "simferopol";
 
 export function SiteBackground() {
   const pathname = usePathname();
@@ -21,6 +21,10 @@ export function SiteBackground() {
 }
 
 function getBackgroundVariant(pathname: string): BackgroundVariant {
+  if (pathname === "/cities/simferopol" || pathname === "/cities/simferopol/") {
+    return "simferopol";
+  }
+
   if (pathname === "/cities" || pathname.startsWith("/cities/")) {
     return "city";
   }

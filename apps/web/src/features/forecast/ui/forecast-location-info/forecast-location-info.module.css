@@ -1,3 +1,11 @@
 .section { display: grid; gap: 12px; margin-top: var(--layout-section-gap); }
 .section h2, .section p { margin: 0; }
 .section h2 { font-size: clamp(22px, 3vw, 30px); }
+
+.cityNote {
+  margin: 16px 0 0;
+  color: var(--foreground);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
