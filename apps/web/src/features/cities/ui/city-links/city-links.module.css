@@ -1,4 +1,4 @@
-.section { display: grid; gap: 20px; }
+.section { display: grid; gap: 20px; margin-top: var(--layout-section-gap); }
 .heading h2 { margin: 0; font-size: clamp(24px, 4vw, 36px); }
 .list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; padding: 0; margin: 0; list-style: none; }
 .list li { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; }
