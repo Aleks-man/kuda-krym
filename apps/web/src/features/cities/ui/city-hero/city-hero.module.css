@@ -3,6 +3,7 @@
 .back { display: inline-flex; margin-bottom: 48px; color: var(--accent-strong); font-size: 14px; font-weight: 750; }
 .eyebrow { margin: 0 0 12px; color: #c66b31; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .hero h1 { max-width: 100%; margin: 0; overflow-wrap: break-word; font-size: clamp(40px, 5vw, 62px); font-weight: 780; hyphens: auto; letter-spacing: -.055em; line-height: .96; }
+.cityName { display: block; margin-top: .12em; hyphens: none; }
 .description { max-width: 680px; margin: 24px 0 0; color: var(--muted); font-size: clamp(18px, 3vw, 22px); line-height: 1.55; }
 .visual { position: relative; min-height: 520px; margin: 0; overflow: hidden; background: #665e4f; isolation: isolate; }
 .image { z-index: -2; object-fit: cover; }
